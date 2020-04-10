@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    image: mysql:8.0.17
+    command:
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: tutors
+    ports:
+      - 3308:3306
+  app:
+    build:
+      .
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 5001:80
+    depends_on:
+      - database
