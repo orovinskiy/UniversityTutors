@@ -19,3 +19,7 @@ To enable routing for the docker container
 
 If adding files in not allowed
 * Permission for uploads folder on server ```chmod 777 uploads```
+
+Git branches:
+* Create new branch ```git checkout -b name```
+* Push git branch ```git push origin head```
