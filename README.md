@@ -23,3 +23,4 @@ If adding files in not allowed
 Git branches:
 * Create new branch ```git checkout -b name```
 * Push git branch ```git push origin head```
+* Get current branch ```git rev-parse --abbrev-ref HEAD```
