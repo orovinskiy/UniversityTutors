@@ -32,4 +32,10 @@ $f3->route('GET /test', function () {
     echo $view->render("views/home.html");
 });
 
+// Define a default route
+$f3->route('GET /tutors', function () {
+    $view = new Template();
+    echo $view->render("views/tutors.html");
+});
+
 $f3->run();
