@@ -32,4 +32,10 @@ $f3->route('GET /test', function () {
     echo $view->render("views/home.html");
 });
 
+//Define a route for form
+$f3->route('GET /form', function () {
+    $view = new Template();
+    echo $view->render('views/form.html');
+});
+
 $f3->run();
