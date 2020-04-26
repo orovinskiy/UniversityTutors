@@ -1,0 +1,30 @@
+.image-preview {
+    width: 150px;
+    height: 50px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: lightskyblue;
+}
+
+.image-preview__image {
+    display: none;
+    width: 100%;
+}
+fieldset{
+    padding: 2em;
+    border: 1px solid cornflowerblue;
+}
+.jumbotron{
+    background-color: cornflowerblue;
+    color: white;
+}
+
+legend {
+    font-weight: bold;
+    color: cornflowerblue;
+    font-variant: small-caps;
+    font-size: 125%;
+}

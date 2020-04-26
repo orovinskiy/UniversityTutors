@@ -7,93 +7,61 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
-        .image-preview {
-            width: 200px;
-            height: 50px;
-            margin-top: 15px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: lightskyblue;
-        }
-
-        .image-preview__image {
-            display: none;
-            width: 100%;
-        }
-
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="../styles/formStyleSheet.css">
     <title>Form</title>
 </head>
 <body>
 <div class="container">
-    <h1>Onboarding Process form</h1>
-    <p class="em">Please enter your information to proceed in the Onboarding Process </p>
-    <form>
-        <div class="row">
-            <div class="col">
-                <div class=" row form-group">
-                    <label class="font-weight-bold" for="firstName">First Name</label>
-                    <input type="text" class="form-control" name="firstName" id="firstName">
+    <div class="jumbotron">
+        <h1 class="display-4">Onboarding Process form</h1>
+        <p class="lead">Please enter your information to proceed in the Onboarding Process</p>
+        <hr class="my-4">
+        <p>Your information will be secure with us!</p>
+    </div>
+    <form action="#" method="post">
+        <fieldset class="form-group">
+            <legend> Personal Information</legend>
+            <div class="row">
+                <div class="col">
+                    <div class=" row form-group">
+                        <label class="font-weight-bold" for="firstName">First Name</label>
+                        <input type="text" class="form-control" name="firstName" id="firstName">
+                    </div>
+                    <div class="row form-group">
+                        <label class="font-weight-bold" for="email">Email</label>
+                        <input type="text" class="form-control" name="email" id="email">
+                    </div>
+                    <div class="row form-group">
+                        <label class="font-weight-bold" for="phone">Phone</label>
+                        <input type="tel" class="form-control" name="phone" id="phone">
+                    </div>
+                    <div class="row form-group">
+                        <label class="font-weight-bold" for="ssn">SSN</label>
+                        <input type="text" class="form-control" name="phone" id="ssn">
+                    </div>
                 </div>
-                <div class="row form-group">
-                    <label class="font-weight-bold" for="email">Email</label>
-                    <input type="text" class="form-control" name="email" id="email">
-                </div>
-                <div class="row form-group">
-                    <label class="font-weight-bold" for="phone">Phone</label>
-                    <input type="tel" class="form-control" name="phone" id="phone">
-                </div>
-                <div class="row form-group">
-                    <label class="font-weight-bold" for="ssn">SSN</label>
-                    <input type="text" class="form-control" name="phone" id="ssn">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label class="font-weight-bold" for="lastName">Last Name</label>
-                    <input type="text" class="form-control" name="firstName" id="lastName">
-                </div>
-                <div>
-                    <label class="font-weight-bold" for="img">Select image:</label>
-                    <input type="file" id="img" name="img" accept="image/*">
-                </div>
-                    <div class="row image-preview mt-4" id="imagePreview">
+                <div class="col">
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="lastName">Last Name</label>
+                        <input type="text" class="form-control" name="firstName" id="lastName">
+                    </div>
+                    <div>
+                        <label class="font-weight-bold" for="img">Select image:</label>
+                        <input type="file" id="img" name="img" accept="image/*">
+                    </div>
+                    <div class="row image-preview mt-4 ml-4" id="imagePreview">
                         <img scr="" alt="Image Preview" class="image-preview__image">
                         <span class="image-preview__default-text">Image Preview</span>
                     </div>
-
+                </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="float-right">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </fieldset>
     </form>
 </div>
-<script>
-    const inputFile = document.getElementById("img");
-    const previewContainer = document.getElementById("imagePreview");
-    const previewImage = previewContainer.querySelector(".image-preview__image");
-    const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-
-    inputFile.addEventListener("change", function () {
-        const file = this.files[0];
-        // console.log(file);
-        if (file) {
-            const reader = new FileReader();
-            previewDefaultText.style.display = "none";
-            previewImage.style.display = "block";
-            reader.addEventListener("load", function () {
-                previewImage.setAttribute("src", this.result);
-
-            });
-            reader.readAsDataURL(file);
-
-        }
-    });
-</script>
+<script src="../scripts/formScript.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
