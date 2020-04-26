@@ -22,7 +22,7 @@ $f3 = Base::instance();
 
 //define variables
 $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
-    "Affirmations and Disclosures","Handbook Verification","I-9(first step)","Offer Letter",
+    "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
     "Orientation RSVP","W4"));
 
 // Define a default route
