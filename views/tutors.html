@@ -7,23 +7,133 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- DataTables Styles -->
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 </head>
 <body>
+
+<div class="text-center">
+    <h1>Tutor Onboarding</h1>
+    <button class="btn btn-secondary">Last Year</button>
+    <h3 class="d-inline">2020</h3>
+    <button class="btn btn-secondary">Next Year</button>
+</div>
 
 <table id="tutors-table">
     <thead>
     <tr>
-        <th>Test</th>
-        <th>Test2</th>
-        <th>Test3</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Onboarding Packet</th>
+        <th>Background Check</th>
+        <th>Reference Check</th>
+        <th>Offer Letter</th>
+        <th>Affirmation & Disclosures</th>
+        <th>Sexual Misconduct</th>
+        <th>W4</th>
+        <th>Handbook Verification</th>
+        <th>ADP Registration</th>
+        <th>I-9</th>
+        <th>Orientation</th>
+        <th>Placement</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
+        <!-- Name -->
+        <td>Keller Flint</td>
+
+        <!-- Email -->
+        <td>kflint0068@gmail.com</td>
+
+        <!-- Onboarding Packet -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- Background Check -->
+        <td>
+            <select class="form-control">
+                <option selected>Not Done</option>
+                <option>Sent</option>
+                <option>Clear</option>
+                <option>Flag</option>
+            </select>
+        </td>
+
+        <!-- Reference Check -->
+        <td>
+            ?
+        </td>
+
+        <!-- Offer Letter -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- Affirmation & Disclosures -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- Sexual Misconduct -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- W4 -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- Handbook Verification -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- ADP Enrollment -->
+        <td>
+            <select class="form-control">
+                <option selected>Not Sent</option>
+                <option>Invite Sent</option>
+                <option>Registered</option>
+            </select>
+        </td>
+
+        <!-- I-9 -->
+        <td>
+            <select class="form-control">
+                <option selected>Not Done</option>
+                <option>Tutor Done</option>
+                <option>Admin Done</option>
+            </select>
+        </td>
+
+        <!-- Orientation -->
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+            </div>
+        </td>
+
+        <!-- Placement -->
+        <td>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Not Placed">
+            </div>
+        </td>
+
     </tr>
     </tbody>
 </table>
