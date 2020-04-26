@@ -1,3 +1,9 @@
+<!--
+Page for admin viewing and management of tutor onboarding data.
+
+@author Keller Flint
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,15 +15,12 @@
     <!-- DataTables Styles -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
-    <style>
-        .checkbox-big {
-            transform: scale(1.5);
-            -webkit-transform: scale(1.5);
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../styles/tutors_style.css">
 </head>
 <body>
 <div class="content">
+
+    <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
         <button class="btn btn-secondary">Last Year</button>
@@ -25,12 +28,13 @@
         <button class="btn btn-secondary">Next Year</button>
     </div>
 
+    <!-- Tutors DataTable -->
     <table id="tutors-table" class="compact stripe">
         <thead>
         <tr>
             <th class="text-center">Name</th>
             <th class="text-center">Email</th>
-            <th class="text-center">Onboarding Packet</th>
+            <th class="text-center">Onboarding Packet Sent</th>
             <th class="text-center">Background Check</th>
             <th class="text-center">Reference Check</th>
             <th class="text-center">Offer Letter</th>
@@ -47,7 +51,7 @@
         <tbody>
         <tr>
             <!-- Name -->
-            <td>Keller Flint</td>
+            <td>Keller Flint-Blanchard</td>
 
             <!-- Email -->
             <td>kflint0068@gmail.com</td>
@@ -71,7 +75,9 @@
 
             <!-- Reference Check -->
             <td>
-                ?
+                <div class="form-check text-center">
+                    <input class="form-check-input checkbox-big" type="checkbox">
+                </div>
             </td>
 
             <!-- Offer Letter -->
@@ -137,7 +143,7 @@
             <!-- Placement -->
             <td>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="None">
+                    <input type="text" class="form-control placement" placeholder="None">
                 </div>
             </td>
         </tr>
