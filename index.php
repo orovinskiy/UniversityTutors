@@ -37,5 +37,4 @@ $f3->route('GET /form', function () {
     $view = new Template();
     echo $view->render('views/form.html');
 });
-
 $f3->run();
