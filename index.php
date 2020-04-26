@@ -32,4 +32,13 @@ $f3->route('GET /test', function () {
     echo $view->render("views/home.html");
 });
 
+/**
+ * Route for admin viewing and management of tutors.
+ * @author Keller
+ */
+$f3->route('GET /tutors', function () {
+    $view = new Template();
+    echo $view->render("views/tutors.html");
+});
+
 $f3->run();
