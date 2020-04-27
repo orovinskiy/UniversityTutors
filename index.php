@@ -31,6 +31,7 @@ $f3->route('GET /', function () {
     echo $view->render("views/home.html");
 });
 
+
 /**
  * Route for checklist
  * @author oleg
@@ -39,6 +40,7 @@ $f3->route('GET /checklist', function () {
     $view = new Template();
     echo $view->render("views/checklist.html");
 });
+
 
 /**
  * Route for onboarding-form
@@ -57,6 +59,5 @@ $f3->route('GET /tutors', function () {
     $view = new Template();
     echo $view->render("views/tutors.html");
 });
-
 
 $f3->run();
