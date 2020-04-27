@@ -1,4 +1,5 @@
-$(".get").on("click",function(){
+$(".get").on("click",function()
+{
     console.log(this.value);
 
     let $sideCheck = $("#"+this.value);
@@ -10,7 +11,8 @@ $(".get").on("click",function(){
     }
 });
 
-$(".side").on("click",function(){
+$(".side").on("click",function()
+{
     console.log(this.value);
 
     let $box = $("#"+this.value+"box");
