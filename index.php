@@ -20,17 +20,27 @@ session_start();
 //create an instance of the base class
 $f3 = Base::instance();
 
+//define variables
+$f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
+    "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
+    "Orientation RSVP","W4"));
+
 // Define a default route
 $f3->route('GET /', function () {
     $view = new Template();
     echo $view->render("views/home.html");
 });
 
-// Define a default route
-$f3->route('GET /test', function () {
+
+/**
+ * Route for checklist
+ * @author oleg
+ */
+$f3->route('GET /checklist', function () {
     $view = new Template();
-    echo $view->render("views/home.html");
+    echo $view->render("views/checklist.html");
 });
+
 
 /**
  * Route for onboarding-form
@@ -40,6 +50,7 @@ $f3->route('GET /form', function () {
     $view = new Template();
     echo $view->render('views/form.html');
 });
+
 /**
  * Route for admin viewing and management of tutors.
  * @author Keller
