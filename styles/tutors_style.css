@@ -1,0 +1,19 @@
+/*
+Styles for the admin tutors table
+
+@author Keller Flint
+*/
+
+.checkbox-big {
+    transform: scale(2) translateY(-5.5px);
+    -webkit-transform: scale(2) translateY(-5.5px);;
+}
+
+.placement {
+    transform: translateY(8px);
+    -webkit-transform: translateY(8px);;
+}
+
+th {
+    font-size: .7em;
+}

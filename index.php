@@ -31,16 +31,31 @@ $f3->route('GET /', function () {
     echo $view->render("views/home.html");
 });
 
-// Define a default route
-$f3->route('GET /test', function () {
-    $view = new Template();
-    echo $view->render("views/home.html");
-});
-
-// Define a route too tutors checklist
+/**
+ * Route for checklist
+ * @author oleg
+ */
 $f3->route('GET /checklist', function () {
     $view = new Template();
     echo $view->render("views/checklist.html");
+});
+
+/**
+ * Route for onboarding-form
+ * @author Laxmi
+ */
+$f3->route('GET /form', function () {
+    $view = new Template();
+    echo $view->render('views/form.html');
+});
+
+/**
+ * Route for admin viewing and management of tutors.
+ * @author Keller
+ */
+$f3->route('GET /tutors', function () {
+    $view = new Template();
+    echo $view->render("views/tutors.html");
 });
 
 
