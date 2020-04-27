@@ -1,4 +1,8 @@
-//Get the file form the user
+/**
+ * Script for Displaying image in form page
+ * @author Laxmi Kandel
+ */
+//Get the elements
 const inputFile = document.getElementById("img");
 const previewContainer = document.getElementById("imagePreview");
 const previewImage = previewContainer.querySelector(".image-preview__image");
@@ -13,7 +17,6 @@ inputFile.addEventListener("change", function () {
         previewImage.style.display = "block";
         reader.addEventListener("load", function () {
             previewImage.setAttribute("src", this.result);
-
         });
         reader.readAsDataURL(file);
     }
