@@ -1,3 +1,4 @@
+//Get the file form the user
 const inputFile = document.getElementById("img");
 const previewContainer = document.getElementById("imagePreview");
 const previewImage = previewContainer.querySelector(".image-preview__image");
