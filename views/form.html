@@ -28,31 +28,40 @@ Form for OnBoarding process
             <div class="row">
                 <div class="col">
                     <!--div for first name-->
-                    <div class=" row form-group">
+                    <div class="row form-group val-empty val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="firstName">First Name</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName">
+                        <input type="text" class="input form-control" name="firstName" id="firstName">
+                        <div class="errors text-danger"></div>
                     </div>
                     <!--div for email-->
-                    <div class="row form-group">
+                    <div class="row form-group val-empty val-lessThan255">
                         <label class="font-weight-bold" for="email">Email</label>
-                        <input type="text" class="form-control" name="email" id="email">
+                        <input type="text" class="form-control input" name="email" id="email">
+                        <div class="errors text-danger"></div>
+
                     </div>
                     <!--div for phone-->
-                    <div class="row form-group">
+                    <div class="row form-group val-empty val-lessThan10">
                         <label class="font-weight-bold" for="phone">Phone</label>
-                        <input type="tel" class="form-control" name="phone" id="phone">
+                        <input type="tel" class="form-control input" name="phone" id="phone">
+                        <div class="errors text-danger"></div>
+
                     </div>
                     <!--div for SSN-->
-                    <div class="row form-group"><!--div for SSN-->
+                    <div class="row form-group val-empty val-lessThan9"><!--div for SSN-->
                         <label class="font-weight-bold" for="ssn">SSN</label>
-                        <input type="text" class="form-control" name="phone" id="ssn">
+                        <input type="text" class="form-control input " name="phone" id="ssn">
+                        <div class="errors text-danger"></div>
+
                     </div>
                 </div><!--div col closed-->
                 <div class="col">
                     <!--div for last name-->
-                    <div class="form-group">
+                    <div class="form-group val-empty val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="lastName">Last Name</label>
-                        <input type="text" class="form-control" name="firstName" id="lastName">
+                        <input type="text" class="form-control input" name="firstName" id="lastName">
+                        <div class="errors text-danger"></div>
+
                     </div>
                     <!--div for image-->
                     <div>
@@ -72,15 +81,17 @@ Form for OnBoarding process
         </fieldset>
     </form>
 </div><!--main div closed-->
-<script src="../scripts/formScript.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
         crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="../scripts/client_validation.js"></script>
+<script src="../scripts/formScript.js"></script>
 </body>
 </html>
