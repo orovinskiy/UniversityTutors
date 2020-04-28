@@ -9,7 +9,7 @@ CREATE TABLE User (
     user_id int,
     user_email varchar(255) NOT NULL,
     user_password varchar(255) NOT NULL,
-    user_is_admin tinyint(1) NOT NULL,
+    user_is_admin bit NOT NULL,
 
     PRIMARY KEY (user_id)
 );
@@ -32,17 +32,17 @@ CREATE TABLE Year (
     year_id int,
     user_id int NOT NULL,
     year_start year NOT NULL,
-    year_packet_sent tinyint(1) NOT NULL,
+    year_packet_sent bit NOT NULL,
     year_background enum('none', 'sent', 'clear', 'flag') NOT NULL,
     year_reference enum('none', 'incomplete', 'clear', 'flag') NOT NULL,
-    year_offer_letter tinyint(1) NOT NULL,
-    year_affirmation_disclosures tinyint(1) NOT NULL,
-    year_sexual_misconduct tinyint(1) NOT NULL,
-    year_w4 tinyint(1) NOT NULL,
-    year_handbook_verification tinyint(1) NOT NULL,
+    year_offer_letter bit NOT NULL,
+    year_affirmation_disclosures bit NOT NULL,
+    year_sexual_misconduct bit NOT NULL,
+    year_w4 bit NOT NULL,
+    year_handbook_verification bit NOT NULL,
     year_ADP enum('none', 'invited', 'registered') NOT NULL,
     year_i9 enum('none', 'tutor', 'admin') NOT NULL,
-    year_orientation tinyint(1) NOT NULL,
+    year_orientation bit NOT NULL,
     year_placement varchar(255) NULL,
 
     PRIMARY KEY (year_id),
