@@ -20,6 +20,9 @@ session_start();
 //create an instance of the base class
 $f3 = Base::instance();
 
+//create new Database object
+$db = new Database();
+
 //define variables
 $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
     "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
