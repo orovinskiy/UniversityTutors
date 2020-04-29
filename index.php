@@ -31,6 +31,13 @@ $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
 
 // Define a default route
 $f3->route('GET /', function () {
+    $result = $GLOBALS['db']->getTutors();
+    $results = $GLOBALS['db']->testDatabase();
+
+    $_POST['results'] = $result;
+    var_dump($_POST);
+    var_dump($result);
+
     $view = new Template();
     echo $view->render("views/home.html");
 });
