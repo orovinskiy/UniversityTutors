@@ -9,6 +9,7 @@
 
 //require the autoload file
 require_once('vendor/autoload.php');
+require_once ("model/config.php");
 
 //Turn on error reporting
 ini_set('display_errors', 1);
