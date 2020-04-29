@@ -15,6 +15,7 @@ class Database
 
     /**
      * Constructor for database class. Creates a new database object
+     * @author Dallas Sloan
      */
     function __construct()
     {
