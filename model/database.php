@@ -27,10 +27,15 @@ class Database
         }
     }
 
-    function getTutors($year = '2020', $tutor = "all")
+    /**
+     * function to retrieve all data within Year table to show all information from Year table, joining with the User,
+     * and Tutor table to show all information needed within admin datatable
+     * @param string $year the year you would like to see information for. Default parameter is 2020
+     * @return array Returns array of all rows within Year table
+     * @author Dallas Sloan
+     */
+    function getTutors($year = '2020')
     {
-        //checking to see if default $tutor parameter is used
-        if ($tutor == "all"){
             //defining query
             $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
@@ -51,11 +56,20 @@ class Database
 
             //Get Results
             $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-            echo var_dump($results);
+            //echo var_dump($results);
             return $results;
-        }
 
-        //if default $tutor parameter is not used
+
+    }
+
+    /**
+     * Function to retrieve information for a specific tutor to be shown within the new hire screen
+     * @param $year parameter to know what year to grab information for
+     * @param $tutorEmail parameter to select the specific tutor
+     * @return array returns the row with the data for the specific tutor for the specific year
+     */
+    function getTutor($year, $tutorEmail)
+    {
         //defining query
         $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
@@ -70,16 +84,21 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         //Execute Statement and binding parameter
-        $statement->execute([$tutor, $year]);
+        $statement->execute([$tutorEmail, $year]);
 
         //Get Results
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        echo "$results";
+        //echo "$results";
 
         return $results;
 
     }
 
+    /**
+     * Function to test the database connection
+     * @return array returns all rows from Tutor table
+     * @author Dallas Sloan
+     */
     function testDatabase()
     {
         $sql = "SELECT * from Tutor";
@@ -92,7 +111,7 @@ class Database
 
         //Get Results
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        echo var_dump($results);
+        //echo var_dump($results);
 
         return $results;
 
