@@ -43,16 +43,13 @@ class Database
                     Year.year_placement from Year
                     JOIN Tutor on Year.user_id = Tutor.user_id
                     JOIN User on Year.user_id = User.user_id
-                    where Year.year_start = :year";
+                    where Year.year_start = ?";
 
         //Preparing statement
         $statement = $this->_dbh->prepare($sql);
 
-        //Binding Parameters
-        $statement->bindParam(':year', $year);
-
         //Execute Statement
-        $statement->execute();
+        $statement->execute([$year]);
 
         //Get Results
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);

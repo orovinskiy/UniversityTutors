@@ -25,7 +25,7 @@ $f3 = Base::instance();
 $db = new Database();
 
 //create new Controller
-$controller = new Controller($f3);
+$controller = new Controller($f3, $db);
 
 //define variables
 $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",

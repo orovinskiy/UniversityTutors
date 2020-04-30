@@ -9,16 +9,18 @@
 class Controller
 {
     private $_f3; //router
+    private $_db;
     private $_val;
 
     /**
      * Controller constructor
      * @param $f3 Object The fat free instance
      */
-    function __construct($f3)
+    function __construct($f3, $db)
     {
         //$this->_val = new Validation();
         $this->_f3 = $f3;
+        $this->_db = $db;
     }
 
     /**
@@ -28,10 +30,9 @@ class Controller
      */
     function tutorsPage($year)
     {
-        global $db;
 
         // Get tutor data for current year
-        $tutorsData = $db->getTutors($year);
+        $tutorsData = $this->_db->getTutors($year);
         
         // Set values for select dropdowns
         $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
@@ -51,8 +52,6 @@ class Controller
      * @author Keller Flint
      */
     function tutorsAjax() {
-        global $db;
-
-        $db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
+        $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
     }
 }
