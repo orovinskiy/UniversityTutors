@@ -24,6 +24,7 @@ class Controller
     /**
      * Logic and rendering for tutors page
      * @param string $year The year to load tutors data for
+     * @author Keller Flint
      */
     function tutorsPage($year)
     {
@@ -47,10 +48,11 @@ class Controller
 
     /**
      * Ajax logic for tutors page
+     * @author Keller Flint
      */
     function tutorsAjax() {
         global $db;
 
-        var_dump($db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]));
+        $db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
     }
 }

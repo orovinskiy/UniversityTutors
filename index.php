@@ -66,7 +66,7 @@ $f3->route('GET /form', function () {
 
 /**
  * Route for admin viewing and management of tutors.
- * @author Keller
+ * @author Keller Flint
  */
 $f3->route('GET /tutors/@year', function ($f3, $param) {
     global $controller;
@@ -75,6 +75,7 @@ $f3->route('GET /tutors/@year', function ($f3, $param) {
 
 /**
  * Route for tutors page ajax functions
+ * @author Keller Flint
  */
 $f3->route('POST /tutorsAjax', function () {
     global $controller;

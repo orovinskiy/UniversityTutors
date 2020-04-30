@@ -100,7 +100,6 @@ class Database
      * @param string $column The name of the column in the database being updated
      * @param mixed $value The value to set the column to
      * @param int $yearId The year_id for the year data being updated
-     *
      * @author Keller Flint
      */
     function updateYearData($column, $value, $yearId)
