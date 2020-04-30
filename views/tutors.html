@@ -49,105 +49,184 @@ Page for admin viewing and management of tutor onboarding data.
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <!-- Name -->
-            <td>Keller Flint-Blanchard</td>
+        <repeat group="{{ @tutorsData }}" value=" {{ @tutor }}">
+            <tr>
+                <!-- Name -->
+                <td>{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
 
-            <!-- Email -->
-            <td>kflint0068@gmail.com</td>
+                <!-- Email -->
+                <td>{{ @tutor['user_email'] }}</td>
 
-            <!-- Onboarding Packet -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Onboarding Packet -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_packet_sent'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- Background Check -->
-            <td>
-                <select class="form-control">
-                    <option selected>Not Done</option>
-                    <option>Sent</option>
-                    <option>Clear</option>
-                    <option>Flag</option>
-                </select>
-            </td>
+                <!-- Background Check -->
+                <td>
+                    <select class="form-control">
+                        <repeat group=" {{ @backgroundOptions }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_background'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
+                </td>
 
-            <!-- Reference Check -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Reference Check -->
+                <td>
+                    <select class="form-control">
+                        <repeat group=" {{ @referenceOptions }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_reference'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
+                </td>
 
-            <!-- Offer Letter -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Offer Letter -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_offer_letter'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- Affirmation & Disclosures -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Affirmation & Disclosures -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_affirmation_disclosures'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- Sexual Misconduct -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Sexual Misconduct -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_sexual_misconduct'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- W4 -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- W4 -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_w4'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- Handbook Verification -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Handbook Verification -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_handbook_verification'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- ADP Enrollment -->
-            <td>
-                <select class="form-control">
-                    <option selected>Not Sent</option>
-                    <option>Invite Sent</option>
-                    <option>Registered</option>
-                </select>
-            </td>
+                <!-- ADP Enrollment -->
+                <td>
+                    <select class="form-control">
+                        <repeat group=" {{ @ADPOptions }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_ADP'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
+                </td>
 
-            <!-- I-9 -->
-            <td>
-                <select class="form-control">
-                    <option selected>Not Done</option>
-                    <option>Tutor Done</option>
-                    <option>Admin Done</option>
-                </select>
-            </td>
+                <!-- I-9 -->
+                <td>
+                    <select class="form-control">
+                        <repeat group=" {{ @i9Options }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_i9'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
+                </td>
 
-            <!-- Orientation -->
-            <td>
-                <div class="form-check text-center">
-                    <input class="form-check-input checkbox-big" type="checkbox">
-                </div>
-            </td>
+                <!-- Orientation -->
+                <td>
+                    <div class="form-check text-center">
+                        <check if="{{ @tutor['year_orientation'] == 1 }}">
+                            <true>
+                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                            </true>
+                            <false>
+                                <input class="form-check-input checkbox-big" type="checkbox">
+                            </false>
+                        </check>
+                    </div>
+                </td>
 
-            <!-- Placement -->
-            <td>
-                <div class="form-group">
-                    <input type="text" class="form-control placement" placeholder="None">
-                </div>
-            </td>
-        </tr>
-
+                <!-- Placement -->
+                <td>
+                    <div class="form-group">
+                        <input type="text" class="form-control placement" placeholder="None" value="{{ @tutor['year_placement'] }}">
+                    </div>
+                </td>
+            </tr>
+        </repeat>
         </tbody>
     </table>
 </div>
