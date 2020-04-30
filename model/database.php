@@ -78,7 +78,7 @@ class Database
                     Year.year_placement from Year
                     JOIN Tutor on Year.user_id = Tutor.user_id
                     JOIN User on Year.user_id = User.user_id
-                    where User.user_email = ?
+                    where User.user_id = ?
                     and Year.year_start = ?";
 
         //Preparing statement
