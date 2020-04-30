@@ -24,6 +24,9 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
+//create new Controller
+$controller = new Controller($f3);
+
 //define variables
 $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
     "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
@@ -66,8 +69,8 @@ $f3->route('GET /form', function () {
  * @author Keller
  */
 $f3->route('GET /tutors', function () {
-    $view = new Template();
-    echo $view->render("views/tutors.html");
+    global $controller;
+    $controller->tutorsPage();
 });
 
 $f3->run();
