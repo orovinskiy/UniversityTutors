@@ -65,11 +65,11 @@ class Database
 
     /**
      * Function to retrieve information for a specific tutor to be shown within the new hire screen
-     * @param $year parameter to know what year to grab information for
-     * @param $tutorEmail parameter to select the specific tutor
+     * @param int $year parameter to know what year to grab information for
+     * @param int $userID parameter to select the specific tutor
      * @return array returns the row with the data for the specific tutor for the specific year
      */
-    function getTutor($year, $tutorEmail)
+    function getTutor($year, $userID)
     {
         //defining query
         $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
@@ -85,7 +85,7 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         //Execute Statement and binding parameter
-        $statement->execute([$tutorEmail, $year]);
+        $statement->execute([$userID, $year]);
 
         //Get Results
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
