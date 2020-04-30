@@ -12,7 +12,7 @@ class Controller
     private $_val;
 
     /**
-     * Controller constructor.
+     * Controller constructor
      * @param $f3 Object The fat free instance
      */
     function __construct($f3)
@@ -21,22 +21,33 @@ class Controller
         $this->_f3 = $f3;
     }
 
-    function tutorsPage()
+    /**
+     * Logic and rendering for tutors page
+     * @param string $year The year to load tutors data for
+     */
+    function tutorsPage($year)
     {
         global $db;
 
-        $tutorsData = $db->getTutors("2020");
+        // Get tutor data for current year
+        $tutorsData = $db->getTutors($year);
 
+        // Set values for select dropdowns
         $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
 
+        // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
-
-        var_dump($tutorsData);
 
         $view = new Template();
         echo $view->render("views/tutors.html");
+    }
+
+    function tutorsAjax() {
+        global $db;
+
+
     }
 }
