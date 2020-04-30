@@ -24,11 +24,6 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
-//define variables
-$f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
-    "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
-    "Orientation RSVP","W4"));
-
 // Define a default route
 $f3->route('GET /', function () {
     //below is code to test the database functions
@@ -46,7 +41,30 @@ $f3->route('GET /', function () {
  * Route for checklist
  * @author oleg
  */
-$f3->route('GET /checklist', function () {
+$f3->route('GET /checklist/@userId', function ($f3,$param) {
+    //get the current year
+    $currentYear = date('Y');
+    var_dump($param);
+
+    $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear,$param['userId']);
+    $checkBoxes = $checkBoxes[0];
+
+    $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
+    $checkBoxes['year_ADP'] == 'none' ? $checkBoxes['year_ADP'] = '0' : $checkBoxes['year_ADP'] = '1';
+
+    $f3->set('userName',$checkBoxes['tutor_first']." ".$checkBoxes['tutor_last']);
+    $f3->set('checkboxes',array("ADP Registration"=>$checkBoxes['year_ADP'],
+        "Adult Sexual Misconduct"=>$checkBoxes['year_sexual_misconduct'],
+        "Affirmations and Disclosures"=>$checkBoxes['year_affirmation_disclosures'],
+        "Handbook Verification"=>$checkBoxes['year_handbook_verification'],
+        "I-9"=>$checkBoxes['year_i9'],
+        "Offer Letter"=>$checkBoxes['year_offer_letter'],
+        "Orientation RSVP"=>$checkBoxes['year_orientation'],
+        "W4"=>$checkBoxes['year_w4']));
+
+
+    var_dump($checkBoxes);
+
     $view = new Template();
     echo $view->render("views/checklist.html");
 });
