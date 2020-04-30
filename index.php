@@ -73,6 +73,9 @@ $f3->route('GET /tutors/@year', function ($f3, $param) {
     $controller->tutorsPage($param['year']);
 });
 
+/**
+ * Route for tutors page ajax functions
+ */
 $f3->route('POST /tutorsAjax', function () {
     global $controller;
     $controller->tutorsAjax();

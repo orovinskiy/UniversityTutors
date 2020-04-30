@@ -18,7 +18,7 @@ $(".checkbox-big").on("click", function () {
     let value = $(this).is(":checked") ? 1 : 0;
     let yearId = $(this).data("yearid");
 
-    // Update
+    // Update database via ajax
     $.post("/tutorsAjax", {
         column: column,
         value: value,
