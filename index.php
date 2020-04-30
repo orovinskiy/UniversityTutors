@@ -9,6 +9,7 @@
 
 //require the autoload file
 require_once('vendor/autoload.php');
+require_once ("model/config.php");
 
 //Turn on error reporting
 ini_set('display_errors', 1);
@@ -20,6 +21,9 @@ session_start();
 //create an instance of the base class
 $f3 = Base::instance();
 
+//create new Database object
+$db = new Database();
+
 //define variables
 $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
     "Affirmations and Disclosures","Handbook Verification","I-9","Offer Letter",
@@ -27,6 +31,12 @@ $f3->set("tutorForms",array("ADP Registration","Adult Sexual Misconduct",
 
 // Define a default route
 $f3->route('GET /', function () {
+    //below is code to test the database functions
+    //$result = $GLOBALS['db']->getTutors();
+    //$result2 = $GLOBALS['db']->getTutor(2020,1);
+    //$results = $GLOBALS['db']->testDatabase();
+    //var_dump($result2);
+
     $view = new Template();
     echo $view->render("views/home.html");
 });
