@@ -6,7 +6,7 @@ Schema for application's database.
 
 /* User table containing basic user data. */
 CREATE TABLE User (
-    user_id int,
+    user_id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255) NOT NULL,
     user_password varchar(255) NOT NULL,
     user_is_admin bit NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE Tutor (
 
 /* Year table containing the onboarding data for tutors each year. */
 CREATE TABLE Year (
-    year_id int,
+    year_id int NOT NULL AUTO_INCREMENT,
     user_id int NOT NULL,
     year_start year NOT NULL,
     year_packet_sent bit NOT NULL,
