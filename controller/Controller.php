@@ -32,6 +32,8 @@ class Controller
         // Get tutor data for current year
         $tutorsData = $db->getTutors($year);
 
+        var_dump($tutorsData);
+
         // Set values for select dropdowns
         $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
@@ -48,6 +50,8 @@ class Controller
     function tutorsAjax() {
         global $db;
 
+        var_dump($_POST);
 
+        var_dump($db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]));
     }
 }

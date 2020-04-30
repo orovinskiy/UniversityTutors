@@ -37,7 +37,7 @@ class Database
     function getTutors($year = '2020')
     {
         //defining query
-        $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
+        $sql = "SELECT Year.year_id, Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
                     Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
                     Year.year_placement from Year
@@ -105,11 +105,14 @@ class Database
      */
     function updateYearData($column, $value, $yearId)
     {
-        $sql = "UPDATE Year SET ? = ? WHERE year_id = ?";
+
+        // TODO validate $column against php array of column names used in db to prevent sql injection
+
+        $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$column, $value, $yearId]);
+        $statement->execute([$value, $yearId]);
     }
 
     /**

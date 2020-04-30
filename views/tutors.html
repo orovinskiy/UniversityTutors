@@ -62,10 +62,12 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_packet_sent'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_packet_sent"
+                                       class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_packet_sent"
+                                       class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -108,10 +110,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_offer_letter'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_offer_letter" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_offer_letter" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -122,10 +124,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_affirmation_disclosures'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_affirmation_disclosures" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_affirmation_disclosures" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -136,10 +138,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_sexual_misconduct'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_sexual_misconduct" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_sexual_misconduct" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -150,10 +152,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_w4'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_w4" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_w4" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -164,10 +166,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_handbook_verification'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_handbook_verification" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_handbook_verification" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -210,10 +212,10 @@ Page for admin viewing and management of tutor onboarding data.
                     <div class="form-check text-center">
                         <check if="{{ @tutor['year_orientation'] == 1 }}">
                             <true>
-                                <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_orientation" class="form-check-input checkbox-big" type="checkbox" checked>
                             </true>
                             <false>
-                                <input class="form-check-input checkbox-big" type="checkbox">
+                                <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_orientation" class="form-check-input checkbox-big" type="checkbox">
                             </false>
                         </check>
                     </div>
@@ -222,7 +224,8 @@ Page for admin viewing and management of tutor onboarding data.
                 <!-- Placement -->
                 <td>
                     <div class="form-group">
-                        <input type="text" class="form-control placement" placeholder="None" value="{{ @tutor['year_placement'] }}">
+                        <input type="text" class="form-control placement" placeholder="None"
+                               value="{{ @tutor['year_placement'] }}">
                     </div>
                 </td>
             </tr>
