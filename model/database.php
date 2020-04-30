@@ -108,7 +108,12 @@ class Database
 
         // TODO validate $column against php array of column names used in db to prevent sql injection
 
-        $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
+        if ($value == '0' || $value == '1') {
+            $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
+        } else {
+            $sql = "UPDATE Year SET $column = ? WHERE year_id = ?";
+        }
+
 
         $statement = $this->_dbh->prepare($sql);
 
