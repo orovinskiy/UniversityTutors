@@ -66,10 +66,8 @@ $f3->route('GET|POST /form', function ($f3) {
         $f3->set('phone', $_POST['phone']);
         $f3->set('ssn', $_POST['ssn']);
         //if the user input in form is valid
-        if($val->ValidForm1()){
-            echo"Hi I am valid";
-            $GLOBALS['db']->insertMember(4, $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
-
+        if($val->ValidForm()){
+            $GLOBALS['db']->insertMember(6, $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
         }
         //user_id is hardcoded here needs to be changed after the login page is up
     }
@@ -85,5 +83,4 @@ $f3->route('GET /tutors', function () {
     $view = new Template();
     echo $view->render("views/tutors.html");
 });
-
 $f3->run();

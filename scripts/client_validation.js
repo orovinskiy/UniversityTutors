@@ -44,6 +44,7 @@ function lessThan255(input, valClass) {
     return isValid;
 }
 
+
 /**
  * Check to see if user input is less than 10 digits
  * @param input user's input

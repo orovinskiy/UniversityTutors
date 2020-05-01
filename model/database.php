@@ -119,15 +119,10 @@ class Database
 
     function insertMember($user_id, $firstName, $lastName, $phone, $ssn)
     {
-        echo "I am here";
         $sql = "INSERT INTO Tutor VALUES(?,?, ?, ?, ?,'test.png')";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$user_id,$firstName, $lastName, $phone, $ssn]);
-        echo $user_id;
-        echo $firstName;
-        echo $lastName;
-        echo $phone;
-        echo $ssn;
+        return $this->_dbh->lastInsertId();
     }
 
 }

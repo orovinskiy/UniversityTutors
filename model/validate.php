@@ -60,7 +60,6 @@ class Validate
             $emailResult = true;
         }
         return $emailResult;
-
     }
 
     /**
@@ -93,12 +92,10 @@ class Validate
         return $ssnResult;
     }
 
-    function validForm1()
+    function validForm()
     {
         global $f3;
         $isValid = true;//flag
-
-
         //FIRST  NAME
         if (!$this->validFirstName($f3->get('firstName'))) {
             $isValid = false;
@@ -126,75 +123,4 @@ class Validate
         }
         return $isValid;
     }
-
-
-//    function validForm($firstName, $lastName, $email, $phone, $ssn)
-//    {
-//        global $f3;
-//        $isValid = true;//flag
-//        $errors = [];
-//
-//        // first name  validation
-//        if (empty(trim($firstName))) {
-//            $isValid = false;
-//            array_push($errors, ["val-empty-error" => "Cannot be empty."]);
-//        }
-//        if (strlen($firstName) > 255) {
-//            $isValid = false;
-//            array_push($errors, ["val-lessThan255-error" => "Cannot be longer than 255 characters."]);
-//        }
-//        if(!$this->validFirstName($firstName)){
-//            $$isValid = false;
-//            array_push($errors,["val-empty-error"=> "Please enter only alphabets"]);
-//        }
-//        $f3->set("errors['firstName']", $errors);
-//        $errors = [];
-//
-//        //last name validation
-//        if (empty(trim($lastName))) {
-//            $isValid = false;
-//            array_push($errors, ["val-empty-error" => "Cannot be empty."]);
-//        }
-//        if (strlen($lastName) > 255) {
-//            $isValid = false;
-//            array_push($errors, ["val-lessThan5000-error" => "Cannot be longer than 255 characters."]);
-//        }
-//        if(!$this->validLastName($lastName)){
-//            $isValid = false;
-//            array_push($errors,["val-error"=> "Please enter only alphabets"]);
-//        }
-//        $f3->set("errors['lastName']", $errors);
-//        $errors = [];
-//
-//        //valid email
-//        if(!$this->validEmail($email)){
-//            $isValid = false;
-//            array_push($errors,["val-error"=> "Please enter valid email"]);
-//        }
-//        $f3->set("errors['email']", $errors);
-//        $errors = [];
-//
-//
-//        //valid phone
-//        if(empty(trim($phone))){
-//            $isValid = false;
-//            array_push($errors, ["val-empty-error" => "Cannot be empty."]);
-//        }
-//        if(!$this->validPhone($phone)){
-//            $isValid = false;
-//            array_push($errors,["val-error"=> "Please enter valid phone number"]);
-//        }
-//
-//        //valid ssn
-//        if(empty(trim($ssn))){
-//            $isValid = false;
-//            array_push($errors, ["val-empty-error" => "Cannot be empty."]);
-//        }
-//        if(!$this->validSsn($ssn)){
-//            $isValid = false;
-//            array_push($errors,["val-error"=> "Please enter 9 digit ssn"]);
-//        }
-//        return $isValid;
-//
-//    }
 }
