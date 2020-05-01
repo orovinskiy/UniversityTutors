@@ -26,6 +26,8 @@ $db = new Database();
 
 //instantiate Validate class
  $val = new Validate();
+//create new Controller
+$controller = new Controller($f3, $db);
 
 //define variables
 $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
@@ -77,10 +79,19 @@ $f3->route('GET|POST /form', function ($f3) {
 
 /**
  * Route for admin viewing and management of tutors.
- * @author Keller
+ * @author Keller Flint
  */
-$f3->route('GET /tutors', function () {
-    $view = new Template();
-    echo $view->render("views/tutors.html");
+$f3->route('GET /tutors/@year', function ($f3, $param) {
+    global $controller;
+    $controller->tutorsPage($param['year']);
+});
+
+/**
+ * Route for tutors page ajax functions
+ * @author Keller Flint
+ */
+$f3->route('POST /tutorsAjax', function () {
+    global $controller;
+    $controller->tutorsAjax();
 });
 $f3->run();
