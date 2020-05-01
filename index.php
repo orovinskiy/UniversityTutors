@@ -24,8 +24,6 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
-//instantiate Validate class
- $val = new Validate();
 //create new Controller
 $controller = new Controller($f3, $db);
 
@@ -59,22 +57,9 @@ $f3->route('GET /checklist', function () {
  * Route for onboarding-form
  * @author Laxmi
  */
-$f3->route('GET|POST /form', function ($f3) {
-    global $val;
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $f3->set('firstName', $_POST['firstName']);
-        $f3->set('lastName', $_POST['lastName']);
-        $f3->set('email', $_POST['email']);
-        $f3->set('phone', $_POST['phone']);
-        $f3->set('ssn', $_POST['ssn']);
-        //if the user input in form is valid
-        if($val->ValidForm()){
-            $GLOBALS['db']->insertMember(6, $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
-        }
-        //user_id is hardcoded here needs to be changed after the login page is up
-    }
-    $view = new Template();
-    echo $view->render('views/form.html');
+$f3->route('GET|POST /form/@id', function ($f3, $param) {
+    global $controller;
+    $controller->formPage($param);
 });
 
 /**

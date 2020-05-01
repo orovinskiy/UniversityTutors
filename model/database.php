@@ -140,12 +140,36 @@ class Database
 
     }
 
-    function insertMember($user_id, $firstName, $lastName, $phone, $ssn)
+    /**
+     * Insert into tutor table
+     * @param $firstName user's first name
+     * @param $lastName user's last name
+     * @param $phone user's phone
+     * @param $ssn user's ssn
+     * @return string last inserted id
+     * @author  laxmi
+     */
+    function insertMember($firstName, $lastName, $phone, $ssn)
     {
         $sql = "INSERT INTO Tutor VALUES(?,?, ?, ?, ?,'test.png')";
         $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$user_id,$firstName, $lastName, $phone, $ssn]);
+        $statement->execute([$firstName, $lastName, $phone, $ssn]);
         return $this->_dbh->lastInsertId();
+    }
+
+    /**
+     * update tutor table
+     * @param $user_id
+     * @param $firstName
+     * @param $lastName
+     * @param $phone
+     * @param $ssn
+     */
+    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn)
+    {
+        $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=? WHERE user_id=?";
+        $statement =$this->_dbh->prepare($sql);
+        $statement->execute([$firstName,$lastName,$phone,$ssn,$user_id]);
     }
 
 }
