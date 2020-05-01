@@ -69,6 +69,14 @@ $f3->route('GET /checklist/@userId', function ($f3,$param) {
     echo $view->render("views/checklist.html");
 });
 
+/**
+ * reroute too file
+ */
+$f3->route('POST /makeBox', function () {
+    $view = new Template();
+    echo $view->render('views/form.html');
+});
+
 
 /**
  * Route for onboarding-form

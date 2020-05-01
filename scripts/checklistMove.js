@@ -1,25 +1,29 @@
 $(".get").on("click",function()
 {
-    console.log(this.value);
+    console.log($(this).val());
+    console.log($(this).attr("id"));
+    console.log($(this).is(":checked"));
+    let wholeCheckBox = $(this).parents(":eq(3)");
+    console.log(wholeCheckBox);
+    wholeCheckBox.remove();
 
-    let $sideCheck = $("#"+this.value);
-    if($sideCheck.attr("checked")){
-        $sideCheck.attr("checked",false);
+    let dataValue;
+    if($(this).is(":checked")){
+        dataValue = 1;
+        $(".completedBox").append(wholeCheckBox);
     }
     else{
-        $sideCheck.attr("checked",true)
+        dataValue = 0;
+        $(".notCompletedBox").append(wholeCheckBox);
     }
-});
 
-$(".side").on("click",function()
-{
-    console.log(this.value);
+    if($(this).attr("id") === "ADP Registration"){
+        dataValue = ""
+    }
 
-    let $box = $("#"+this.value+"box");
-    if($box.attr("checked")){
-        $box.attr("checked",false);
-    }
-    else{
-        $box.attr("checked",true)
-    }
+    $.post("../makeBox",
+        {
+            form : $(this).attr("id"),
+            value : dataValue
+        });
 });

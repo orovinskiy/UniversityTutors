@@ -20,7 +20,7 @@ what forms they have already completed
 
                 <!--To be Completed Section-->
                 <legend>To Be Completed</legend>
-                <div class="row">
+                <div class="row notCompletedBox">
                     <repeat group="{{@checkboxes}}" key="{{@name}}"  value="{{@isChecked}}">
                         <check if="{{@isChecked == 0}}">
                             <div class="col-6 mb-3">
@@ -47,7 +47,7 @@ what forms they have already completed
         <div id="completed" class="col-12">
             <fieldset>
                 <legend>Completed</legend>
-                <div class="row">
+                <div class="row completedBox">
 
                     <repeat group="{{@checkboxes}}" key="{{@name2}}"  value="{{@isChecked}}">
                         <check if="{{@isChecked == 1}}">
@@ -75,9 +75,9 @@ what forms they have already completed
 </div><!--Container-->
 
 <!-- jQuery first, then Popper.js, Bootstrap JS then personal validation script-->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<!--<script src="model/checklistMove.js"></script>-->
+<script src="../scripts/checklistMove.js"></script>
 </body>
 </html>
