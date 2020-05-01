@@ -113,7 +113,7 @@ class Validate
         }
         //EMAIL
         if (!$this->validEmail($f3->get('email'))) {
-            $valid = false;
+            $isValid = false;
             $f3->set("errors['email']", "Please enter valid email address ");
         }
         //SSN

@@ -66,6 +66,7 @@ class Controller
         $this->_f3->set("ssn" , $this->_db->getTutorById($param["id"])["tutor_ssn"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
 
+
         //when the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->_f3->set('firstName', $_POST['firstName']);
@@ -78,8 +79,10 @@ class Controller
                 //check param id
                 if ($param["id"] != 0) {
                      $this->_db->updateTutor($param["id"],$_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
+                     $this->_db->updateEmail($param["id"],$_POST['email']);
                 }
             }
+
         }
         $view = new Template();
         echo $view->render('views/form.html');

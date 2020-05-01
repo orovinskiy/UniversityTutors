@@ -201,4 +201,16 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Update email
+     * @param $user_id
+     * @param $email
+     * @author laxmi
+     */
+    function  updateEmail($user_id, $email)
+    {
+        $sql = "UPDATE User SET user_email=? WHERE user_id =?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement ->execute([$email,$user_id]);
+    }
 }
