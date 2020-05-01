@@ -49,7 +49,10 @@ CREATE TABLE Year (
     FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
 );
 
-/*Test Data*/
+/*
+Test Data
+@author Oleg
+*/
 
 INSERT INTO User Values (default,"Bobby@mail.com","bobTroll!!",0),(default,"Andy@mail.com","AndyHot!!",0),(default,"CoolGuy@mail.com","notCool!!",0),
 (default,"Jasmine@mail.com","IgotNada!!",0),(default,"Admin@mail.com","Admin101!!",1),(default,"carGuy@mail.com","TrucksLOL!!",0),

@@ -1,13 +1,22 @@
-$(".get").on("click",function()
+/**
+ * This post data to a ajax function to update the database.
+ * It also moves boxes from completed or to not completed.
+ * @author Oleg Rovinskiy
+ * @version 1.0
+ */
+
+//  puts a listener on the body to see if any inputs
+// have been clicked
+$("body").on("click","input",function()
 {
-    console.log($(this).val());
-    console.log($(this).attr("id"));
-    console.log($(this).is(":checked"));
+    //predefined variables
     let wholeCheckBox = $(this).parents(":eq(3)");
-    console.log(wholeCheckBox);
+    let dataValue;
+
+    //remove whole checkbox
     wholeCheckBox.remove();
 
-    let dataValue;
+    //check what data to put into the database
     if($(this).is(":checked")){
         dataValue = 1;
         $(".completedBox").append(wholeCheckBox);
@@ -18,12 +27,17 @@ $(".get").on("click",function()
     }
 
     if($(this).attr("id") === "ADP Registration"){
-        dataValue = ""
+        $(this).is(":checked") ? dataValue = "registered" : dataValue = "none";
+    }
+    if($(this).attr("id") === "I-9"){
+        $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
     }
 
+    //Post to makeBox to save the data
     $.post("../makeBox",
         {
-            form : $(this).attr("id"),
-            value : dataValue
+            column : $(this).val(),
+            value : dataValue,
+            year : $('.yearID').attr('data-id')
         });
 });

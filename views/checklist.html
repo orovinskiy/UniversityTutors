@@ -14,6 +14,10 @@ what forms they have already completed
         <a class="border btn btn-secondary" href="#notCompleted">To Be Completed</a>
         <a class="border btn btn-secondary" href="#completed">Completed</a>
     </div><!-- Navigation -->
+
+    <!-- Welcome Intro -->
+    <p class="yearID" data-id="{{@yearID}}">Welcome, {{@userName}}</p>
+
     <div class="row">
         <div id="notCompleted" class="col-12">
             <fieldset>
@@ -21,14 +25,16 @@ what forms they have already completed
                 <!--To be Completed Section-->
                 <legend>To Be Completed</legend>
                 <div class="row notCompletedBox">
+
+                    <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checkboxes}}" key="{{@name}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked == 0}}">
+                        <check if="{{@isChecked['Value'] == 0}}">
                             <div class="col-6 mb-3">
                                 <section class="card">
                                     <h2 class="card-title text-center">{{@name}}</h2>
                                     <div class="card-subtitle">
                                         <div class="form-check mt-3 mb-5 ml-md-5">
-                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="1"
+                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
                                                    id="{{@name}}" name="doorInter[]">
                                             <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name}}">
                                                 Completed
@@ -49,14 +55,15 @@ what forms they have already completed
                 <legend>Completed</legend>
                 <div class="row completedBox">
 
+                    <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checkboxes}}" key="{{@name2}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked == 1}}">
+                        <check if="{{@isChecked['Value'] == 1}}">
                             <div class="col-6 mb-3">
                                 <section class="card">
                                     <h2 class="card-title text-center">{{@name2}}</h2>
                                     <div class="card-subtitle">
                                         <div class="form-check mt-3 mb-5 ml-md-5">
-                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="1"
+                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
                                                    id="{{@name2}}" name="doorInter[]" checked>
                                             <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name2}}">
                                                 Completed
