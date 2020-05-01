@@ -164,12 +164,41 @@ class Database
      * @param $lastName
      * @param $phone
      * @param $ssn
+     * @author laxmi
      */
     function updateTutor($user_id, $firstName, $lastName, $phone, $ssn)
     {
         $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=? WHERE user_id=?";
         $statement =$this->_dbh->prepare($sql);
         $statement->execute([$firstName,$lastName,$phone,$ssn,$user_id]);
+    }
+
+    /**
+     * Get the tutor by their user_id
+     * @param $user_id
+     * @return mixed
+     * @author laxmi
+     */
+    function getTutorById($user_id)
+    {
+        $sql = "SELECT * FROM Tutor WHERE user_id=?";
+        $statement =  $this->_dbh->prepare($sql);
+        $statement-> execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get user by it's id
+     * @param $user_id
+     * @return mixed
+     * @author  laxmi
+     */
+    function  getUserById($user_id)
+    {
+        $sql = "SELECT * FROM User WHERE user_id =? ";
+        $statement = $this->_dbh-> prepare($sql);
+        $statement ->execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
 }

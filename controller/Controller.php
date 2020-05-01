@@ -59,6 +59,14 @@ class Controller
 
     function formPage($param)
     {
+        //retrieving data form database
+        $this->_f3->set("firstName" , $this->_db->getTutorById($param["id"])["tutor_first"]);
+        $this->_f3->set("lastName" , $this->_db->getTutorById($param["id"])["tutor_last"]);
+        $this->_f3->set("phone" , $this->_db->getTutorById($param["id"])["tutor_phone"]);
+        $this->_f3->set("ssn" , $this->_db->getTutorById($param["id"])["tutor_ssn"]);
+        $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
+
+        //when the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->_f3->set('firstName', $_POST['firstName']);
             $this->_f3->set('lastName', $_POST['lastName']);
