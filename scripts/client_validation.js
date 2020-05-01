@@ -23,7 +23,6 @@ function isEmpty(input, valClass) {
     let isValid = false;
     if (input.val().trim() === "") {
         isValid = true;
-        console.log("something ");
     }
     toggleErrors(input, valClass, !isValid, "Cannot be empty.");
     return isValid;
@@ -36,11 +35,12 @@ function isEmpty(input, valClass) {
  * @returns true if the input is less than 255 characters
  */
 function lessThan255(input, valClass) {
+    $('.err').remove();
     let isValid = false;
-    if (input.val().length <= 255) {
+    if (input.val().length <= 255 && input.val().trim() != "") {
         isValid = true;
     }
-    toggleErrors(input,valClass, isValid, "Cannot be longer than 255 characters.");
+    toggleErrors(input,valClass, isValid, "Cannot be empty and longer than 255 characters.");
     return isValid;
 }
 
@@ -51,11 +51,12 @@ function lessThan255(input, valClass) {
  * @returns true if user's input is less than 10 digits
  */
 function lessThan10(input, valClass) {
+    $('.err').remove();
     let isValid = false;
-    if (input.val().length <= 10) {
+    if (input.val().length == 10 && input.val().trim() != "") {
         isValid = true;
     }
-    toggleErrors(input, valClass, isValid, "Cannot be longer than 10 characters.");
+    toggleErrors(input, valClass, isValid, "Must be 10 digits");
     return isValid;
 }
 
@@ -66,11 +67,12 @@ function lessThan10(input, valClass) {
  * @returns true if user's input is less then 9 digits
  */
 function lessThan9(input, valClass) {
+    $('.err').remove();
     let isValid = false;
-    if (input.val().length <= 9) {
+    if (input.val().length == 9 && input.val().trim()!=="") {
         isValid = true;
     }
-    toggleErrors(input, valClass, isValid, "Cannot be longer than 9 characters.");
+    toggleErrors(input, valClass, isValid, "Must be 9 digits");
     return isValid;
 }
 
@@ -81,6 +83,7 @@ function lessThan9(input, valClass) {
  * @returns true if user's input does not have spaces
  */
 function hasSpaces(input, valClass) {
+    $('.err').remove();
     let isValid = false;
     if (/\s/.test(input.val())) {
         isValid = true;

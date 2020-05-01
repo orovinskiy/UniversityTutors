@@ -28,38 +28,51 @@ Form for OnBoarding process
             <div class="row">
                 <div class="col">
                     <!--div for first name-->
-                    <div class="row form-group val-empty val-lessThan255 val-hasSpaces">
+                    <div class="row form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="firstName">First Name</label>
                         <input type="text" class="input form-control" name="firstName" id="firstName">
+                        <check if="{{ @errors['firstName'] }}">
+                            <span class="err">{{ @errors['firstName'] }}</span>
+                        </check>
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for email-->
-                    <div class="row form-group val-empty val-lessThan255">
+                    <div class="row form-group  val-lessThan255">
                         <label class="font-weight-bold" for="email">Email</label>
                         <input type="text" class="form-control input" name="email" id="email">
+                        <check if="{{ @errors['email'] }}">
+                            <span class="err">{{ @errors['email'] }}</span>
+                        </check>
                         <div class="errors text-danger"></div>
-
                     </div>
                     <!--div for phone-->
-                    <div class="row form-group val-empty val-lessThan10">
+                    <div class="row form-group val-lessThan10">
                         <label class="font-weight-bold" for="phone">Phone</label>
                         <input type="tel" class="form-control input" name="phone" id="phone">
+                        <check if="{{ @errors['phone'] }}">
+                            <span class="err">{{ @errors['phone'] }}</span>
+                        </check>
                         <div class="errors text-danger"></div>
-
                     </div>
                     <!--div for SSN-->
-                    <div class="row form-group val-empty val-lessThan9"><!--div for SSN-->
+                    <div class="row form-group val-lessThan9"><!--div for SSN-->
                         <label class="font-weight-bold" for="ssn">SSN</label>
                         <input type="text" class="form-control input " name="ssn" id="ssn">
+                        <check if="{{ @errors['ssn'] }}">
+                            <span class="err">{{ @errors['ssn'] }}</span>
+                        </check>
                         <div class="errors text-danger"></div>
-
                     </div>
                 </div><!--div col closed-->
                 <div class="col">
                     <!--div for last name-->
-                    <div class="form-group val-empty val-lessThan255 val-hasSpaces">
+                    <div class="form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="lastName">Last Name</label>
                         <input type="text" class="form-control input" name="lastName" id="lastName">
+                        <check if="{{ @errors['firstName'] }}">
+                            <span class="err">{{ @errors['lastName'] }}</span>
+                        </check>
+
                         <div class="errors text-danger"></div>
 
                     </div>

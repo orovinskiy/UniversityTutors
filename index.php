@@ -24,6 +24,9 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
+//instantiate Validate class
+ $val = new Validate();
+
 //define variables
 $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
     "Affirmations and Disclosures", "Handbook Verification", "I-9", "Offer Letter",
@@ -32,17 +35,9 @@ $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
 // Define a default route
 $f3->route('GET /', function () {
     //below is code to test the database functions
-    $result = $GLOBALS['db']->getTutors();
-    $result2 = $GLOBALS['db']->getTutor(2020, 1);
-    $results = $GLOBALS['db']->testDatabase();
-    echo "<pre>";
-    echo "gettutor";
-    var_dump($result2);
-    echo "<pre>";
-
-    echo "testDatabase";
-    var_dump($results);
-
+//    $result = $GLOBALS['db']->getTutors();
+//    $result2 = $GLOBALS['db']->getTutor(2020, 1);
+//    $results = $GLOBALS['db']->testDatabase();
     $view = new Template();
     echo $view->render("views/home.html");
 });
@@ -62,10 +57,21 @@ $f3->route('GET /checklist', function () {
  * Route for onboarding-form
  * @author Laxmi
  */
-$f3->route('GET|POST /form', function () {
+$f3->route('GET|POST /form', function ($f3) {
+    global $val;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $f3->set('firstName', $_POST['firstName']);
+        $f3->set('lastName', $_POST['lastName']);
+        $f3->set('email', $_POST['email']);
+        $f3->set('phone', $_POST['phone']);
+        $f3->set('ssn', $_POST['ssn']);
+        //if the user input in form is valid
+        if($val->ValidForm1()){
+            echo"Hi I am valid";
+            $GLOBALS['db']->insertMember(4, $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
+
+        }
         //user_id is hardcoded here needs to be changed after the login page is up
-        $GLOBALS['db']->insertMember(4, $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
     }
     $view = new Template();
     echo $view->render('views/form.html');
