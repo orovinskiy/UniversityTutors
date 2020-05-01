@@ -74,3 +74,39 @@ INSERT INTO Year VALUES (default,"1","2020",1,"sent","clear",0,1,1,0,1,"invited"
 (default,"10","2020",1,"sent","none",0,1,0,0,1,"invited","none",1,"Gamevill Elementry"),
 (default,"11","2020",0,"flag","incomplete",1,1,1,0,1,"registered","tutor",1,"NoneExistence Elementry"),
 (default,"12","2020",1,"none","clear",0,0,1,1,1,"none","tutor",0,"Ghetttto Elementry");
+
+/*
+Test Data for application database
+
+@author Dallas Sloan
+ */
+
+-- Insert statements for user table --
+insert into User values(default,"jdoe@mail.greenriver.edu", "password", b'1');
+insert into User values(default, "kflint@mail.greenriver.edu", "password", b'1');
+insert into User values(default,"sguy@mail.greenriver.edu", "password", b'0');
+insert into User values(default,"tostrich@mail.greenriver.edu", "password", b'0');
+insert into User values(default,"test@mail.greenriver.edu", "password", b'0');
+insert into User values(default,"jsmith@mail.greenriver.edu", "password", b'0');
+
+-- Insert statements for Tutor table
+insert into Tutor (user_id, tutor_first, tutor_last, tutor_phone) values(2, "Some", "Guy", 1231231234);
+insert into Tutor (user_id, tutor_first, tutor_last, tutor_phone) values(3, "Tuna", "Ostrich", 1112223333);
+insert into Tutor (user_id, tutor_first, tutor_last, tutor_phone) values(4, "Dave", "Test", 8585858585);
+insert into Tutor (user_id, tutor_first, tutor_last, tutor_phone) values(5, "Joe", "Smith", 2222333545);
+
+-- Insert statements for Year table
+insert into Year values(default,2,2020,b'1',"sent","flag",b'1', b'0',b'0',b'1',b'0',"invited", "none", b'0', "not placed");
+insert into Year values(default,2,2019,b'1',"clear","flag",b'1', b'1',b'0',b'0',b'0',"invited", "none", b'0', "not placed");
+insert into Year values(default,3,2020,b'1',"none","incomplete",b'1', b'1',b'0',b'1',b'0',"invited", "none", b'1', "Seattle High");
+insert into Year values(default,3,2017,b'0',"none","incomplete",b'0', b'0',b'0',b'0',b'0',"registered", "tutor", b'0', "Not Placed");
+insert into Year values(default,4,2020,b'1',"flag","none",b'0', b'1',b'1',b'1',b'1',"none", "none", b'1', "Test Middle School");
+insert into Year values(default,5,2018,b'1',"clear","clear",b'1', b'0',b'0',b'0',b'1',"registered", "admin", b'0', "Test High School");
+insert into Year values(default,5,2019,b'1',"clear","flag",b'0', b'0',b'1',b'1',b'1',"invited", "tutor", b'1', "Ranier");
+insert into Year values(default,5,2020,b'0',"none","incomplete",b'1', b'1',b'1',b'1',b'1',"none", "none", b'1', "Test High School");
+
+
+
+
+
+>>>>>>> master

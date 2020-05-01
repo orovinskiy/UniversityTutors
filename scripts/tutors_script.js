@@ -9,3 +9,51 @@ $(document).ready(function () {
         responsive: true
     });
 });
+
+// Event listener for updating checkboxes
+$(".checkbox-big").on("click", function () {
+
+    // Get data for update
+    let column = $(this).data("column");
+    let value = $(this).is(":checked") ? 1 : 0;
+    let yearId = $(this).data("yearid");
+
+    // Update database via ajax
+    $.post("/tutorsAjax", {
+        column: column,
+        value: value,
+        yearId: yearId
+    });
+});
+
+// Event listener for updating selects
+$(".tutor-select").on("change", function () {
+
+    // Get data for update
+    let column = $(this).data("column");
+    let value = $(this).val();
+    let yearId = $(this).data("yearid");
+
+    // Update database via ajax
+    $.post("/tutorsAjax", {
+        column: column,
+        value: value,
+        yearId: yearId
+    });
+});
+
+// Event listener for updating inputs
+$(".placement").on("blur", function () {
+
+    // Get data for update
+    let column = $(this).data("column");
+    let value = $(this).val();
+    let yearId = $(this).data("yearid");
+
+    // Update database via ajax
+    $.post("/tutorsAjax", {
+        column: column,
+        value: value,
+        yearId: yearId
+    });
+});

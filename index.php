@@ -9,7 +9,7 @@
 
 //require the autoload file
 require_once('vendor/autoload.php');
-require_once ("model/config.php");
+require_once("model/config.php");
 
 //Turn on error reporting
 ini_set('display_errors', 1);
@@ -23,6 +23,10 @@ $f3 = Base::instance();
 
 //create new Database object
 $db = new Database();
+
+
+//create new Controller
+$controller = new Controller($f3, $db);
 
 // Define a default route
 $f3->route('GET /', function () {
@@ -89,11 +93,20 @@ $f3->route('GET /form', function () {
 
 /**
  * Route for admin viewing and management of tutors.
- * @author Keller
+ * @author Keller Flint
  */
-$f3->route('GET /tutors', function () {
-    $view = new Template();
-    echo $view->render("views/tutors.html");
+$f3->route('GET /tutors/@year', function ($f3, $param) {
+    global $controller;
+    $controller->tutorsPage($param['year']);
+});
+
+/**
+ * Route for tutors page ajax functions
+ * @author Keller Flint
+ */
+$f3->route('POST /tutorsAjax', function () {
+    global $controller;
+    $controller->tutorsAjax();
 });
 
 $f3->run();
