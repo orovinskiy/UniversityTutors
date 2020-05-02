@@ -37,3 +37,9 @@ legend {
 .err{
     color: #dc3545;
 }
+img{
+    width: 100px;
+}
+.err{
+    text-align: center;
+}

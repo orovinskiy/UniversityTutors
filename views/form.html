@@ -71,7 +71,7 @@ Form for OnBoarding process
                         <label class="font-weight-bold" for="lastName">Last Name</label>
                         <input type="text" class="form-control input" name="lastName" id="lastName"
                                value="{{@lastName}}">
-                        <check if="{{ @errors['firstName'] }}">
+                        <check if="{{ @errors['lastName'] }}">
                             <span class="err">{{ @errors['lastName'] }}</span>
                         </check>
 
@@ -79,20 +79,43 @@ Form for OnBoarding process
 
                     </div>
                     <!--div for image-->
+                    <div class="from-group">
+                        <input type="file" class="form-control-file" name="fileToUpload" id="img">
+                    </div>
                     <div>
-                        <label class="font-weight-bold" for="img">Select image:</label>
-                        <input type="file" id="img" name="img" accept="image/*">
+                        <img src="../uploads/{{ @image }}" alt="tutor image">
                     </div>
-                    <!--div for image preview-->
-                    <div class="row image-preview mt-4 ml-4" id="imagePreview">
-                        <img scr="" alt="Image Preview" class="image-preview__image">
-                        <span class="image-preview__default-text">Image Preview</span>
-                    </div>
+                    <check if="{{ @errors['image'] }}">
+                        <span class="err">{{ @errors['image'] }}</span>
+                    </check>
+                    <div class="errors text-danger"></div>
+
+                    <!--                    <div>-->
+                    <!--                        <label class="font-weight-bold" for="img">Select image:</label>-->
+                    <!--                        <input type="file" id="img" name="img" accept="image/*">-->
+                    <!--                    </div>-->
+                    <!--                    &lt;!&ndash;div for image preview&ndash;&gt;-->
+                    <!--                    <div class="row image-preview mt-4 ml-4" id="imagePreview">-->
+                    <!--                        <img scr="" alt="Image Preview" class="image-preview__image">-->
+                    <!--                        <span class="image-preview__default-text">Image Preview</span>-->
+                    <!--                    </div>-->
                 </div>
             </div><!--div main row closed-->
             <div class="float-right">
                 <button type="submit" class="btn btn-primary btn-lg" name="submit">Submit</button>
             </div>
+            <check if="{{ @errors['largeImg'] }}">
+                <span class="err text-danger">{{ @errors['largeImg'] }}</span>
+            </check>
+            <check if="{{ @errors['returnCode'] }}">
+                <span class="err text-danger">{{ @errors['returnCode'] }}</span>
+            </check>
+            <check if="{{ @errors['duplicatedImage'] }}">
+                <span class="err text-danger">{{ @errors['duplicatedImage'] }}</span>
+            </check>
+            <check if="{{ @errors['wrongFileType'] }}">
+                <span class="err text-danger">{{ @errors['wrongFileType'] }}</span>
+            </check>
         </fieldset>
     </form>
 </div><!--main div closed-->

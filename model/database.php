@@ -213,4 +213,11 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement ->execute([$email,$user_id]);
     }
+
+    function uploadTutorImage($filePath,$user_id)
+    {
+        $sql="UPDATE Tutor SET tutor_image =?  WHERE  user_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$filePath,$user_id]);
+    }
 }

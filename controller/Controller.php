@@ -56,35 +56,65 @@ class Controller
         $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
     }
 
+    /**
+     * render page for form
+     * @param $param
+     * @author laxmi
+     */
 
     function formPage($param)
     {
+        global $dirName;
         //retrieving data form database
-        $this->_f3->set("firstName" , $this->_db->getTutorById($param["id"])["tutor_first"]);
-        $this->_f3->set("lastName" , $this->_db->getTutorById($param["id"])["tutor_last"]);
-        $this->_f3->set("phone" , $this->_db->getTutorById($param["id"])["tutor_phone"]);
-        $this->_f3->set("ssn" , $this->_db->getTutorById($param["id"])["tutor_ssn"]);
+        //need to be changed
+        $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
+        $this->_f3->set("lastName", $this->_db->getTutorById($param["id"])["tutor_last"]);
+        $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
+        $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
+        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
 
 
         //when the form is submitted
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $this->_f3->set('firstName', $_POST['firstName']);
             $this->_f3->set('lastName', $_POST['lastName']);
             $this->_f3->set('email', $_POST['email']);
             $this->_f3->set('phone', $_POST['phone']);
             $this->_f3->set('ssn', $_POST['ssn']);
+            $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
-            if ($this->_val->ValidForm()) {
+            var_dump($_FILES);
+            if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName)) {
                 //check param id
                 if ($param["id"] != 0) {
-                     $this->_db->updateTutor($param["id"],$_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
-                     $this->_db->updateEmail($param["id"],$_POST['email']);
+                    $this->_db->updateTutor($param["id"], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
+                    $this->_db->updateEmail($param["id"], $_POST['email']);
+                    echo "before Image";
+                    //not validating but able to update in database
+                    move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
+                    $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                 }
             }
-
         }
         $view = new Template();
         echo $view->render('views/form.html');
     }
+
+    /**
+     * function to generate random string for file name
+     * @return string
+     * @author laxmi
+     */
+    function generateRandomString()
+    {
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
 }

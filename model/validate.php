@@ -34,7 +34,7 @@ class Validate
     function validFirstName($firstName)
     {
         $firstName = trim($firstName);
-            return ctype_alpha($firstName);
+        return ctype_alpha($firstName);
     }
 
     /**
@@ -92,7 +92,7 @@ class Validate
         return $ssnResult;
     }
 
-    function validForm()
+    function validForm($file, $newName)
     {
         global $f3;
         $isValid = true;//flag
@@ -121,6 +121,47 @@ class Validate
             $isValid = false;
             $f3->set("errors['ssn']", "Please enter valid 9 digit SSN ");
         }
+        //image file
+        echo "above file";
+        if (isset($file)) {
+                if (!$this->validateFileUpload($file, $newName)) {
+                    $isValid = false;
+                    $f3->set("errors['image']", "please upload image");
+            }
+        }
         return $isValid;
     }
+
+    function validateFileUpload($file, $newName)
+    {
+        global $dirName;
+        global $f3;
+
+        $isValid = true;
+        //defining the valid file type
+        $validateType = array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
+
+        //checking the file size 2MB-maximum
+        if ($_SERVER['CONTENT_LENGTH'] > 3000000) {
+            $f3->set("errors['largeImg", "Sorry! file size too large Maximum file size is 3 MB ");
+            $isValid = false;
+        } //check the file type
+        elseif (in_array($file['type'], $validateType)) {
+            if ($file['error'] > 0) {
+                $f3->set("errors['returnCode']", "Sorry! file could not be uploaded Try again");
+                $isValid = false;
+            }
+
+            //checking for duplicate
+            if (file_exists($dirName . $newName)) {
+                $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
+                $isValid = false;
+            }
+        } else {
+            $f3->set("errors['wrongFileType']", "Sorry! Only supports .jpeg, .jpg, .gif and .png images");
+            $isValid = false;
+        }
+        return $isValid;
+    }
+
 }
