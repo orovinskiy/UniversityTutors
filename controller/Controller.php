@@ -74,7 +74,7 @@ class Controller
     /**
      * View of all the required forms. Lets the user check of or uncheck a form if it has been
      * completed
-     * @param $param int is the id of the user
+     * @param int $param is the id of the user
      * @author oleg
      */
     function checklist($param){
