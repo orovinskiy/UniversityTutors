@@ -24,13 +24,9 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
+
 //create new Controller
 $controller = new Controller($f3, $db);
-
-//define variables
-$f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
-    "Affirmations and Disclosures", "Handbook Verification", "I-9", "Offer Letter",
-    "Orientation RSVP", "W4"));
 
 // Define a default route
 $f3->route('GET /', function () {
@@ -47,11 +43,18 @@ $f3->route('GET /', function () {
 
 /**
  * Route for checklist
- * @author oleg
+ * @author Oleg
  */
-$f3->route('GET /checklist', function () {
-    $view = new Template();
-    echo $view->render("views/checklist.html");
+$f3->route('GET /checklist/@userId', function ($f3,$param) {
+    $GLOBALS['controller']->checklist($param);
+});
+
+/**
+ * route to checklist ajax function
+ * @author Oleg
+ */
+$f3->route('POST /makeBox', function () {
+    $GLOBALS['controller']->checklistAjax();
 });
 
 

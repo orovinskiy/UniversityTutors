@@ -7,170 +7,74 @@ what forms they have already completed
  -->
 
 <include href="views/navbar.html"><!-- This brings in the navbar -->
-    <link rel="stylesheet" href="styles/checklist.css">
+    <link rel="stylesheet" href="../styles/checklist.css">
 
 <div class="container">
     <div class="btn-group mb-3 mt-1 center">
         <a class="border btn btn-secondary" href="#notCompleted">To Be Completed</a>
         <a class="border btn btn-secondary" href="#completed">Completed</a>
     </div><!-- Navigation -->
+
+    <!-- Welcome Intro -->
+    <p class="yearID" data-id="{{@yearID}}">Welcome, {{@userName}}</p>
+
     <div class="row">
-        <div id="notCompleted" class="col-8">
+        <div id="notCompleted" class="col-12">
             <fieldset>
 
                 <!--To be Completed Section-->
                 <legend>To Be Completed</legend>
-                <div class="row">
+                <div class="row notCompletedBox">
 
-                    <!--W4 Form-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">W4 Form</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="W4"
-                                           id="W4box" name="doorInter[]">
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="W4box">
-                                        Completed
-                                    </label>
-                                </div>
+                    <!-- Creates a box with the form that was not completed -->
+                    <repeat group="{{@checkboxes}}" key="{{@name}}"  value="{{@isChecked}}">
+                        <check if="{{@isChecked['Value'] == 0}}">
+                            <div class="col-6 mb-3">
+                                <section class="card">
+                                    <h2 class="card-title text-center">{{@name}}</h2>
+                                    <div class="card-subtitle">
+                                        <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
+                                                   id="{{@name}}" name="doorInter[]">
+                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name}}">
+                                                Completed
+                                            </label>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
-                        </section>
-                    </div>
-
-                    <!--Affirmations and Disclosures-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">Affirmations and Disclosures</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="Affirmations and Disclosures"
-                                           id="Affirmations and Disclosuresbox" name="doorInter[]">
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="Affirmations and Disclosuresbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!--Handbook Verification-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">Handbook Verification</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="Handbook Verification"
-                                           id="Handbook Verificationbox" name="doorInter[]">
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="Handbook Verificationbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!--Offer Letter-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">Offer Letter</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="Offer Letter"
-                                           id="Offer Letterbox" name="doorInter[]">
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="Offer Letterbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!--Orientation RSVP-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">Orientation RSVP</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="Orientation RSVP"
-                                           id="Orientation RSVPbox" name="doorInter[]">
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="Orientation RSVPbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
+                        </check>
+                    </repeat>
                 </div>
             </fieldset>
         </div><!--Column-->
 
-        <!-- This is the side checklist -->
-        <div class="col-4 mt-3">
-            <repeat group="{{@tutorForms}}" value="{{@form}}">
-                <div class="form-check mb-1">
-                    <input class="form-check-input side" type="checkbox" value="{{@form}}"
-                    id="{{@form}}" name="doorInter[]">
-                    <label class="form-check-label" for="{{@form}}">
-                        {{@form}}
-                    </label>
-                </div>
-            </repeat>
-        </div><!--Column-->
-
         <!--Completed Section-->
-        <div id="completed" class="col-8">
+        <div id="completed" class="col-12">
             <fieldset>
                 <legend>Completed</legend>
-                <div class="row">
+                <div class="row completedBox">
 
-                    <!--I9 Form-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">I9 Form</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="I-9"
-                                           id="I-9box" checked name="doorInter[]" >
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="I-9box">
-                                        Completed
-                                    </label>
-                                </div>
+                    <!-- Creates a box with the form that was not completed -->
+                    <repeat group="{{@checkboxes}}" key="{{@name2}}"  value="{{@isChecked}}">
+                        <check if="{{@isChecked['Value'] == 1}}">
+                            <div class="col-6 mb-3">
+                                <section class="card">
+                                    <h2 class="card-title text-center">{{@name2}}</h2>
+                                    <div class="card-subtitle">
+                                        <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
+                                                   id="{{@name2}}" name="doorInter[]" checked>
+                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name2}}">
+                                                Completed
+                                            </label>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
-                        </section>
-                    </div>
+                        </check>
+                    </repeat>
 
-                    <!--ADP Registration-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">ADP Registration</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="ADP Registration"
-                                           id="ADP Registrationbox" checked name="doorInter[]" >
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="ADP Registrationbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!--Adult Sexual Misconduct-->
-                    <div class="col-6 mb-3">
-                        <section class="card">
-                            <h2 class="card-title text-center">Adult Sexual Misconduct</h2>
-                            <div class="card-subtitle">
-                                <div class="form-check mt-3 mb-5 ml-md-5">
-                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="Adult Sexual Misconduct"
-                                           id="Adult Sexual Misconductbox" checked name="doorInter[]" >
-                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="Adult Sexual Misconductbox">
-                                        Completed
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
                 </div>
             </fieldset>
         </div><!--Column-->
@@ -178,9 +82,9 @@ what forms they have already completed
 </div><!--Container-->
 
 <!-- jQuery first, then Popper.js, Bootstrap JS then personal validation script-->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<!--<script src="model/checklistMove.js"></script>-->
+<script src="../scripts/checklistMove.js"></script>
 </body>
 </html>
