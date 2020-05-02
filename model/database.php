@@ -117,6 +117,42 @@ class Database
     }
 
     /**
+     * Inserts into User, Tutor and Year tables to create a new user.
+     *
+     * @param string $year The new user's starting year of employment.
+     * @param string $email The new user's email
+     * @return int The new user's id
+     * @author Keller Flint
+     */
+    function addNewTutor($year, $email)
+    {
+        // add new user
+        $sql = "insert into User values(default, ?, '1234', b'0')";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$email]);
+
+        $id = $this->_dbh->lastInsertId();
+
+        // add new tutor
+        $sql = "insert into Tutor (user_id) values($id)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute();
+
+        // add new year data
+        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$year]);
+
+        return $id;
+    }
+
+    /**
      * Function to test the database connection
      * @return array returns all rows from Tutor table
      * @author Dallas Sloan

@@ -16,9 +16,9 @@ CREATE TABLE User (
 
 /* Tutor table containing basic tutor data. Child of User table. */
 CREATE TABLE Tutor (
-    user_id int,
-    tutor_first varchar(255) NOT NULL,
-    tutor_last varchar(255) NOT NULL,
+    user_id int NOT NULL,
+    tutor_first varchar(255) NULL,
+    tutor_last varchar(255) NULL,
     tutor_phone varchar(255) NULL,
     tutor_ssn varchar(255) NULL,
     tutor_image varchar(255) NULL,
