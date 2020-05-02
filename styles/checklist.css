@@ -1,6 +1,6 @@
 .center{
-    margin-left: 22%;
-    margin-right: 25%;
+    margin-left: 36%;
+    margin-right: 36%;
 }
 
 fieldset{
@@ -14,3 +14,12 @@ legend{
     padding-left: 5%;
 }
 
+input {
+    transform: scale(1.3);
+    -webkit-transform: scale(1.3);
+}
+
+.card{
+    background-color: lightgray;
+    padding-top: 5%;
+}
