@@ -43,3 +43,8 @@ img{
 .err{
     text-align: center;
 }
+em{
+    color: palevioletred;
+    font-size: smaller;
+    margin-left: 5px;
+}

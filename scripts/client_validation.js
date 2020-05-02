@@ -53,29 +53,12 @@ function lessThan255(input, valClass) {
 function lessThan10(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().length == 10 && input.val().trim() != "") {
+    if (input.val().length == 14 && input.val().trim() != "") {
         isValid = true;
     }
-    toggleErrors(input, valClass, isValid, "Must be 10 digits");
+    toggleErrors(input, valClass, isValid, "Must be valid");
     return isValid;
 }
-
-// /**
-//  * Check to see if user input is less then 9 digits
-//  * @param input user's input
-//  * @param valClass from array
-//  * @returns true if user's input is less then 9 digits
-//  */
-// function lessThan9(input, valClass) {
-//     $('.err').remove();
-//     let isValid = false;
-//     if (input.val().length == 9 && input.val().trim()!=="") {
-//         isValid = true;
-//     }
-//     toggleErrors(input, valClass, isValid, "Must be 9 digits");
-//     return isValid;
-// }
-
 /**
  * Check to see if user input spaces
  * @param input user's input

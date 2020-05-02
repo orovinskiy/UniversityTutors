@@ -2,7 +2,8 @@
 
 /**
  * Validating onboarding form
- * */
+ * @author Laxmi kandel
+ */
 class Validate
 {
     /**
@@ -28,7 +29,7 @@ class Validate
 
     /**
      * Validating First Name
-     * @param $firstName
+     * @param $firstName tutor's first name
      * @return bool
      */
     function validFirstName($firstName)
@@ -39,7 +40,7 @@ class Validate
 
     /**
      * Validating Last Name
-     * @param $last
+     * @param $last tutor's last name
      * @return bool
      */
     function validLastName($last)
@@ -50,7 +51,7 @@ class Validate
 
     /**
      * Validating email
-     * @param $email
+     * @param $email tutor's email
      * @return bool
      */
     function validEmail($email)
@@ -64,22 +65,25 @@ class Validate
 
     /**
      * Validating Phone Number
-     * @param $phone
+     * @param $phone tutor's phone
      * @return bool
      */
     function validPhone($phone)
     {
+        $regex =  "[0-9()-]";
         $phoneResult = false;
         $phone = trim($phone);
-        if (strlen($phone) == 10 && ctype_digit($phone)) {
+        echo $phone;
+        echo strlen($phone);
+        if (strlen($phone) == 14 && preg_match($regex,$phone)){
             $phoneResult = true;
         }
         return $phoneResult;
     }
 
     /**
-     * Validating SSN
-     * @param ssn
+     * Validating SSN if provided
+     * @param ssn tutor's ssn
      * @return bool
      */
     function validSsn($ssn)
@@ -96,10 +100,17 @@ class Validate
         return $ssnResult;
     }
 
+    /**Validating all the required fields name, phone, email, ssn, image
+     * @param $file user's selected file for image
+     * @param $newName name for file
+     * @return bool
+     * @author  Laxmi
+     */
     function validForm($file, $newName)
     {
         global $f3;
         $isValid = true;//flag
+
         //FIRST  NAME
         if (!$this->validFirstName($f3->get('firstName'))) {
             $isValid = false;
@@ -113,7 +124,7 @@ class Validate
         //PHONE
         if (!$this->validPhone($f3->get('phone'))) {
             $isValid = false;
-            $f3->set("errors['phone']", "Please enter valid 10 digit phone number ");
+            $f3->set("errors['phone']", "Please enter valid phone number ");
         }
         //EMAIL
         if (!$this->validEmail($f3->get('email'))) {
@@ -136,7 +147,12 @@ class Validate
         return $isValid;
     }
 
-
+    /**
+     * Validate image
+     * @param $file image file
+     * @param $newName image name
+     * @return bool
+     */
 
     function validateFileUpload($file, $newName)
     {
@@ -171,50 +187,4 @@ class Validate
         }
         return $isValid;
     }
-
-//
-//    function validateFileUpload($file, $newName)
-//    {
-//        echo "running into function";
-//        global $dirName;
-//        global $f3;
-//
-//        $isValid = true;
-//        //defining the valid file type
-//        $validateType = array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
-//
-//        if (isset($file)) {
-//            //checking the file size 2MB-maximum
-//            if ($_SERVER['CONTENT_LENGTH'] > 3000000) {
-//                $f3->set("errors['largeImg", "Sorry! file size too large Maximum file size is 3 MB ");
-//                $isValid = false;
-//                return $isValid;
-//            } //check the file type
-//            if (in_array($file['type'], $validateType)) {
-//                if ($file['error'] > 0) {
-//                    $f3->set("errors['returnCode']", "Sorry! Something went wrong please try again!");
-//                    $isValid = false;
-//                    return $isValid;
-//                }
-//                //checking for duplicate
-//                if (file_exists($dirName . $newName)) {
-//                    $f3->set("errors['duplicatedImage']", "Sorry! Something went wrong please try again!");
-//                    $isValid = false;
-//                    return $isValid;
-//                }
-//            }
-//            if(!in_array($file['type'],$validateType)) {
-//                $f3->set("errors['wrongFileType']", "Sorry! Only supports .jpeg, .jpg, .gif and .png images");
-//                $isValid = false;
-//                return $isValid;
-//            }
-//            else{
-//                return $isValid;
-//            }
-//        }
-//        else{
-//            return $isValid;
-//        }
-//    }
-
 }

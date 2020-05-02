@@ -158,12 +158,12 @@ class Database
     }
 
     /**
-     * update tutor table
-     * @param $user_id
-     * @param $firstName
-     * @param $lastName
-     * @param $phone
-     * @param $ssn
+     * update tutor table in given user's id
+     * @param $user_id  given user's id
+     * @param $firstName tutor's first name
+     * @param $lastName tutor's last name
+     * @param $phone tutor's phone
+     * @param $ssn tutor's ssn
      * @author laxmi
      */
     function updateTutor($user_id, $firstName, $lastName, $phone, $ssn)
@@ -175,8 +175,8 @@ class Database
 
     /**
      * Get the tutor by their user_id
-     * @param $user_id
-     * @return mixed
+     * @param $user_id given user's id
+     * @return returns  a row from Tutor table
      * @author laxmi
      */
     function getTutorById($user_id)
@@ -189,8 +189,8 @@ class Database
 
     /**
      * Get user by it's id
-     * @param $user_id
-     * @return mixed
+     * @param $user_id given user's id
+     * @return returns a rows from Tutor table
      * @author  laxmi
      */
     function  getUserById($user_id)
@@ -203,8 +203,8 @@ class Database
 
     /**
      * Update email
-     * @param $user_id
-     * @param $email
+     * @param $user_id given user's id
+     * @param $email tutor's email
      * @author laxmi
      */
     function  updateEmail($user_id, $email)
@@ -214,6 +214,12 @@ class Database
         $statement ->execute([$email,$user_id]);
     }
 
+    /**
+     * Upload tutor's image
+     * @param $filePath path of image
+     * @param $user_id given user's id
+     * @laxmi
+     */
     function uploadTutorImage($filePath,$user_id)
     {
         $sql="UPDATE Tutor SET tutor_image =?  WHERE  user_id=?";
