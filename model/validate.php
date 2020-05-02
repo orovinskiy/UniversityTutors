@@ -78,7 +78,7 @@ class Validate
     }
 
     /**
-     * Validating Phone Number
+     * Validating SSN
      * @param ssn
      * @return bool
      */
@@ -86,8 +86,12 @@ class Validate
     {
         $ssnResult = false;
         $ssn = trim($ssn);
-        if (strlen($ssn) == 9 && ctype_digit($ssn)) {
-            $ssnResult = true;
+        if(!empty($ssn)){
+            if (strlen($ssn) == 9 && ctype_digit($ssn)) {
+                $ssnResult = true;
+            }
+        }else{
+            $ssnResult =true;
         }
         return $ssnResult;
     }
@@ -123,13 +127,16 @@ class Validate
         }
         //image file
         if (isset($file)) {
+            if(!empty($file["name"])){
                 if (!$this->validateFileUpload($file, $newName)) {
                     $isValid = false;
-                    $f3->set("errors['image']", "please upload image");
+                }
             }
         }
         return $isValid;
     }
+
+
 
     function validateFileUpload($file, $newName)
     {
@@ -155,6 +162,8 @@ class Validate
             if (file_exists($dirName . $newName)) {
                 $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
                 $isValid = false;
+            } else {
+                $f3->set("success['uploadSuccessfully']", "Updated successfully");
             }
         } else {
             $f3->set("errors['wrongFileType']", "Sorry! Only supports .jpeg, .jpg, .gif and .png images");
@@ -162,5 +171,50 @@ class Validate
         }
         return $isValid;
     }
+
+//
+//    function validateFileUpload($file, $newName)
+//    {
+//        echo "running into function";
+//        global $dirName;
+//        global $f3;
+//
+//        $isValid = true;
+//        //defining the valid file type
+//        $validateType = array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
+//
+//        if (isset($file)) {
+//            //checking the file size 2MB-maximum
+//            if ($_SERVER['CONTENT_LENGTH'] > 3000000) {
+//                $f3->set("errors['largeImg", "Sorry! file size too large Maximum file size is 3 MB ");
+//                $isValid = false;
+//                return $isValid;
+//            } //check the file type
+//            if (in_array($file['type'], $validateType)) {
+//                if ($file['error'] > 0) {
+//                    $f3->set("errors['returnCode']", "Sorry! Something went wrong please try again!");
+//                    $isValid = false;
+//                    return $isValid;
+//                }
+//                //checking for duplicate
+//                if (file_exists($dirName . $newName)) {
+//                    $f3->set("errors['duplicatedImage']", "Sorry! Something went wrong please try again!");
+//                    $isValid = false;
+//                    return $isValid;
+//                }
+//            }
+//            if(!in_array($file['type'],$validateType)) {
+//                $f3->set("errors['wrongFileType']", "Sorry! Only supports .jpeg, .jpg, .gif and .png images");
+//                $isValid = false;
+//                return $isValid;
+//            }
+//            else{
+//                return $isValid;
+//            }
+//        }
+//        else{
+//            return $isValid;
+//        }
+//    }
 
 }

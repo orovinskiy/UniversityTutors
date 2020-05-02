@@ -40,7 +40,8 @@ Form for OnBoarding process
                     <!--div for email-->
                     <div class="row form-group  val-lessThan255">
                         <label class="font-weight-bold" for="email">Email</label>
-                        <input type="text" class="form-control input" name="email" id="email" value="{{ @user['user_email'] }}">
+                        <input type="text" class="form-control input" name="email" id="email"
+                               value="{{ @user['user_email'] }}">
                         <check if="{{ @errors['email'] }}">
                             <span class="err">{{ @errors['email'] }}</span>
                         </check>
@@ -49,7 +50,8 @@ Form for OnBoarding process
                     <!--div for phone-->
                     <div class="row form-group val-lessThan10">
                         <label class="font-weight-bold" for="phone">Phone</label>
-                        <input type="tel" class="form-control input" name="phone" id="phone" value="{{ @tutor['tutor_phone'] }}">
+                        <input type="tel" class="form-control input" name="phone" id="phone"
+                               value="{{ @tutor['tutor_phone'] }}">
                         <check if="{{ @errors['phone'] }}">
                             <span class="err">{{ @errors['phone'] }}</span>
                         </check>
@@ -58,7 +60,8 @@ Form for OnBoarding process
                     <!--div for SSN-->
                     <div class="row form-group val-lessThan9"><!--div for SSN-->
                         <label class="font-weight-bold" for="ssn">SSN</label>
-                        <input type="text" class="form-control input " name="ssn" id="ssn" value="{{ @tutor['tutor_ssn'] }}">
+                        <input type="text" class="form-control input " name="ssn" id="ssn"
+                               value="{{ @tutor['tutor_ssn'] }}">
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>
@@ -86,16 +89,6 @@ Form for OnBoarding process
                         <img src="../uploads/{{ @tutor['tutor_image'] }}" alt="tutor image">
                     </div>
                     <div class="errors text-danger"></div>
-
-                    <!--                    <div>-->
-                    <!--                        <label class="font-weight-bold" for="img">Select image:</label>-->
-                    <!--                        <input type="file" id="img" name="img" accept="image/*">-->
-                    <!--                    </div>-->
-                    <!--                    &lt;!&ndash;div for image preview&ndash;&gt;-->
-                    <!--                    <div class="row image-preview mt-4 ml-4" id="imagePreview">-->
-                    <!--                        <img scr="" alt="Image Preview" class="image-preview__image">-->
-                    <!--                        <span class="image-preview__default-text">Image Preview</span>-->
-                    <!--                    </div>-->
                 </div>
             </div><!--div main row closed-->
             <div class="float-right">

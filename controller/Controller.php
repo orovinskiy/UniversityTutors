@@ -83,8 +83,10 @@ class Controller
                     $this->_db->updateTutor($param["id"], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
                     $this->_db->updateEmail($param["id"], $_POST['email']);
                     //not validating but able to update in database
-                    move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                    $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                    if (!empty($_FILES['fileToUpload']['name'])) {
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
+                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                    }
                 }
             }
         }
