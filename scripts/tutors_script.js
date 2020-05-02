@@ -57,3 +57,19 @@ $(".placement").on("blur", function () {
         yearId: yearId
     });
 });
+
+// Event listener for adding new tutors on click
+$("#add-tutor-button").on("click", function () {
+
+    // Get data for update
+    let email = $("#add-tutor-input").val();
+    let year = $(this).data("year");
+
+    // Update database via ajax
+    $.post("/tutorsAjax", {
+        email: email,
+        year: year
+    }, function (result) {
+        alert("Email was sent. You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
+    });
+});

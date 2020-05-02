@@ -24,7 +24,7 @@ Page for admin viewing and management of tutor onboarding data.
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
         <button class="btn btn-secondary">Last Year</button>
-        <h3 class="d-inline">2020</h3>
+        <h3 class="d-inline">{{ @year }}</h3>
         <button class="btn btn-secondary">Next Year</button>
     </div>
 
@@ -249,6 +249,20 @@ Page for admin viewing and management of tutor onboarding data.
         </repeat>
         </tbody>
     </table>
+
+    <!-- Add new tutor email input and button -->
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-3 text-center px-1">
+            <div class="form-group">
+                <input type="text" id="add-tutor-input" class="form-control" placeholder="someone@example.com">
+            </div>
+        </div>
+        <div class="col-4 px-1">
+            <button data-year="{{ @year }}" id="add-tutor-button" class="btn btn-success">Add Tutor</button>
+        </div>
+        <div class="col-4"></div>
+    </div>
 </div>
 
 <!--JQuery and bootstrap dependencies-->

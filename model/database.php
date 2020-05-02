@@ -104,7 +104,6 @@ class Database
     {
 
         // TODO validate $column against php array of column names used in db to prevent sql injection
-
         if ($value == '0' || $value == '1') {
             $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
         } else {
@@ -115,6 +114,42 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$value, $yearId]);
+    }
+
+    /**
+     * Inserts into User, Tutor and Year tables to create a new user.
+     *
+     * @param string $year The new user's starting year of employment.
+     * @param string $email The new user's email
+     * @return int The new user's id
+     * @author Keller Flint
+     */
+    function addNewTutor($year, $email)
+    {
+        // add new user
+        $sql = "insert into User values(default, ?, '1234', b'0')";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$email]);
+
+        $id = $this->_dbh->lastInsertId();
+
+        // add new tutor
+        $sql = "insert into Tutor (user_id) values($id)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute();
+
+        // add new year data
+        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$year]);
+
+        return $id;
     }
 
     /**
@@ -225,5 +260,25 @@ class Database
         $sql="UPDATE Tutor SET tutor_image =?  WHERE  user_id=?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$filePath,$user_id]);
+    }
+    /** This fetches all the information to be displayed for the tutors view.
+     * Only important data is chosen.
+     * @param int $year the year that is required
+     * @param int $userID the database id of the tutor
+     * @return array returns all the required checkboxes as well as the name
+     * @author oleg
+     */
+    function getTutorsChecklist($year, $userID){
+        $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
+        year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation FROM
+        Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$userID,$year]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results;
     }
 }

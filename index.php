@@ -23,6 +23,7 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
+
 //create new Controller
 $controller = new Controller($f3, $db);
 $dirName = 'uploads/';
@@ -44,11 +45,18 @@ $f3->route('GET /', function () {
 
 /**
  * Route for checklist
- * @author oleg
+ * @author Oleg
  */
-$f3->route('GET /checklist', function () {
-    $view = new Template();
-    echo $view->render("views/checklist.html");
+$f3->route('GET /checklist/@userId', function ($f3,$param) {
+    $GLOBALS['controller']->checklist($param);
+});
+
+/**
+ * route to checklist ajax function
+ * @author Oleg
+ */
+$f3->route('POST /makeBox', function () {
+    $GLOBALS['controller']->checklistAjax();
 });
 
 
