@@ -26,7 +26,7 @@ $db = new Database();
 
 //create new Controller
 $controller = new Controller($f3, $db);
-
+$dirName = 'uploads/';
 //define variables
 $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
     "Affirmations and Disclosures", "Handbook Verification", "I-9", "Offer Letter",

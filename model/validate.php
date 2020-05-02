@@ -122,7 +122,6 @@ class Validate
             $f3->set("errors['ssn']", "Please enter valid 9 digit SSN ");
         }
         //image file
-        echo "above file";
         if (isset($file)) {
                 if (!$this->validateFileUpload($file, $newName)) {
                     $isValid = false;

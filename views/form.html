@@ -22,7 +22,7 @@ Form for OnBoarding process
         <hr class="my-4">
         <p>Your information will be secure with us!</p>
     </div><!--closed jumbotron div-->
-    <form action="#" method="post">
+    <form action="#" method="post" enctype="multipart/form-data">
         <fieldset class="form-group">
             <legend> Personal Information</legend>
             <div class="row">
@@ -31,7 +31,7 @@ Form for OnBoarding process
                     <div class="row form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="firstName">First Name</label>
                         <input type="text" class="input form-control" name="firstName" id="firstName"
-                               value="{{@firstName}}">
+                               value="{{ @tutor['tutor_first'] }}">
                         <check if="{{ @errors['firstName'] }}">
                             <span class="err">{{ @errors['firstName'] }}</span>
                         </check>
@@ -40,7 +40,7 @@ Form for OnBoarding process
                     <!--div for email-->
                     <div class="row form-group  val-lessThan255">
                         <label class="font-weight-bold" for="email">Email</label>
-                        <input type="text" class="form-control input" name="email" id="email" value="{{@email}}">
+                        <input type="text" class="form-control input" name="email" id="email" value="{{ @user['user_email'] }}">
                         <check if="{{ @errors['email'] }}">
                             <span class="err">{{ @errors['email'] }}</span>
                         </check>
@@ -49,7 +49,7 @@ Form for OnBoarding process
                     <!--div for phone-->
                     <div class="row form-group val-lessThan10">
                         <label class="font-weight-bold" for="phone">Phone</label>
-                        <input type="tel" class="form-control input" name="phone" id="phone" value="{{@phone}}">
+                        <input type="tel" class="form-control input" name="phone" id="phone" value="{{ @tutor['tutor_phone'] }}">
                         <check if="{{ @errors['phone'] }}">
                             <span class="err">{{ @errors['phone'] }}</span>
                         </check>
@@ -58,7 +58,7 @@ Form for OnBoarding process
                     <!--div for SSN-->
                     <div class="row form-group val-lessThan9"><!--div for SSN-->
                         <label class="font-weight-bold" for="ssn">SSN</label>
-                        <input type="text" class="form-control input " name="ssn" id="ssn" value="{{@ssn}}">
+                        <input type="text" class="form-control input " name="ssn" id="ssn" value="{{ @tutor['tutor_ssn'] }}">
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>
@@ -70,7 +70,7 @@ Form for OnBoarding process
                     <div class="form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="lastName">Last Name</label>
                         <input type="text" class="form-control input" name="lastName" id="lastName"
-                               value="{{@lastName}}">
+                               value="{{@tutor['tutor_last']}}">
                         <check if="{{ @errors['lastName'] }}">
                             <span class="err">{{ @errors['lastName'] }}</span>
                         </check>
@@ -83,11 +83,8 @@ Form for OnBoarding process
                         <input type="file" class="form-control-file" name="fileToUpload" id="img">
                     </div>
                     <div>
-                        <img src="../uploads/{{ @image }}" alt="tutor image">
+                        <img src="../uploads/{{ @tutor['tutor_image'] }}" alt="tutor image">
                     </div>
-                    <check if="{{ @errors['image'] }}">
-                        <span class="err">{{ @errors['image'] }}</span>
-                    </check>
                     <div class="errors text-danger"></div>
 
                     <!--                    <div>-->
