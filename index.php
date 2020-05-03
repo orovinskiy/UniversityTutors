@@ -38,8 +38,9 @@ $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
 $f3->route('GET /', function () {
     //below is code to test the database functions
 //    $result = $GLOBALS['db']->getTutors();
-//    $result2 = $GLOBALS['db']->getTutor(2020, 1);
+    $result2 = $GLOBALS['db']->getTutor(2020, 1);
 //    $results = $GLOBALS['db']->testDatabase();
+    $newUser = new User(2,2020, $GLOBALS['db']);
     $view = new Template();
     echo $view->render("views/home.html");
 });

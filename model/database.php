@@ -85,7 +85,7 @@ class Database
         $statement->execute([$userID, $year]);
 
         //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
         //echo "$results";
 
         return $results;
