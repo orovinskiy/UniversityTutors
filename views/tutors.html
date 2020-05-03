@@ -23,9 +23,9 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
-        <button class="btn btn-secondary year-change" id ="year-last">Last Year</button>
+        <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }}</h3>
-        <button class="btn btn-secondary year-change" id ="year-next">Next Year</button>
+        <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
     </div>
 
     <!-- Tutors DataTable -->
@@ -240,9 +240,11 @@ Page for admin viewing and management of tutor onboarding data.
                 <!-- Placement -->
                 <td>
                     <div class="form-group">
-                        <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_placement" type="text"
-                               class="form-control placement" placeholder="None"
+                        <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_placement"
+                               data-original="{{ @tutor['year_placement'] }}" type="text"
+                               class="form-control placement" placeholder=""
                                value="{{ @tutor['year_placement'] }}">
+                        <button class="btn btn-success w-100 d-none placement-button">Save</button>
                     </div>
                 </td>
             </tr>
