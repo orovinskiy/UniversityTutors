@@ -64,6 +64,11 @@ class Validate
         return $emailResult;
     }
 
+    /**
+     * Check to see if email is unique base on database
+     * @param stirng $email user input email
+     * @return bool true if email does not exist in database otherwise false
+     */
     function uniqueEmail($email)
     {
         global $db;
@@ -113,15 +118,15 @@ class Validate
     /**Validating all the required fields name, phone, email, ssn, image
      * @param string $file user's selected file for image
      * @param string $newName name for file
+     * @param int $param user id
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName,$param)
+    function validForm($file, $newName, $param)
     {
         global $f3;
         global $db;
         $isValid = true;//flag
-
 
 
         //FIRST  NAME
@@ -145,8 +150,8 @@ class Validate
             $f3->set("errors['email']", "Please enter valid email address ");
         }
 
-//        //UNIQUE EMAIL
-        if($param != $db->getEmail($f3->get('email'))['user_id']){
+        //UNIQUE EMAIL
+        if ($param != $db->getEmail($f3->get('email'))['user_id']) {
             if (!$this->uniqueEmail($f3->get('email'))) {
                 $isValid = false;
                 $f3->set("errors['email']", "This email has been already taken Please chose another ");

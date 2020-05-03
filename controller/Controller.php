@@ -131,15 +131,11 @@ class Controller
             $this->_f3->set('phone', $_POST['phone']);
             $this->_f3->set('ssn', $_POST['ssn']);
 
-            //get user_id for specific email
-            $this->_f3->set("userId", $this->_db->getEmail($_POST['email'])['user_id']);
-
-
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
 
             //if the user input in form is valid
-            if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName,$param["id"])) {
+            if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName, $param["id"])) {
                 //check param id
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']), $_POST['phone'], $_POST['ssn']);
@@ -151,7 +147,7 @@ class Controller
                         $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                     }
                 }
-                $this->_f3->reroute("/checklist/". $param["id"]);
+                $this->_f3->reroute("/checklist/" . $param["id"]);
             }
         }
         $view = new Template();
