@@ -53,7 +53,6 @@ class Controller
      */
     function tutorsAjax()
     {
-        $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         } else if (isset($_POST["year"])) {

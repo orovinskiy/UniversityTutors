@@ -193,8 +193,8 @@ class Database
 
     /**
      * Get the tutor by their user_id
-     * @param $user_id given user's id
-     * @return returns  a row from Tutor table
+     * @param int $user_id given user's id
+     * @return array  a row from Tutor table
      * @author laxmi
      */
     function getTutorById($user_id)
@@ -207,8 +207,8 @@ class Database
 
     /**
      * Get user by it's id
-     * @param $user_id given user's id
-     * @return returns a rows from Tutor table
+     * @param int $user_id given user's id
+     * @return array a rows from Tutor table
      * @author  laxmi
      */
     function getUserById($user_id)
@@ -221,8 +221,8 @@ class Database
 
     /**
      * Update email
-     * @param $user_id given user's id
-     * @param $email tutor's email
+     * @param int $user_id given user's id
+     * @param string $email tutor's email
      * @author laxmi
      */
     function updateEmail($user_id, $email)
@@ -234,8 +234,8 @@ class Database
 
     /**
      * Upload tutor's image
-     * @param $filePath path of image
-     * @param $user_id given user's id
+     * @param string $filePath path of image
+     * @param int $user_id given user's id
      * @laxmi
      */
     function uploadTutorImage($filePath, $user_id)
