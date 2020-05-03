@@ -23,9 +23,9 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
-        <button class="btn btn-secondary">Last Year</button>
-        <h3 class="d-inline">{{ @year }}</h3>
-        <button class="btn btn-secondary">Next Year</button>
+        <button class="btn btn-secondary year-change" id ="year-last">Last Year</button>
+        <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }}</h3>
+        <button class="btn btn-secondary year-change" id ="year-next">Next Year</button>
     </div>
 
     <!-- Tutors DataTable -->
