@@ -13,11 +13,11 @@ $('#phone').keyup(function () {
         this.value = valPhone;
     }
     if ((valPhone.length > 3) && (valPhone.length < 7)) {
-        newValPhone += '(' +valPhone.substr(0, 3) + ') ';
+        newValPhone += '(' + valPhone.substr(0, 3) + ') ';
         valPhone = valPhone.substr(3);
     }
     if (valPhone.length > 6) {
-        newValPhone += '(' +valPhone.substr(0, 3) + ') ';
+        newValPhone += '(' + valPhone.substr(0, 3) + ') ';
         newValPhone += valPhone.substr(3, 3) + '-';
         valPhone = valPhone.substr(6);
     }
@@ -78,10 +78,17 @@ function isEmpty(input, valClass) {
 function lessThan255(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().length <= 255 && input.val().trim() != "") {
+    if (input.val().length <= 255) {
         isValid = true;
+    } else {
+        toggleErrors(input, valClass, isValid, "Can't be longer than 255 characters.");
     }
-    toggleErrors(input, valClass, isValid, "Cannot be empty and longer than 255 characters.");
+    if (input.val().length != 0) {
+        console.log("check here");
+        isValid = true;
+    } else {
+        toggleErrors(input, valClass, isValid, "Cannot be empty");
+    }
     return isValid;
 }
 
@@ -94,7 +101,7 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().length == 14 && input.val().trim() != "") {
+    if (input.val().trim() != "") {
         isValid = true;
     }
     toggleErrors(input, valClass, isValid, "Must be valid");

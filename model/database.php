@@ -177,7 +177,7 @@ class Database
 
     /**
      * update tutor table in given user's id
-     * @param int $user_id  given user's id
+     * @param int $user_id given user's id
      * @param string $firstName tutor's first name
      * @param string $lastName tutor's last name
      * @param string $phone tutor's phone
@@ -265,5 +265,19 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results;
+    }
+
+    /**Get email form the user table
+     * @param string $email user's email
+     * @return array of a row with the specific user email
+     * @author laxmi
+     */
+    function getEmail($email)
+    {
+        $sql = "SELECT * FROM User WHERE user_email=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$email]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+
     }
 }

@@ -17,9 +17,9 @@ class Controller
      */
     function __construct($f3, $db)
     {
-        $this->_val = new Validate();
         $this->_f3 = $f3;
         $this->_db = $db;
+        $this->_val = new Validate($db);
     }
 
     /**
@@ -119,6 +119,8 @@ class Controller
         $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
         $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
+        //get the image form the database
+        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
 
         //when request is sent
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -136,8 +138,8 @@ class Controller
             if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName)) {
                 //check param id
                 if ($param["id"] != 0) {
-                    $this->_db->updateTutor($param["id"], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
-                    $this->_db->updateEmail($param["id"], $_POST['email']);
+                    $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']), $_POST['phone'], $_POST['ssn']);
+                    $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
@@ -145,12 +147,12 @@ class Controller
                         $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                     }
                 }
+                $this->_f3->reroute("/checklist/". $param["id"]);
             }
         }
-        //get the image form the database
-        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
         $view = new Template();
         echo $view->render('views/form.html');
+
     }
 
     /**
