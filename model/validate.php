@@ -8,7 +8,7 @@ class Validate
 {
     //stores an array of error messages
     private $_errors;
-    private $db;
+    private $_db;
 
 
     /**
@@ -116,10 +116,13 @@ class Validate
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName)
+    function validForm($file, $newName,$param)
     {
         global $f3;
+        global $db;
         $isValid = true;//flag
+
+
 
         //FIRST  NAME
         if (!$this->validFirstName($f3->get('firstName'))) {
@@ -143,9 +146,11 @@ class Validate
         }
 
 //        //UNIQUE EMAIL
-        if (!$this->uniqueEmail($f3->get('email'))) {
-            $isValid = false;
-            $f3->set("errors['email']", "This email has been already taken Please chose another ");
+        if($param != $db->getEmail($f3->get('email'))['user_id']){
+            if (!$this->uniqueEmail($f3->get('email'))) {
+                $isValid = false;
+                $f3->set("errors['email']", "This email has been already taken Please chose another ");
+            }
         }
 
         //SSN
