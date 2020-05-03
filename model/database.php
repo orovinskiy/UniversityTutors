@@ -37,6 +37,7 @@ class Database
     function getTutors($year = '2020')
     {
         //defining query
+
         $sql = "SELECT Year.year_id, Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
                     Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
@@ -174,6 +175,76 @@ class Database
 
     }
 
+    /**
+     * update tutor table in given user's id
+     * @param int $user_id  given user's id
+     * @param string $firstName tutor's first name
+     * @param string $lastName tutor's last name
+     * @param string $phone tutor's phone
+     * @param string $ssn tutor's ssn
+     * @author laxmi
+     */
+    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn)
+    {
+        $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=? WHERE user_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$firstName, $lastName, $phone, $ssn, $user_id]);
+    }
+
+    /**
+     * Get the tutor by their user_id
+     * @param int $user_id given user's id
+     * @return array  a row from Tutor table
+     * @author laxmi
+     */
+    function getTutorById($user_id)
+    {
+        $sql = "SELECT * FROM Tutor WHERE user_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get user by it's id
+     * @param int $user_id given user's id
+     * @return array a rows from Tutor table
+     * @author  laxmi
+     */
+    function getUserById($user_id)
+    {
+        $sql = "SELECT * FROM User WHERE user_id =? ";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Update email
+     * @param int $user_id given user's id
+     * @param string $email tutor's email
+     * @author laxmi
+     */
+    function updateEmail($user_id, $email)
+    {
+        $sql = "UPDATE User SET user_email=? WHERE user_id =?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$email, $user_id]);
+    }
+
+    /**
+     * Upload tutor's image
+     * @param string $filePath path of image
+     * @param int $user_id given user's id
+     * @laxmi
+     */
+    function uploadTutorImage($filePath, $user_id)
+    {
+        $sql = "UPDATE Tutor SET tutor_image =?  WHERE  user_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$filePath, $user_id]);
+    }
+
     /** This fetches all the information to be displayed for the tutors view.
      * Only important data is chosen.
      * @param int $year the year that is required
@@ -181,18 +252,18 @@ class Database
      * @return array returns all the required checkboxes as well as the name
      * @author oleg
      */
-    function getTutorsChecklist($year, $userID){
+    function getTutorsChecklist($year, $userID)
+    {
         $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
         year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation FROM
         Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$userID,$year]);
+        $statement->execute([$userID, $year]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results;
     }
-
 }

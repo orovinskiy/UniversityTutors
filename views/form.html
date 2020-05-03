@@ -1,7 +1,7 @@
 <!--
-Form for OnBoarding process
-@author Laxmi Kandel
--->
+   Form for OnBoarding process
+   @author Laxmi Kandel
+   -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,7 +12,7 @@ Form for OnBoarding process
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../styles/formStyleSheet.css">
-    <title>Form</title>
+    <title>Onboarding-Form</title>
 </head>
 <body>
 <div class="container">
@@ -21,60 +21,100 @@ Form for OnBoarding process
         <p class="lead">Please enter your information to proceed in the Onboarding Process</p>
         <hr class="my-4">
         <p>Your information will be secure with us!</p>
-    </div><!--closed jumbotron div-->
-    <form action="#" method="post">
+    </div>
+    <!--closed jumbotron div-->
+    <form action="#" method="post" enctype="multipart/form-data">
         <fieldset class="form-group">
             <legend> Personal Information</legend>
             <div class="row">
                 <div class="col">
                     <!--div for first name-->
-                    <div class=" row form-group">
-                        <label class="font-weight-bold" for="firstName">First Name</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName">
+                    <div class="row form-group val-lessThan255 val-hasSpaces">
+                        <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
+                        <input type="text" class="input form-control" name="firstName" id="firstName"
+                               value="{{ @firstName }}">
+                        <check if="{{ @errors['firstName'] }}">
+                            <span class="err">{{ @errors['firstName'] }}</span>
+                        </check>
+                        <div class="errors text-danger"></div>
                     </div>
                     <!--div for email-->
-                    <div class="row form-group">
-                        <label class="font-weight-bold" for="email">Email</label>
-                        <input type="text" class="form-control" name="email" id="email">
+                    <div class="row form-group  val-lessThan255">
+                        <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
+                        <input type="text" class="form-control input" name="email" id="email"
+                               value="{{ @email }}">
+                        <check if="{{ @errors['email'] }}">
+                            <span class="err">{{ @errors['email'] }}</span>
+                        </check>
+                        <div class="errors text-danger"></div>
                     </div>
                     <!--div for phone-->
-                    <div class="row form-group">
-                        <label class="font-weight-bold" for="phone">Phone</label>
-                        <input type="tel" class="form-control" name="phone" id="phone">
+                    <div class="row form-group val-lessThan10">
+                        <label class="font-weight-bold" for="phone">Phone</label><em>*</em>
+                        <input type="text" class="form-control input" name="phone" id="phone"
+                               value="{{ @phone }}">
+                        <check if="{{ @errors['phone'] }}">
+                            <span class="err">{{ @errors['phone'] }}</span>
+                        </check>
+                        <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="row form-group"><!--div for SSN-->
-                        <label class="font-weight-bold" for="ssn">SSN</label>
-                        <input type="text" class="form-control" name="phone" id="ssn">
-                    </div>
-                </div><!--div col closed-->
-                <div class="col">
-                    <!--div for last name-->
-                    <div class="form-group">
-                        <label class="font-weight-bold" for="lastName">Last Name</label>
-                        <input type="text" class="form-control" name="firstName" id="lastName">
-                    </div>
-                    <!--div for image-->
-                    <div>
-                        <label class="font-weight-bold" for="img">Select image:</label>
-                        <input type="file" id="img" name="img" accept="image/*">
-                    </div>
-                    <!--div for image preview-->
-                    <div class="row image-preview mt-4 ml-4" id="imagePreview">
-                        <img scr="" alt="Image Preview" class="image-preview__image">
-                        <span class="image-preview__default-text">Image Preview</span>
+                    <div class="row form-group">
+                        <!--div for SSN-->
+                        <label class="font-weight-bold" for="ssn">SSN</label><em>(optional)</em>
+                        <input type="text" class="form-control input " name="ssn" id="ssn"
+                               value="{{ @ssn }}">
+                        <check if="{{ @errors['ssn'] }}">
+                            <span class="err">{{ @errors['ssn'] }}</span>
+                        </check>
+                        <div class="errors text-danger"></div>
                     </div>
                 </div>
-            </div><!--div main row closed-->
-            <div class="float-right">
-                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <!--div col closed-->
+                <div class="col">
+                    <!--div for last name-->
+                    <div class="form-group val-lessThan255 val-hasSpaces">
+                        <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
+                        <input type="text" class="form-control input" name="lastName" id="lastName"
+                               value="{{@lastName}}">
+                        <check if="{{ @errors['lastName'] }}">
+                            <span class="err">{{ @errors['lastName'] }}</span>
+                        </check>
+                        <div class="errors text-danger"></div>
+                    </div>
+                    <!--div for image-->
+                    <div class="from-group">
+                        <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
+                    </div>
+                    <div>
+                        <img src="../uploads/{{ @image }}" alt="Your Image">
+                    </div>
+                    <div class="errors text-danger"></div>
+                </div>
             </div>
+            <!--div main row closed-->
+            <div class="float-right">
+                <button type="submit" class="btn btn-primary btn-lg" name="submit">Submit</button>
+            </div>
+            <!--errors messages for invalid images-->
+            <check if="{{ @errors['largeImg'] }}">
+                <span class="err text-danger">{{ @errors['largeImg'] }}</span>
+            </check>
+            <check if="{{ @errors['returnCode'] }}">
+                <span class="err text-danger">{{ @errors['returnCode'] }}</span>
+            </check>
+            <check if="{{ @errors['duplicatedImage'] }}">
+                <span class="err text-danger">{{ @errors['duplicatedImage'] }}</span>
+            </check>
+            <check if="{{ @errors['wrongFileType'] }}">
+                <span class="err text-danger">{{ @errors['wrongFileType'] }}</span>
+            </check>
         </fieldset>
     </form>
-</div><!--main div closed-->
-<script src="../scripts/formScript.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+</div>
+<!--main div closed-->
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -82,5 +122,8 @@ Form for OnBoarding process
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/jquery-input-mask-phone-number@1.0.9/dist/jquery-input-mask-phone-number.js"></script>
+<script src="../scripts/client_validation.js"></script>
 </body>
 </html>
