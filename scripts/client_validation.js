@@ -23,7 +23,6 @@ $('#phone').keyup(function () {
     }
     newValPhone += valPhone;
     this.value = newValPhone.substring(0, 14);
-    console.log(newValPhone.length);
 });
 
 ////Auto formatting for SSN
@@ -46,6 +45,26 @@ $('#ssn').keyup(function () {
     this.value = newVal.substring(0, 11);
 });
 
+/**
+ * function to display image right before submitting form
+ * @param file input file
+ * @author laxmi
+ */
+function readURL(input) {
+    console.log("reading image");
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#preview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]); 
+    }
+}
+
+$("#img").change(function () {
+    readURL(this);
+});
 //creating an array for validations
 let validations = [
     ["val-empty", isEmpty],
@@ -84,7 +103,6 @@ function lessThan255(input, valClass) {
         toggleErrors(input, valClass, isValid, "Can't be longer than 255 characters.");
     }
     if (input.val().length != 0) {
-        console.log("check here");
         isValid = true;
     } else {
         toggleErrors(input, valClass, isValid, "Cannot be empty");

@@ -23,7 +23,7 @@
         <p>Your information will be secure with us!</p>
     </div>
     <!--closed jumbotron div-->
-    <form action="#" method="post" enctype="multipart/form-data">
+    <form action="#" method="post" enctype="multipart/form-data" runat="server">
         <fieldset class="form-group">
             <legend> Personal Information</legend>
             <div class="row">
@@ -86,8 +86,9 @@
                     <div class="from-group">
                         <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
                     </div>
+                    <!--div for image preview-->
                     <div>
-                        <img src="../uploads/{{ @image }}" alt="Your Image">
+                        <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
                     </div>
                     <div class="errors text-danger"></div>
                 </div>
@@ -122,6 +123,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="../scripts/client_validation.js"></script>
 </body>
 </html>
