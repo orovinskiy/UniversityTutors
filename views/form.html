@@ -32,7 +32,7 @@
                     <div class="row form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
                         <input type="text" class="input form-control" name="firstName" id="firstName"
-                               value="{{ @tutor['tutor_first'] }}">
+                               value="{{ @firstName }}">
                         <check if="{{ @errors['firstName'] }}">
                             <span class="err">{{ @errors['firstName'] }}</span>
                         </check>
@@ -40,9 +40,9 @@
                     </div>
                     <!--div for email-->
                     <div class="row form-group  val-lessThan255">
-                        <label class="font-weight-bold" for="email">Email  </label><em>(update email if you want)</em>
+                        <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
                         <input type="text" class="form-control input" name="email" id="email"
-                               value="{{ @user['user_email'] }}">
+                               value="{{ @email }}">
                         <check if="{{ @errors['email'] }}">
                             <span class="err">{{ @errors['email'] }}</span>
                         </check>
@@ -51,8 +51,8 @@
                     <!--div for phone-->
                     <div class="row form-group val-lessThan10">
                         <label class="font-weight-bold" for="phone">Phone</label><em>*</em>
-                        <input type="tel" class="form-control input" name="phone" id="phone"
-                               value="{{ @tutor['tutor_phone'] }}">
+                        <input type="text" class="form-control input" name="phone" id="phone"
+                               value="{{ @phone }}">
                         <check if="{{ @errors['phone'] }}">
                             <span class="err">{{ @errors['phone'] }}</span>
                         </check>
@@ -63,7 +63,7 @@
                         <!--div for SSN-->
                         <label class="font-weight-bold" for="ssn">SSN</label><em>(optional)</em>
                         <input type="text" class="form-control input " name="ssn" id="ssn"
-                               value="{{ @tutor['tutor_ssn'] }}">
+                               value="{{ @ssn }}">
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>
@@ -76,7 +76,7 @@
                     <div class="form-group val-lessThan255 val-hasSpaces">
                         <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
                         <input type="text" class="form-control input" name="lastName" id="lastName"
-                               value="{{@tutor['tutor_last']}}">
+                               value="{{@lastName}}">
                         <check if="{{ @errors['lastName'] }}">
                             <span class="err">{{ @errors['lastName'] }}</span>
                         </check>
@@ -87,7 +87,7 @@
                         <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
                     </div>
                     <div>
-                        <img src="../uploads/{{ @tutor['tutor_image'] }}" alt="Your Image">
+                        <img src="../uploads/{{ @image }}" alt="Your Image">
                     </div>
                     <div class="errors text-danger"></div>
                 </div>
@@ -125,13 +125,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://unpkg.com/jquery-input-mask-phone-number@1.0.9/dist/jquery-input-mask-phone-number.js"></script>
 <script>
-$(document).ready(function () {
-$('#phone').usPhoneFormat({
-format: '(xxx) xxx-xxxx',
-});
-});</script>
+    $(document).ready(function () {
+        $('#phone').usPhoneFormat({
+            format: '(xxx) xxx-xxxx',
+        });
+    });</script>
+<script type="text/javascript">
+    $('#ssn').keyup(function() {
+        var val = this.value.replace(/\D/g, '');
+        val = val.replace(/^(\d{3})/, '$1-');
+        val = val.replace(/-(\d{2})/, '-$1-');
+        val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
+        this.value = val;
+    });
+</script>
 <!--JavaScript has to go below all the required js cdn's-->
-<script src="../scripts/formScript.js"></script>
 <script src="../scripts/client_validation.js"></script>
 </body>
 </html>

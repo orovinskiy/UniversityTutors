@@ -70,11 +70,9 @@ class Validate
      */
     function validPhone($phone)
     {
-        $regex =  "[0-9()-]";
+        $regex =  "/\(\d{3}\) \d{3}-\d{4}/";
         $phoneResult = false;
         $phone = trim($phone);
-        echo $phone;
-        echo strlen($phone);
         if (strlen($phone) == 14 && preg_match($regex,$phone)){
             $phoneResult = true;
         }
@@ -88,10 +86,11 @@ class Validate
      */
     function validSsn($ssn)
     {
+        $regexSsn ="/^\d{3}-\d{2}-\d{4}$/";
         $ssnResult = false;
         $ssn = trim($ssn);
         if(!empty($ssn)){
-            if (strlen($ssn) == 9 && ctype_digit($ssn)) {
+            if (strlen($ssn) == 11 && preg_match($regexSsn,$ssn)) {
                 $ssnResult = true;
             }
         }else{
@@ -134,7 +133,7 @@ class Validate
         //SSN
         if (!$this->validSsn($f3->get('ssn'))) {
             $isValid = false;
-            $f3->set("errors['ssn']", "Please enter valid 9 digit SSN ");
+            $f3->set("errors['ssn']", "Please enter valid  SSN ");
         }
         //image file
         if (isset($file)) {

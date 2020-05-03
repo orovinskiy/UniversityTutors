@@ -67,8 +67,9 @@ class Controller
      * Ajax logic for checklist page
      * @author Oleg
      */
-    function checklistAjax(){
-        $this->_db->updateYearData($_POST['column'],$_POST['value'],$_POST['year']);
+    function checklistAjax()
+    {
+        $this->_db->updateYearData($_POST['column'], $_POST['value'], $_POST['year']);
     }
 
     /**
@@ -77,27 +78,27 @@ class Controller
      * @param int $param is the id of the user
      * @author oleg
      */
-    function checklist($param){
+    function checklist($param)
+    {
         //get the current year
         $currentYear = date('Y');
 
-        $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear,$param['userId']);
+        $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
         $checkBoxes = $checkBoxes[0];
 
         $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
         $checkBoxes['year_ADP'] == 'none' ? $checkBoxes['year_ADP'] = '0' : $checkBoxes['year_ADP'] = '1';
 
-        $this->_f3->set('yearID',$checkBoxes['year_id']);
-        $this->_f3->set('userName',$checkBoxes['tutor_first']." ".$checkBoxes['tutor_last']);
-        $this->_f3->set('checkboxes',array("ADP Registration"=>array("Value"=>$checkBoxes['year_ADP'],"Column"=>"year_ADP"),
-            "Adult Sexual Misconduct"=>array("Value"=>$checkBoxes['year_sexual_misconduct'],"Column"=>"year_sexual_misconduct"),
-            "Affirmations and Disclosures"=>array("Value"=>$checkBoxes['year_affirmation_disclosures'],"Column"=>"year_affirmation_disclosures"),
-            "Handbook Verification"=>array("Value"=>$checkBoxes['year_handbook_verification'],"Column"=>"year_handbook_verification"),
-            "I-9"=>array("Value"=>$checkBoxes['year_i9'],"Column"=>"year_i9"),
-            "Offer Letter"=>array("Value"=>$checkBoxes['year_offer_letter'],"Column"=>"year_offer_letter"),
-            "Orientation RSVP"=>array("Value"=>$checkBoxes['year_orientation'],"Column"=>"year_orientation"),
-            "W4"=>array("Value"=>$checkBoxes['year_w4'],"Column"=>"year_w4")));
-
+        $this->_f3->set('yearID', $checkBoxes['year_id']);
+        $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
+        $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'], "Column" => "year_ADP"),
+            "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'], "Column" => "year_sexual_misconduct"),
+            "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'], "Column" => "year_affirmation_disclosures"),
+            "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'], "Column" => "year_handbook_verification"),
+            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9"),
+            "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'], "Column" => "year_offer_letter"),
+            "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'], "Column" => "year_orientation"),
+            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4")));
 
 
         $view = new Template();
@@ -113,7 +114,14 @@ class Controller
     function formPage($param)
     {
         global $dirName;
+        //retrieving data form database
+        $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
+        $this->_f3->set("lastName", $this->_db->getTutorById($param["id"])["tutor_last"]);
+        $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
+        $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
+        $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
 
+        //when request is sent
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //Storing data in hive variables
             $this->_f3->set('firstName', $_POST['firstName']);
@@ -140,9 +148,8 @@ class Controller
                 }
             }
         }
-        //retrieving data form database
-        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
-        $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+        //get the image form the database
+        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
         $view = new Template();
         echo $view->render('views/form.html');
     }

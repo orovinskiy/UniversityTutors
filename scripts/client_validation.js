@@ -8,7 +8,7 @@ console.log("loaded client validation");
 let validations = [
     ["val-empty", isEmpty],
     ["val-lessThan255", lessThan255],
-    ["val-lessThan10", lessThan10],
+    ["val-lessThan10", lessThan14],
     ["val-hasSpaces", hasSpaces],
 ];
 
@@ -50,7 +50,7 @@ function lessThan255(input, valClass) {
  * @param valClass from array
  * @returns true if user's input is less than 10 digits
  */
-function lessThan10(input, valClass) {
+function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
     if (input.val().length == 14 && input.val().trim() != "") {
