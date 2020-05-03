@@ -23,23 +23,36 @@
         <p>Your information will be secure with us!</p>
     </div>
     <!--closed jumbotron div-->
-    <form action="#" method="post" enctype="multipart/form-data" runat="server">
+    <form action="#" method="post" enctype="multipart/form-data">
         <fieldset class="form-group">
             <legend> Personal Information</legend>
             <div class="row">
+                <!--div for first name-->
+                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                    <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
+                    <input type="text" class="input form-control" name="firstName" id="firstName"
+                           value="{{ @firstName }}">
+                    <check if="{{ @errors['firstName'] }}">
+                        <span class="err">{{ @errors['firstName'] }}</span>
+                    </check>
+                    <div class="errors text-danger"></div>
+                </div>
+                <!--div for last name-->
+                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                    <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
+                    <input type="text" class="form-control input" name="lastName" id="lastName"
+                           value="{{@lastName}}">
+                    <check if="{{ @errors['lastName'] }}">
+                        <span class="err">{{ @errors['lastName'] }}</span>
+                    </check>
+                    <div class="errors text-danger"></div>
+                </div>
+            </div>
+            <!--row for first and last name closed-->
+            <div class="row">
                 <div class="col">
-                    <!--div for first name-->
-                    <div class="row form-group val-lessThan255 val-hasSpaces val-empty">
-                        <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
-                        <input type="text" class="input form-control" name="firstName" id="firstName"
-                               value="{{ @firstName }}">
-                        <check if="{{ @errors['firstName'] }}">
-                            <span class="err">{{ @errors['firstName'] }}</span>
-                        </check>
-                        <div class="errors text-danger"></div>
-                    </div>
                     <!--div for email-->
-                    <div class="row form-group  val-lessThan255 val-empty">
+                    <div class="form-group  val-lessThan255 val-empty">
                         <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
                         <input type="text" class="form-control input" name="email" id="email"
                                value="{{ @email }}">
@@ -49,7 +62,7 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for phone-->
-                    <div class="row form-group val-lessThan14 val-empty">
+                    <div class="form-group val-lessThan14 val-empty">
                         <label class="font-weight-bold" for="phone">Phone</label><em>*</em>
                         <input type="text" class="form-control input" name="phone" id="phone"
                                value="{{ @phone }}">
@@ -59,8 +72,7 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="row form-group">
-                        <!--div for SSN-->
+                    <div class="form-group">
                         <label class="font-weight-bold" for="ssn">SSN</label><em>(optional)</em>
                         <input type="text" class="form-control input " name="ssn" id="ssn"
                                value="{{ @ssn }}">
@@ -70,19 +82,8 @@
                         <div class="errors text-danger"></div>
                     </div>
                 </div>
-                <!--div col closed-->
+                <!--div for image-->
                 <div class="col">
-                    <!--div for last name-->
-                    <div class="form-group val-lessThan255 val-hasSpaces val-empty">
-                        <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
-                        <input type="text" class="form-control input" name="lastName" id="lastName"
-                               value="{{@lastName}}">
-                        <check if="{{ @errors['lastName'] }}">
-                            <span class="err">{{ @errors['lastName'] }}</span>
-                        </check>
-                        <div class="errors text-danger"></div>
-                    </div>
-                    <!--div for image-->
                     <div class="from-group">
                         <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
                     </div>
@@ -93,7 +94,7 @@
                     <div class="errors text-danger"></div>
                 </div>
             </div>
-            <!--div main row closed-->
+            <!--div for button-->
             <div class="float-right">
                 <button type="submit" class="btn btn-primary btn-lg" name="submit">Submit</button>
             </div>
