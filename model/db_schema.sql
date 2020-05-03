@@ -65,16 +65,16 @@ INSERT INTO User Values (default,"Bobby@mail.com","bobTroll!!",0),(default,"Andy
 (default,"test@mail.greenriver.edu", "password", b'0'),
 (default,"jsmith@mail.greenriver.edu", "password", b'0');
 
-INSERT INTO Tutor VALUES ("1","Bob","Riely","206-345-7843","234-43-7853","image.jpg"),("2","Andy","Shmuck","253-786-5426","937-20-0573","image.jpg"),
-("3","Richard","Fanny","253-285-7210","073-96-1074","image.jpg"),("4","Jasmine","Riely","206-037-1056","658-43-0123","image.jpg"),
-("5","Reddin","Huck","206-856-0264","106-54-8528","image.jpg"),
-("7","Ben","Luss","253-883-2222","973-91-7893","image.jpg"),("8","Nick","Goravskiy","206-632-0835","123-45-6789","image.jpg"),
-("9","Joe","Carole","206-764-2945","964-53-0274","image.jpg"),("10","Ivan","Hambug","206-635-8468","936-02-6482","image.jpg"),
-("11","Gyser","Huck","206-345-7843","294-03-7851","image.jpg"),("12","Chad","Getter","253-635-9732","087-66-9882","image.jpg"),
-(13, "Some", "Guy", 1231231234,null,null),
-(14, "Tuna", "Ostrich", 1112223333,null,null),
-(15, "Dave", "Test", 8585858585,null,null),
-(16, "Joe", "Smith", 2222333545,null,null);
+INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","image.jpg"),("2","Andy","Shmuck","253-786-5426","937-20-0573","image.jpg"),
+("3","Richard","Fanny","(222) 222-4444","073-96-1074","image.jpg"),("4","Jasmine","Riely","206-037-1056","658-43-0123","image.jpg"),
+("5","Reddin","Huck","(223) 232-4544","106-54-8528","image.jpg"),
+("7","Ben","Luss","(242) 222-4444","973-91-7893","image.jpg"),("8","Nick","Goravskiy","206-632-0835","123-45-6789","image.jpg"),
+("9","Joe","Carole","(252) 222-4444","964-53-0274","image.jpg"),("10","Ivan","Hambug","206-635-8468","936-02-6482","image.jpg"),
+("11","Gyser","Huck","(292) 022-4844","294-03-7851","image.jpg"),("12","Chad","Getter","253-635-9732","087-66-9882","image.jpg"),
+(13, "Some", "Guy", "(206) 222-4444",null,null),
+(14, "Tuna", "Ostrich", "(2062) 222-4644",null,null),
+(15, "Dave", "Test", "(202) 222-4444",null,null),
+(16, "Joe", "Smith", "(292) 222-4444",null,null);
 
 INSERT INTO Year VALUES (default,"1","2020",1,"sent","clear",0,1,1,0,1,"invited","tutor",1,"Fredwork"),
 (default,"2","2020",1,"flag","none",1,1,0,0,0,"registered","none",1,"Green Elementry"),
