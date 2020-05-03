@@ -28,14 +28,21 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checkboxes}}" key="{{@name}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['Value'] == 0}}">
+                        <check if="{{@isChecked['Value'] == 0 || @isChecked['Value']=='none'}}">
                             <div class="col-6 mb-3">
                                 <section class="card">
+                                    <check if="{{@isChecked['Value'] == 'none'}}">
+                                        <p class="text-center">*Admin must invite you before you can register*</p>
+                                    </check>
                                     <h2 class="card-title text-center">{{@name}}</h2>
                                     <div class="card-subtitle">
                                         <div class="form-check mt-3 mb-5 mr-5 text-center">
                                             <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
-                                                   id="{{@name}}" name="doorInter[]">
+                                                   id="{{@name}}" name="doorInter[]"
+                                                <check if="{{@isChecked['Value'] == 'none'}}">
+                                                    disabled
+                                                </check>
+                                            >
                                             <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name}}">
                                                 Completed
                                             </label>
