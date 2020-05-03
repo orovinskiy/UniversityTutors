@@ -27,8 +27,9 @@ $("body").on("click","input",function()
     }
 
     if($(this).attr("id") === "ADP Registration"){
-        $(this).is(":checked") ? dataValue = "registered" : dataValue = "none";
+        $(this).is(":checked") ? dataValue = "registered" : dataValue = "invited";
     }
+
     if($(this).attr("id") === "I-9"){
         $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
     }

@@ -86,7 +86,13 @@ class Controller
         $checkBoxes = $checkBoxes[0];
 
         $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
-        $checkBoxes['year_ADP'] == 'none' ? $checkBoxes['year_ADP'] = '0' : $checkBoxes['year_ADP'] = '1';
+
+        if($checkBoxes['year_ADP'] == 'invited'){
+            $checkBoxes['year_ADP'] = '0';
+        }
+        if($checkBoxes['year_ADP'] == 'registered'){
+            $checkBoxes['year_ADP'] = '1';
+        }
 
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
