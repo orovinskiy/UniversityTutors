@@ -3,7 +3,7 @@
    @author Laxmi Kandel
    -->
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -124,22 +124,6 @@
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://unpkg.com/jquery-input-mask-phone-number@1.0.9/dist/jquery-input-mask-phone-number.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#phone').usPhoneFormat({
-            format: '(xxx) xxx-xxxx',
-        });
-    });</script>
-<script type="text/javascript">
-    $('#ssn').keyup(function() {
-        var val = this.value.replace(/\D/g, '');
-        val = val.replace(/^(\d{3})/, '$1-');
-        val = val.replace(/-(\d{2})/, '-$1-');
-        val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
-        this.value = val;
-    });
-</script>
-<!--JavaScript has to go below all the required js cdn's-->
 <script src="../scripts/client_validation.js"></script>
 </body>
 </html>

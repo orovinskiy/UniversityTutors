@@ -4,6 +4,23 @@
  */
 
 console.log("loaded client validation");
+
+//Phone number auto formatting
+$(document).ready(function () {
+    $('#phone').usPhoneFormat({
+        format: '(xxx) xxx-xxxx',
+    });
+});
+
+//SSN auto formatting
+$('#ssn').keyup(function() {
+    var val = this.value.replace(/\D/g, '');
+    val = val.replace(/^(\d{3})/, '$1-');
+    val = val.replace(/-(\d{2})/, '-$1-');
+    val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
+    this.value = val;
+});
+
 //creating an array for validations
 let validations = [
     ["val-empty", isEmpty],
@@ -42,7 +59,6 @@ function lessThan255(input, valClass) {
     toggleErrors(input,valClass, isValid, "Cannot be empty and longer than 255 characters.");
     return isValid;
 }
-
 
 /**
  * Check to see if user input is less than 10 digits

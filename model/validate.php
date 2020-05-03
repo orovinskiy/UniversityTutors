@@ -6,9 +6,7 @@
  */
 class Validate
 {
-    /**
-     * @var array
-     */
+   //stores an array of error messages
     private $_errors;
 
     /**
@@ -29,8 +27,8 @@ class Validate
 
     /**
      * Validating First Name
-     * @param $firstName tutor's first name
-     * @return bool
+     * @param string $firstName tutor's first name
+     * @return bool true if first name only has alphabets
      */
     function validFirstName($firstName)
     {
@@ -40,8 +38,8 @@ class Validate
 
     /**
      * Validating Last Name
-     * @param $last tutor's last name
-     * @return bool
+     * @param string $last tutor's last name
+     * @return bool true if last name only has alphabets
      */
     function validLastName($last)
     {
@@ -51,8 +49,8 @@ class Validate
 
     /**
      * Validating email
-     * @param $email tutor's email
-     * @return bool
+     * @param string $email tutor's email
+     * @return bool true if email is valid
      */
     function validEmail($email)
     {
@@ -65,8 +63,8 @@ class Validate
 
     /**
      * Validating Phone Number
-     * @param $phone tutor's phone
-     * @return bool
+     * @param string $phone tutor's phone
+     * @return bool true if phone is valid
      */
     function validPhone($phone)
     {
@@ -81,8 +79,8 @@ class Validate
 
     /**
      * Validating SSN if provided
-     * @param ssn tutor's ssn
-     * @return bool
+     * @param string ssn tutor's ssn
+     * @return bool true if ssn is valid
      */
     function validSsn($ssn)
     {
@@ -100,9 +98,9 @@ class Validate
     }
 
     /**Validating all the required fields name, phone, email, ssn, image
-     * @param $file user's selected file for image
-     * @param $newName name for file
-     * @return bool
+     * @param string $file user's selected file for image
+     * @param string $newName name for file
+     * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
     function validForm($file, $newName)
@@ -148,9 +146,9 @@ class Validate
 
     /**
      * Validate image
-     * @param $file image file
-     * @param $newName image name
-     * @return bool
+     * @param string $file image file
+     * @param string $newName image name
+     * @return bool true/false if file is valid/not valid
      */
 
     function validateFileUpload($file, $newName)

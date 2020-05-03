@@ -23,10 +23,12 @@ $f3 = Base::instance();
 //create new Database object
 $db = new Database();
 
-
 //create new Controller
 $controller = new Controller($f3, $db);
+
+//default place to upload image files
 $dirName = 'uploads/';
+
 //define variables
 $f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
     "Affirmations and Disclosures", "Handbook Verification", "I-9", "Offer Letter",

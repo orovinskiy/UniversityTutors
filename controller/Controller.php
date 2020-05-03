@@ -107,7 +107,7 @@ class Controller
 
     /**
      * Render page for form
-     * @param $param user's id
+     * @param int $param user's id
      * @author laxmi
      */
 

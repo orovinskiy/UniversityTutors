@@ -72,7 +72,7 @@ INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","imag
 ("9","Joe","Carole","(252) 222-4444","964-53-0274","image.jpg"),("10","Ivan","Hambug","206-635-8468","936-02-6482","image.jpg"),
 ("11","Gyser","Huck","(292) 022-4844","294-03-7851","image.jpg"),("12","Chad","Getter","253-635-9732","087-66-9882","image.jpg"),
 (13, "Some", "Guy", "(206) 222-4444",null,null),
-(14, "Tuna", "Ostrich", "(2062) 222-4644",null,null),
+(14, "Tuna", "Ostrich", "(206) 222-4644",null,null),
 (15, "Dave", "Test", "(202) 222-4444",null,null),
 (16, "Joe", "Smith", "(292) 222-4444",null,null);
 

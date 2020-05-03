@@ -2,25 +2,24 @@
 Styles for onboarding form
 @author Laxmi Kandel
  */
-.image-preview {
-    width: 150px;
-    height: 50px;
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: lightskyblue;
+.err {
+    color: #dc3545;
+    text-align: center;
 }
 
-.image-preview__image {
-    display: none;
-    width: 100%;
+em {
+    color: palevioletred;
+    font-size: smaller;
+    margin-left: 5px;
 }
 
 fieldset {
-    padding: 2em;
     border: 1px solid cornflowerblue;
+    padding: 2em;
+}
+
+img {
+    width: 200px;
 }
 
 .jumbotron {
@@ -29,22 +28,10 @@ fieldset {
 }
 
 legend {
-    font-weight: bold;
     color: cornflowerblue;
-    font-variant: small-caps;
     font-size: 125%;
+    font-variant: small-caps;
+    font-weight: bold;
 }
-.err{
-    color: #dc3545;
-}
-img{
-    width: 200px;
-}
-.err{
-    text-align: center;
-}
-em{
-    color: palevioletred;
-    font-size: smaller;
-    margin-left: 5px;
-}
+
+
