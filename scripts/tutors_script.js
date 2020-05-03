@@ -42,19 +42,34 @@ $(".tutor-select").on("change", function () {
     });
 });
 
-// Event listener for updating inputs
-$(".placement").on("blur", function () {
+$(".placement").on("keyup", function () {
+    let button = $(this).parent().find(".placement-button");
 
+    if ($(this).attr("data-original") === $(this).val()) {
+        button.addClass("d-none");
+    } else {
+        button.removeClass("d-none");
+    }
+});
+
+
+// Event listener for updating inputs
+$(".placement-button").on("click", function () {
+    let input = $(this).parent().find(".placement");
+    let button = $(this);
     // Get data for update
-    let column = $(this).data("column");
-    let value = $(this).val();
-    let yearId = $(this).data("yearid");
+    let column = input.data("column");
+    let value = input.val();
+    let yearId = input.data("yearid");
 
     // Update database via ajax
     $.post("/tutorsAjax", {
         column: column,
         value: value,
         yearId: yearId
+    }, function (result) {
+        input.attr("data-original", value);
+        button.addClass("d-none");
     });
 });
 
@@ -76,7 +91,7 @@ $("#add-tutor-button").on("click", function () {
 
 //Event listener for changing year to next year
 //@author Dallas Sloan
-$(".year-change").on("click", function() {
+$(".year-change").on("click", function () {
     //get current year from year param
     let year = $("#year-current").data("year");
 
@@ -84,15 +99,14 @@ $(".year-change").on("click", function() {
     let change = $(this).attr("id");
 
     //changing the year param to correct year
-    if (change === "year-last"){
+    if (change === "year-last") {
         year--;
-    }
-    else{
+    } else {
         year++;
     }
     //testing info, can delete once confirmed working
     //alert("This is the current year: "+ year + "Did we get the right button? : " +change);
 
     //refresh page with new year
-    window.location.href = ("/tutors/"+year);
+    window.location.href = ("/tutors/" + year);
 });
