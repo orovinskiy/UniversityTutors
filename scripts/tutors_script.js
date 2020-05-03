@@ -42,6 +42,7 @@ $(".tutor-select").on("change", function () {
     });
 });
 
+// Event listener to show/hide the save button when the placement text is changed.
 $(".placement").on("keyup", function () {
     let button = $(this).parent().find(".placement-button");
 
@@ -85,7 +86,11 @@ $("#add-tutor-button").on("click", function () {
         email: email,
         year: year
     }, function (result) {
-        alert("Email was sent. You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
+        alert("Email was sent (in theory). You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
+
+        //refresh page to load new user into table
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
     });
 });
 
