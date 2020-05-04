@@ -115,3 +115,69 @@ $(".year-change").on("click", function () {
     //refresh page with new year
     window.location.href = ("/tutors/" + year);
 });
+
+// event listener for displaying the delete button
+$(".email").on("click", function () {
+
+    let buttonDelete = $(this).find(".delete");
+    let buttonImport = $(this).find(".import");
+    buttonDelete.removeClass("d-none");
+    buttonImport.removeClass("d-none");
+
+    setTimeout(function () {
+        $(window).on("click", function () {
+            console.log("test");
+            buttonDelete.addClass("d-none");
+            buttonImport.addClass("d-none");
+            $(this).off();
+        });
+    }, 100);
+
+});
+
+// event listener for delete button clicked
+$(".delete").on("click", function () {
+    let result = confirm("Are you sure you want to delete this user and all data associated with them?");
+    if (result) {
+
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            delete: true,
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener to import the user to the current year on click
+$(".import").on("click", function () {
+    let result = confirm("Are you sure you want import this user to the current year?");
+    if (result) {
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener for setting the current year
+$("#current-year").on("click", function () {
+
+    let year = $("#year-current").data("year");
+
+    $.post("/tutorsAjax", {
+        current_year: year
+    });
+
+    // refresh data
+    window.location.href = ("/tutors/" + year);
+});

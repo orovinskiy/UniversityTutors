@@ -66,7 +66,7 @@ class Validate
 
     /**
      * Check to see if email is unique base on database
-     * @param stirng $email user input email
+     * @param string $email user input email
      * @return bool true if email does not exist in database otherwise false
      */
     function uniqueEmail($email)

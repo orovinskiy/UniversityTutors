@@ -38,7 +38,7 @@ class Database
     {
         //defining query
 
-        $sql = "SELECT Year.year_id, Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
+        $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
                     Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
                     Year.year_placement from Year
@@ -280,4 +280,69 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
 
     }
+
+    /**
+     * Deletes a user and all associated data from database by id
+     *
+     * @param int $user_id The id of the user to be deleted
+     * @author Keller Flint
+     */
+    function deleteUser($user_id) {
+        // delete user data from year
+        $sql = "DELETE FROM Year WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+
+        // delete user data from tutor
+        $sql = "DELETE FROM Tutor WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+
+        // delete user
+        $sql = "DELETE FROM User WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+    }
+
+    /**
+     * Returns the current year
+     *
+     * @return string The current year
+     * @author Keller Flint
+     */
+    function getCurrentYear() {
+        $sql = "SELECT DISTINCT info_current_year FROM Info";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC)["info_current_year"];
+    }
+
+    /**
+     * Sets current year to the given year
+     *
+     * @param string $year The year to set current year to
+     * @author Keller Flint
+     */
+    function setCurrentYear($year) {
+        $sql = "UPDATE Info SET info_current_year = ? WHERE info_id = 1";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$year]);
+    }
+
+    /**
+     * Import user to the current year by adding a new Year entry to the database with the user's old id.
+     *
+     * @param int $user_id The id of the user we are importing
+     * @author Keller Flint
+     */
+    function importUser($user_id) {
+        $year = $this->getCurrentYear();
+
+        $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$user_id, $year]);
+    }
+
 }

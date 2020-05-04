@@ -30,6 +30,9 @@ class Controller
     function tutorsPage($year)
     {
 
+        // Get current year
+        $currentYear = $this->_db->getCurrentYear();
+
         // Get tutor data for current year
         $tutorsData = $this->_db->getTutors($year);
 
@@ -39,6 +42,7 @@ class Controller
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
         $this->_f3->set("year", $year);
+        $this->_f3->set("currentYear", $currentYear);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
@@ -55,9 +59,19 @@ class Controller
     {
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
-        } else if (isset($_POST["year"])) {
+        } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor
-            echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            if ($this->_val->uniqueEmail($_POST["email"])) {
+                echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            } else {
+                echo "ERROR: Email already exists";
+            }
+        } else if (isset($_POST["delete"])) {
+            $this->_db->deleteUser($_POST["user_id"]);
+        } else if (isset($_POST["current_year"])) {
+            $this->_db->setCurrentYear($_POST["current_year"]);
+        } else if (isset($_POST["user_id"])) {
+            $this->_db->importUser($_POST["user_id"]);
         }
 
     }
