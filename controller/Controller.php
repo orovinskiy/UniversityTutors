@@ -59,9 +59,13 @@ class Controller
     {
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
-        } else if (isset($_POST["year"])) {
+        } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor
-            echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            if ($this->_val->uniqueEmail($_POST["email"])) {
+                echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            } else {
+                echo "ERROR: Email already exists";
+            }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
         } else if (isset($_POST["current_year"])) {
