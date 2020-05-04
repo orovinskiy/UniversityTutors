@@ -115,3 +115,49 @@ $(".year-change").on("click", function () {
     //refresh page with new year
     window.location.href = ("/tutors/" + year);
 });
+
+// event listener for displaying the delete button
+$(".email").on("click", function () {
+
+    let button = $(this).find(".delete");
+    button.removeClass("d-none");
+
+    setTimeout(function () {
+        $(window).on("click", function () {
+            console.log("test");
+            button.addClass("d-none");
+            $(this).off();
+        });
+    }, 100);
+
+});
+
+// event listener for delete button clicked
+$(".delete").on("click", function () {
+    let result = confirm("Are you sure you want to delete this user and all data associated with them?");
+    if (result) {
+
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener for setting the current year
+$("#current-year").on("click", function () {
+
+    let year = $("#year-current").data("year");
+
+    $.post("/tutorsAjax", {
+        current_year: year
+    });
+
+    // refresh data
+    window.location.href = ("/tutors/" + year);
+});

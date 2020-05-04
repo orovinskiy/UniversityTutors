@@ -26,6 +26,10 @@ Page for admin viewing and management of tutor onboarding data.
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
+        <br>
+        <check if="{{ @currentYear != @year }}">
+            <button id="current-year" class="btn btn-info mt-3">Set Current Year</button>
+        </check>
     </div>
 
     <!-- Tutors DataTable -->
@@ -52,10 +56,13 @@ Page for admin viewing and management of tutor onboarding data.
         <repeat group="{{ @tutorsData }}" value=" {{ @tutor }}">
             <tr>
                 <!-- Name -->
-                <td>{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
+                <td class="name">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
 
                 <!-- Email -->
-                <td>{{ @tutor['user_email'] }}</td>
+                <td class="email">{{ @tutor['user_email'] }}
+                    <br>
+                    <button class="btn btn-danger d-none delete" data-userid="{{ @tutor['user_id'] }}">Delete</button>
+                </td>
 
                 <!-- Onboarding Packet -->
                 <td>

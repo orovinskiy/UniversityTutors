@@ -49,6 +49,20 @@ CREATE TABLE Year (
     FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
 );
 
+CREATE TABLE Info (
+    info_id int NOT NULL,
+    info_current_year year NOT NULL,
+
+    PRIMARY KEY (info_id)
+);
+
+/*
+Set default year
+@author Keller Flint
+ */
+
+INSERT INTO Info Value (1, "2020");
+
 /*
 Test Data
 @author Dallas Sloan, Oleg
