@@ -6,15 +6,18 @@
  */
 class Validate
 {
-   //stores an array of error messages
+    //stores an array of error messages
     private $_errors;
+    private $_db;
+
 
     /**
      * Validator constructor.
      */
-    public function __construct()
+    public function __construct($db)
     {
         $this->_errors = array();
+        $this->_db = $db;
     }
 
     /**
@@ -62,16 +65,31 @@ class Validate
     }
 
     /**
+     * Check to see if email is unique base on database
+     * @param stirng $email user input email
+     * @return bool true if email does not exist in database otherwise false
+     */
+    function uniqueEmail($email)
+    {
+        global $db;
+        $uniqueEmail = false;
+        if (empty($db->getEmail($email))) {
+            $uniqueEmail = true;
+        }
+        return $uniqueEmail;
+    }
+
+    /**
      * Validating Phone Number
      * @param string $phone tutor's phone
      * @return bool true if phone is valid
      */
     function validPhone($phone)
     {
-        $regex =  "/\(\d{3}\) \d{3}-\d{4}/";
+        $regex = "/\(\d{3}\) \d{3}-\d{4}/";
         $phoneResult = false;
         $phone = trim($phone);
-        if (strlen($phone) == 14 && preg_match($regex,$phone)){
+        if (preg_match($regex, $phone)) {
             $phoneResult = true;
         }
         return $phoneResult;
@@ -84,15 +102,15 @@ class Validate
      */
     function validSsn($ssn)
     {
-        $regexSsn ="/^\d{3}-\d{2}-\d{4}$/";
+        $regexSsn = "/^\d{3}-\d{2}-\d{4}$/";
         $ssnResult = false;
         $ssn = trim($ssn);
-        if(!empty($ssn)){
-            if (strlen($ssn) == 11 && preg_match($regexSsn,$ssn)) {
+        if (!empty($ssn)) {
+            if (preg_match($regexSsn, $ssn)) {
                 $ssnResult = true;
             }
-        }else{
-            $ssnResult =true;
+        } else {
+            $ssnResult = true;
         }
         return $ssnResult;
     }
@@ -100,13 +118,16 @@ class Validate
     /**Validating all the required fields name, phone, email, ssn, image
      * @param string $file user's selected file for image
      * @param string $newName name for file
+     * @param int $param user id
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName)
+    function validForm($file, $newName, $param)
     {
         global $f3;
+        global $db;
         $isValid = true;//flag
+
 
         //FIRST  NAME
         if (!$this->validFirstName($f3->get('firstName'))) {
@@ -128,6 +149,15 @@ class Validate
             $isValid = false;
             $f3->set("errors['email']", "Please enter valid email address ");
         }
+
+        //UNIQUE EMAIL
+        if ($param != $db->getEmail($f3->get('email'))['user_id']) {
+            if (!$this->uniqueEmail($f3->get('email'))) {
+                $isValid = false;
+                $f3->set("errors['email']", "This email has been already taken, please choose another ");
+            }
+        }
+
         //SSN
         if (!$this->validSsn($f3->get('ssn'))) {
             $isValid = false;
@@ -135,7 +165,7 @@ class Validate
         }
         //image file
         if (isset($file)) {
-            if(!empty($file["name"])){
+            if (!empty($file["name"])) {
                 if (!$this->validateFileUpload($file, $newName)) {
                     $isValid = false;
                 }
