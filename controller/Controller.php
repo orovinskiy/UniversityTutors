@@ -62,10 +62,12 @@ class Controller
         } else if (isset($_POST["year"])) {
             // TODO create function to generate and send email to tutor
             echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
-        } else if (isset($_POST["user_id"])) {
+        } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
         } else if (isset($_POST["current_year"])) {
             $this->_db->setCurrentYear($_POST["current_year"]);
+        } else if (isset($_POST["user_id"])) {
+            $this->_db->importUser($_POST["user_id"]);
         }
 
     }

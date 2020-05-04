@@ -61,6 +61,9 @@ Page for admin viewing and management of tutor onboarding data.
                 <!-- Email -->
                 <td class="email">{{ @tutor['user_email'] }}
                     <br>
+                    <check if="{{ @currentYear != @year }}">
+                        <button class="btn btn-info d-none import" data-userid="{{ @tutor['user_id'] }}">Import</button>
+                    </check>
                     <button class="btn btn-danger d-none delete" data-userid="{{ @tutor['user_id'] }}">Delete</button>
                 </td>
 

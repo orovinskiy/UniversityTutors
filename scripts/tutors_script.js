@@ -119,13 +119,16 @@ $(".year-change").on("click", function () {
 // event listener for displaying the delete button
 $(".email").on("click", function () {
 
-    let button = $(this).find(".delete");
-    button.removeClass("d-none");
+    let buttonDelete = $(this).find(".delete");
+    let buttonImport = $(this).find(".import");
+    buttonDelete.removeClass("d-none");
+    buttonImport.removeClass("d-none");
 
     setTimeout(function () {
         $(window).on("click", function () {
             console.log("test");
-            button.addClass("d-none");
+            buttonDelete.addClass("d-none");
+            buttonImport.addClass("d-none");
             $(this).off();
         });
     }, 100);
@@ -137,6 +140,23 @@ $(".delete").on("click", function () {
     let result = confirm("Are you sure you want to delete this user and all data associated with them?");
     if (result) {
 
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            delete: true,
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener to import the user to the current year on click
+$(".import").on("click", function () {
+    let result = confirm("Are you sure you want import this user to the current year?");
+    if (result) {
         let user_id = $(this).data("userid");
 
         // ajax deletion

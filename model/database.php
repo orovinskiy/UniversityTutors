@@ -329,4 +329,20 @@ class Database
         $statement->execute([$year]);
     }
 
+    /**
+     * Import user to the current year by adding a new Year entry to the database with the user's old id.
+     *
+     * @param int $user_id The id of the user we are importing
+     * @author Keller Flint
+     */
+    function importUser($user_id) {
+        $year = $this->getCurrentYear();
+
+        $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$user_id, $year]);
+    }
+
 }
