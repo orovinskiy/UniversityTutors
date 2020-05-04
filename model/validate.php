@@ -154,7 +154,7 @@ class Validate
         if ($param != $db->getEmail($f3->get('email'))['user_id']) {
             if (!$this->uniqueEmail($f3->get('email'))) {
                 $isValid = false;
-                $f3->set("errors['email']", "This email has been already taken Please chose another ");
+                $f3->set("errors['email']", "This email has been already taken, please choose another ");
             }
         }
 
