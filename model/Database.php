@@ -3,7 +3,7 @@
 /**
  * Database Class for University Tutors Project
  * @author Dallas Sloan
- * filename: database.php
+ * filename: Database.php
  *
  * This is a class that creates a database object and queries the working database for the project
  * Class Database
