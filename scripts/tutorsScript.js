@@ -116,24 +116,25 @@ $(".year-change").on("click", function () {
     window.location.href = ("/tutors/" + year);
 });
 
-// event listener for displaying the delete button
-$(".email").on("click", function () {
+// hide delete and import buttons on window click
+$(window).on("click", function () {
+    $(".delete").addClass("d-none");
+    $(".import").addClass("d-none");
+});
 
-    let buttonDelete = $(this).find(".delete");
-    let buttonImport = $(this).find(".import");
-    buttonDelete.removeClass("d-none");
-    buttonImport.removeClass("d-none");
-    console.log("email clicked");
+// show delete and import buttons on email click
+$(".email").on("click", function (event) {
 
-    setTimeout(function () {
-        $(window).on("click", function () {
-            console.log("window clicked");
-            buttonDelete.addClass("d-none");
-            buttonImport.addClass("d-none");
-            $(this).off();
-        });
-    }, 100);
+    // hide any open buttons
+    $(".delete").addClass("d-none");
+    $(".import").addClass("d-none");
 
+    // show current buttons
+    $(this).find(".delete").removeClass("d-none");
+    $(this).find(".import").removeClass("d-none");
+
+    // stop window event propagation to keep the window event listener from hiding the button again
+    event.stopPropagation();
 });
 
 // event listener for delete button clicked
