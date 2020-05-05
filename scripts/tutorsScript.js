@@ -123,10 +123,11 @@ $(".email").on("click", function () {
     let buttonImport = $(this).find(".import");
     buttonDelete.removeClass("d-none");
     buttonImport.removeClass("d-none");
+    console.log("email clicked");
 
     setTimeout(function () {
         $(window).on("click", function () {
-            console.log("test");
+            console.log("window clicked");
             buttonDelete.addClass("d-none");
             buttonImport.addClass("d-none");
             $(this).off();
