@@ -96,14 +96,20 @@ class Controller
 
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
-        $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'], "Column" => "year_ADP"),
-            "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'], "Column" => "year_sexual_misconduct"),
-            "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'], "Column" => "year_affirmation_disclosures"),
-            "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'], "Column" => "year_handbook_verification"),
-            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9"),
-            "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'], "Column" => "year_offer_letter"),
-            "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'], "Column" => "year_orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4")));
+        $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
+            "Column" => "year_ADP", "id"=>"adp"),
+            "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'],
+                "Column" => "year_sexual_misconduct", "id"=>"sex-miscond"),
+            "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'],
+                "Column" => "year_affirmation_disclosures", "id"=>"affirm-disclose"),
+            "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'],
+                "Column" => "year_handbook_verification", "id"=>"handbook-verify"),
+            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9", "id"=>"i9"),
+            "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
+                "Column" => "year_offer_letter", "id"=>"offer-letter"),
+            "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
+                "Column" => "year_orientation", "id"=>"orientation"),
+            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id"=>"w4")));
 
 
         $view = new Template();

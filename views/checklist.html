@@ -38,13 +38,13 @@ what forms they have already completed
                                     <div class="card-subtitle">
                                         <div class="form-check mt-3 mb-5 mr-5 text-center">
                                             <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
-                                                   id="{{@name}}" name="doorInter[]"
+                                                   id="{{@isChecked['id']}}" name="doorInter[]"
                                                 <check if="{{@isChecked['Value'] == 'none'}}">
                                                     disabled
                                                 </check>
                                             >
-                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name}}">
-                                                Completed
+                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
+                                                Complete
                                             </label>
                                         </div>
                                     </div>
@@ -71,8 +71,8 @@ what forms they have already completed
                                     <div class="card-subtitle">
                                         <div class="form-check mt-3 mb-5 mr-5 text-center">
                                             <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
-                                                   id="{{@name2}}" name="doorInter[]" checked>
-                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@name2}}">
+                                                   id="{{@isChecked['id']}}" name="doorInter[]" checked>
+                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
                                                 Completed
                                             </label>
                                         </div>
