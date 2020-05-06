@@ -5,6 +5,28 @@
 
 console.log("loaded client validation");
 
+
+//get checkbox using it's id
+let bioTextArea = document.getElementById("checkBio");
+
+//onclick call a function
+bioTextArea.onclick = toggleBioTextArea;
+
+/**
+ * this function displays/hide text area for bio when checked/unchecked
+ */
+function toggleBioTextArea() {
+    let getBioTextArea = document.getElementById("bio-block");
+    if(bioTextArea.checked){
+        getBioTextArea.style.display ="block";
+    }
+    else{
+        getBioTextArea.style.display ="none";
+    }
+}
+
+
+
 //Auto formatting for phone number
 $('#phone').keyup(function () {
     let valPhone = this.value.replace(/\D/g, '');

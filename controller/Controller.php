@@ -156,6 +156,7 @@ class Controller
             $this->_f3->set('email', $_POST['email']);
             $this->_f3->set('phone', $_POST['phone']);
             $this->_f3->set('ssn', $_POST['ssn']);
+            $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];

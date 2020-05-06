@@ -1,7 +1,7 @@
 <!--
-   Form for OnBoarding process
-   @author Laxmi Kandel
-   -->
+  Form for OnBoarding process
+  @author Laxmi Kandel
+  -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -81,17 +81,29 @@
                         </check>
                         <div class="errors text-danger"></div>
                     </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="checkBio" name="bio">
+                        <label for="checkBio"><b>Update your bio</b></label><br>
+
+                    </div>
+                    <div class="form-group" id="bio-block">
+                        <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
+                        <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
+                    </div>
                 </div>
                 <!--div for image-->
                 <div class="col">
-                    <div class="from-group">
-                        <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
-                    </div>
-                    <!--div for image preview-->
                     <div>
-                        <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                        <div class="from-group">
+                            <input type="file" class="form-control-file" name="fileToUpload"
+                                   id="img"><em>(optional)</em>
+                        </div>
+                        <!--div for image preview-->
+                        <div>
+                            <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                        </div>
+                        <div class="errors text-danger"></div>
                     </div>
-                    <div class="errors text-danger"></div>
                 </div>
             </div>
             <!--div for button-->
@@ -128,3 +140,4 @@
 <script src="../scripts/clientValidation.js"></script>
 </body>
 </html>
+
