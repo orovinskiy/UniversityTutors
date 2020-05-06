@@ -2,6 +2,11 @@
 Styles for onboarding form
 @author Laxmi Kandel
  */
+
+#bio-block{
+    display: none;
+}
+
 .err {
     color: #dc3545;
     text-align: center;

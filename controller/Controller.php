@@ -144,6 +144,7 @@ class Controller
         $this->_f3->set("lastName", $this->_db->getTutorById($param["id"])["tutor_last"]);
         $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
         $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
+        $this->_f3->set("bioText", $this->_db->getTutorById($param["id"])["tutor_bio"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
         //get the image form the database
         $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
@@ -165,7 +166,8 @@ class Controller
             if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName, $param["id"])) {
                 //check param id
                 if ($param["id"] != 0) {
-                    $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']), $_POST['phone'], $_POST['ssn']);
+                    $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
+                        $_POST['phone'], $_POST['ssn'],trim($_POST['bio']));
                     $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
