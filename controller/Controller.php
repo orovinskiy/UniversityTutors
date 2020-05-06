@@ -17,9 +17,9 @@ class Controller
      */
     function __construct($f3, $db)
     {
-        $this->_val = new Validate();
         $this->_f3 = $f3;
         $this->_db = $db;
+        $this->_val = new Validate($db);
     }
 
     /**
@@ -30,6 +30,9 @@ class Controller
     function tutorsPage($year)
     {
 
+        // Get current year
+        $currentYear = $this->_db->getCurrentYear();
+
         // Get tutor data for current year
         $tutorsData = $this->_db->getTutors($year);
 
@@ -39,6 +42,7 @@ class Controller
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
         $this->_f3->set("year", $year);
+        $this->_f3->set("currentYear", $currentYear);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
@@ -55,9 +59,19 @@ class Controller
     {
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
-        } else if (isset($_POST["year"])) {
+        } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor
-            echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            if ($this->_val->uniqueEmail($_POST["email"])) {
+                echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+            } else {
+                echo "ERROR: Email already exists";
+            }
+        } else if (isset($_POST["delete"])) {
+            $this->_db->deleteUser($_POST["user_id"]);
+        } else if (isset($_POST["current_year"])) {
+            $this->_db->setCurrentYear($_POST["current_year"]);
+        } else if (isset($_POST["user_id"])) {
+            $this->_db->importUser($_POST["user_id"]);
         }
 
     }
@@ -131,6 +145,8 @@ class Controller
         $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
         $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
+        //get the image form the database
+        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
 
         //when request is sent
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -145,11 +161,11 @@ class Controller
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
 
             //if the user input in form is valid
-            if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName)) {
+            if ($this->_val->validForm($_FILES['fileToUpload'], $randomFileName, $param["id"])) {
                 //check param id
                 if ($param["id"] != 0) {
-                    $this->_db->updateTutor($param["id"], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['ssn']);
-                    $this->_db->updateEmail($param["id"], $_POST['email']);
+                    $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']), $_POST['phone'], $_POST['ssn']);
+                    $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
@@ -157,12 +173,12 @@ class Controller
                         $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                     }
                 }
+                $this->_f3->reroute("/checklist/" . $param["id"]);
             }
         }
-        //get the image form the database
-        $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
         $view = new Template();
         echo $view->render('views/form.html');
+
     }
 
     /**

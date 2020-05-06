@@ -5,22 +5,66 @@
 
 console.log("loaded client validation");
 
-//Phone number auto formatting
-$(document).ready(function () {
-    $('#phone').usPhoneFormat({
-        format: '(xxx) xxx-xxxx',
-    });
+//Auto formatting for phone number
+$('#phone').keyup(function () {
+    let valPhone = this.value.replace(/\D/g, '');
+    let newValPhone = '';
+    if (valPhone.length > 4) {
+        this.value = valPhone;
+    }
+    if ((valPhone.length > 3) && (valPhone.length < 7)) {
+        newValPhone += '(' + valPhone.substr(0, 3) + ') ';
+        valPhone = valPhone.substr(3);
+    }
+    if (valPhone.length > 6) {
+        newValPhone += '(' + valPhone.substr(0, 3) + ') ';
+        newValPhone += valPhone.substr(3, 3) + '-';
+        valPhone = valPhone.substr(6);
+    }
+    newValPhone += valPhone;
+    this.value = newValPhone.substring(0, 14);
 });
 
-//SSN auto formatting
-$('#ssn').keyup(function() {
-    var val = this.value.replace(/\D/g, '');
-    val = val.replace(/^(\d{3})/, '$1-');
-    val = val.replace(/-(\d{2})/, '-$1-');
-    val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
-    this.value = val;
+////Auto formatting for SSN
+$('#ssn').keyup(function () {
+    let val = this.value.replace(/\D/g, '');
+    let newVal = '';
+    if (val.length > 4) {
+        this.value = val;
+    }
+    if ((val.length > 3) && (val.length < 6)) {
+        newVal += val.substr(0, 3) + '-';
+        val = val.substr(3);
+    }
+    if (val.length > 5) {
+        newVal += val.substr(0, 3) + '-';
+        newVal += val.substr(3, 2) + '-';
+        val = val.substr(5);
+    }
+    newVal += val;
+    this.value = newVal.substring(0, 11);
 });
 
+/**
+ * function to display image right before submitting form
+ * @param file input file
+ * @author laxmi
+ */
+function readURL(input) {
+    console.log("reading image");
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#preview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]); 
+    }
+}
+
+$("#img").change(function () {
+    readURL(this);
+});
 //creating an array for validations
 let validations = [
     ["val-empty", isEmpty],
@@ -53,10 +97,16 @@ function isEmpty(input, valClass) {
 function lessThan255(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().length <= 255 && input.val().trim() != "") {
+    if (input.val().length <= 255) {
         isValid = true;
+    } else {
+        toggleErrors(input, valClass, isValid, "Can't be longer than 255 characters.");
     }
-    toggleErrors(input,valClass, isValid, "Cannot be empty and longer than 255 characters.");
+    if (input.val().length != 0) {
+        isValid = true;
+    } else {
+        toggleErrors(input, valClass, isValid, "Cannot be empty");
+    }
     return isValid;
 }
 
@@ -69,12 +119,13 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().length == 14 && input.val().trim() != "") {
+    if (input.val().trim() != "") {
         isValid = true;
     }
     toggleErrors(input, valClass, isValid, "Must be valid");
     return isValid;
 }
+
 /**
  * Check to see if user input spaces
  * @param input user's input
@@ -91,15 +142,16 @@ function hasSpaces(input, valClass) {
     return isValid;
 
 }
-    /* --- Helper functions --- */
+
+/* --- Helper functions --- */
 
 // sets all of the input and submit event listeners to validate the classes given in validations
-    for (let i = 0; i < validations.length; i++) {
-        // validation on input
-        $("." + validations[i][0]).find(".input").on("input focus blur", function () {
-            validations[i][1]($(this), validations[i][0]);
-        });
-    }
+for (let i = 0; i < validations.length; i++) {
+    // validation on input
+    $("." + validations[i][0]).find(".input").on("input focus blur", function () {
+        validations[i][1]($(this), validations[i][0]);
+    });
+}
 
 /**
  * Append/ remove the error messages
@@ -108,17 +160,17 @@ function hasSpaces(input, valClass) {
  * @param isValid boolean
  * @param message Errors messages
  */
-    function toggleErrors(object, valClass, isValid, message) {
-        if (!isValid) {
-            if ($(object).parent().find(".errors").find("." + valClass + "-error").length == 0) {
-                $(object).parent().find(".errors").append("<div class='error " + valClass + "-error'>" + message + "</div>");
-                console.log("appended");
-            }
-        } else {
-            $(object).parent().find(".errors").find("." + valClass + "-error").remove();
-            console.log("removed");
+function toggleErrors(object, valClass, isValid, message) {
+    if (!isValid) {
+        if ($(object).parent().find(".errors").find("." + valClass + "-error").length == 0) {
+            $(object).parent().find(".errors").append("<div class='error " + valClass + "-error'>" + message + "</div>");
+            console.log("appended");
         }
+    } else {
+        $(object).parent().find(".errors").find("." + valClass + "-error").remove();
+        console.log("removed");
     }
+}
 
 
 

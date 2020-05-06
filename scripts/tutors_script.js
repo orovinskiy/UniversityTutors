@@ -42,19 +42,35 @@ $(".tutor-select").on("change", function () {
     });
 });
 
-// Event listener for updating inputs
-$(".placement").on("blur", function () {
+// Event listener to show/hide the save button when the placement text is changed.
+$(".placement").on("keyup", function () {
+    let button = $(this).parent().find(".placement-button");
 
+    if ($(this).attr("data-original") === $(this).val()) {
+        button.addClass("d-none");
+    } else {
+        button.removeClass("d-none");
+    }
+});
+
+
+// Event listener for updating inputs
+$(".placement-button").on("click", function () {
+    let input = $(this).parent().find(".placement");
+    let button = $(this);
     // Get data for update
-    let column = $(this).data("column");
-    let value = $(this).val();
-    let yearId = $(this).data("yearid");
+    let column = input.data("column");
+    let value = input.val();
+    let yearId = input.data("yearid");
 
     // Update database via ajax
     $.post("/tutorsAjax", {
         column: column,
         value: value,
         yearId: yearId
+    }, function (result) {
+        input.attr("data-original", value);
+        button.addClass("d-none");
     });
 });
 
@@ -70,13 +86,17 @@ $("#add-tutor-button").on("click", function () {
         email: email,
         year: year
     }, function (result) {
-        alert("Email was sent. You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
+        alert("Email was sent (in theory). You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
+
+        //refresh page to load new user into table
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
     });
 });
 
 //Event listener for changing year to next year
 //@author Dallas Sloan
-$(".year-change").on("click", function() {
+$(".year-change").on("click", function () {
     //get current year from year param
     let year = $("#year-current").data("year");
 
@@ -84,15 +104,80 @@ $(".year-change").on("click", function() {
     let change = $(this).attr("id");
 
     //changing the year param to correct year
-    if (change === "year-last"){
+    if (change === "year-last") {
         year--;
-    }
-    else{
+    } else {
         year++;
     }
     //testing info, can delete once confirmed working
     //alert("This is the current year: "+ year + "Did we get the right button? : " +change);
 
     //refresh page with new year
-    window.location.href = ("/tutors/"+year);
+    window.location.href = ("/tutors/" + year);
+});
+
+// event listener for displaying the delete button
+$(".email").on("click", function () {
+
+    let buttonDelete = $(this).find(".delete");
+    let buttonImport = $(this).find(".import");
+    buttonDelete.removeClass("d-none");
+    buttonImport.removeClass("d-none");
+
+    setTimeout(function () {
+        $(window).on("click", function () {
+            console.log("test");
+            buttonDelete.addClass("d-none");
+            buttonImport.addClass("d-none");
+            $(this).off();
+        });
+    }, 100);
+
+});
+
+// event listener for delete button clicked
+$(".delete").on("click", function () {
+    let result = confirm("Are you sure you want to delete this user and all data associated with them?");
+    if (result) {
+
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            delete: true,
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener to import the user to the current year on click
+$(".import").on("click", function () {
+    let result = confirm("Are you sure you want import this user to the current year?");
+    if (result) {
+        let user_id = $(this).data("userid");
+
+        // ajax deletion
+        $.post("/tutorsAjax", {
+            user_id: user_id
+        });
+
+        let year = $("#year-current").data("year");
+        window.location.href = ("/tutors/" + year);
+    }
+});
+
+// event listener for setting the current year
+$("#current-year").on("click", function () {
+
+    let year = $("#year-current").data("year");
+
+    $.post("/tutorsAjax", {
+        current_year: year
+    });
+
+    // refresh data
+    window.location.href = ("/tutors/" + year);
 });

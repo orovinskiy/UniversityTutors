@@ -49,6 +49,20 @@ CREATE TABLE Year (
     FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
 );
 
+CREATE TABLE Info (
+    info_id int NOT NULL,
+    info_current_year year NOT NULL,
+
+    PRIMARY KEY (info_id)
+);
+
+/*
+Set default year
+@author Keller Flint
+ */
+
+INSERT INTO Info Value (1, "2020");
+
 /*
 Test Data
 @author Dallas Sloan, Oleg
@@ -65,12 +79,12 @@ INSERT INTO User Values (default,"Bobby@mail.com","bobTroll!!",0),(default,"Andy
 (default,"test@mail.greenriver.edu", "password", b'0'),
 (default,"jsmith@mail.greenriver.edu", "password", b'0');
 
-INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","image.jpg"),("2","Andy","Shmuck","253-786-5426","937-20-0573","image.jpg"),
-("3","Richard","Fanny","(222) 222-4444","073-96-1074","image.jpg"),("4","Jasmine","Riely","206-037-1056","658-43-0123","image.jpg"),
+INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","image.jpg"),("2","Andy","Shmuck","(253) 786-5426","937-20-0573","image.jpg"),
+("3","Richard","Fanny","(222) 222-4444","073-96-1074","image.jpg"),("4","Jasmine","Riely","(206) 037-1056","658-43-0123","image.jpg"),
 ("5","Reddin","Huck","(223) 232-4544","106-54-8528","image.jpg"),
-("7","Ben","Luss","(242) 222-4444","973-91-7893","image.jpg"),("8","Nick","Goravskiy","206-632-0835","123-45-6789","image.jpg"),
-("9","Joe","Carole","(252) 222-4444","964-53-0274","image.jpg"),("10","Ivan","Hambug","206-635-8468","936-02-6482","image.jpg"),
-("11","Gyser","Huck","(292) 022-4844","294-03-7851","image.jpg"),("12","Chad","Getter","253-635-9732","087-66-9882","image.jpg"),
+("7","Ben","Luss","(242) 222-4444","973-91-7893","image.jpg"),("8","Nick","Goravskiy","(206) 632-0835","123-45-6789","image.jpg"),
+("9","Joe","Carole","(252) 222-4444","964-53-0274","image.jpg"),("10","Ivan","Hambug","(206) 635-8468","936-02-6482","image.jpg"),
+("11","Gyser","Huck","(292) 022-4844","294-03-7851","image.jpg"),("12","Chad","Getter","(253) 635-9732","087-66-9882","image.jpg"),
 (13, "Some", "Guy", "(206) 222-4444",null,null),
 (14, "Tuna", "Ostrich", "(206) 222-4644",null,null),
 (15, "Dave", "Test", "(202) 222-4444",null,null),
