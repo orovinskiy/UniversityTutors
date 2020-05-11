@@ -82,13 +82,25 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" id="checkBio" name="bio">
-                        <label for="checkBio"><b>Update your bio</b></label><br>
+                        <check if="{{ @bioCheck === 'on' }}">
+                            <true>
+                                <input type="checkbox" id="checkBio" name="bioCheck" checked="checked">
+                                <label for="checkBio"><b>Update your bio</b></label><br>
+                            </true>
+                            <false>
+                                <input type="checkbox" id="checkBio" name="bioCheck">
+                                <label for="checkBio"><b>Update your bio</b></label><br>
+                            </false>
+                        </check>
+                        <check if="{{ @errors['check'] }}">
+                            <span class="err">{{ @errors['check'] }}</span>
+                        </check>
 
                     </div>
                     <div class="form-group" id="bio-block">
                         <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
                         <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
+
                     </div>
                 </div>
                 <!--div for image-->

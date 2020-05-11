@@ -122,7 +122,7 @@ class Validate
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName, $param)
+    function validForm($checkBox,$file, $newName, $param,$bio)
     {
         global $f3;
         global $db;
@@ -169,6 +169,13 @@ class Validate
                 if (!$this->validateFileUpload($file, $newName)) {
                     $isValid = false;
                 }
+            }
+        }
+        if($checkBox=="on"){
+            if (empty(trim($bio))) {
+                $isValid = false;
+                $f3->set("errors['check']", "Please enter bio");
+
             }
         }
         return $isValid;
