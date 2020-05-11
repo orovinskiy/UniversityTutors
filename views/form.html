@@ -1,7 +1,7 @@
 <!--
-  Form for OnBoarding process
-  @author Laxmi Kandel
-  -->
+   Form for OnBoarding process
+   @author Laxmi Kandel
+   -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -84,29 +84,25 @@
                     <div class="form-group">
                         <check if="{{ @bioCheck === 'on' }}">
                             <true>
-                                <input type="checkbox" id="checkBio" name="bioCheck" checked="checked">
-                                <label for="checkBio"><b>Update your bio</b></label><br>
-                                <div class="form-group not-hidden" id="bio-block">
-                                    <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
-
+                                <input class="checkBio" type="checkbox" name="bioCheck" checked="checked">
+                                <label><b>Update your bio</b></label><br>
+                                <div class="form-group not-hidden bio-block">
+                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
+                                    <check if="{{ @errors['check'] }}">
+                                        <span class="err">{{ @errors['check'] }}</span>
+                                    </check>
                                 </div>
                             </true>
                             <false>
-                                <input type="checkbox" id="checkBio" name="bioCheck">
-                                <label for="checkBio"><b>Update your bio</b></label><br>
-                                <div class="form-group hidden" id="bio-block">
-                                    <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
-
+                                <input class="checkBio" type="checkbox" name="bioCheck">
+                                <label>Update your bio</b></label><br>
+                                <div class="form-group hidden bio-block">
+                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
                                 </div>
-
                             </false>
                         </check>
-                        <check if="{{ @errors['check'] }}">
-                            <span class="err">{{ @errors['check'] }}</span>
-                        </check>
-
                     </div>
                 </div>
                 <!--div for image-->
@@ -158,4 +154,3 @@
 <script src="../scripts/clientValidation.js"></script>
 </body>
 </html>
-
