@@ -35,8 +35,9 @@ class Validate
      */
     function validFirstName($firstName)
     {
-        $firstName = trim($firstName);
-        return ctype_alpha($firstName);
+        return  preg_match_all("/^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/",
+            $firstName,
+            $out, PREG_PATTERN_ORDER);
     }
 
     /**
@@ -46,8 +47,9 @@ class Validate
      */
     function validLastName($last)
     {
-        $last = trim($last);
-        return ctype_alpha($last);
+        return  preg_match_all("/^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/",
+            $last,
+            $out, PREG_PATTERN_ORDER);
     }
 
     /**
@@ -96,7 +98,7 @@ class Validate
     }
 
     /**
-     * Validating SSN if provided
+     * Validating SSN
      * @param string ssn tutor's ssn
      * @return bool true if ssn is valid
      */
@@ -105,24 +107,22 @@ class Validate
         $regexSsn = "/^\d{3}-\d{2}-\d{4}$/";
         $ssnResult = false;
         $ssn = trim($ssn);
-        if (!empty($ssn)) {
-            if (preg_match($regexSsn, $ssn)) {
-                $ssnResult = true;
-            }
-        } else {
+        if (preg_match($regexSsn, $ssn)) {
             $ssnResult = true;
         }
         return $ssnResult;
     }
 
     /**Validating all the required fields name, phone, email, ssn, image
+     * @param bool $checkBox checkbox status
      * @param string $file user's selected file for image
      * @param string $newName name for file
      * @param int $param user id
+     * @param string $bio user's bio
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName, $param)
+    function validForm($checkBox, $file, $newName, $param, $bio)
     {
         global $f3;
         global $db;
@@ -169,6 +169,19 @@ class Validate
                 if (!$this->validateFileUpload($file, $newName)) {
                     $isValid = false;
                 }
+            }
+        }
+
+        //check to see if check box is checked/unchecked
+        if ($checkBox == "on") {
+            if (empty(trim($bio))) {
+                $isValid = false;
+                $f3->set("errors['check']", "Please enter bio");
+                return $isValid;
+            }
+            if (strlen(trim($bio)) < 100) {
+                $isValid = false;
+                $f3->set("errors['check']", "Must be more than 100 characters");
             }
         }
         return $isValid;

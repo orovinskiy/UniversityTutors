@@ -28,7 +28,7 @@
             <legend> Personal Information</legend>
             <div class="row">
                 <!--div for first name-->
-                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                <div class="col form-group val-lessThan255 val-empty">
                     <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
                     <input type="text" class="input form-control" name="firstName" id="firstName"
                            value="{{ @firstName }}">
@@ -38,7 +38,7 @@
                     <div class="errors text-danger"></div>
                 </div>
                 <!--div for last name-->
-                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                <div class="col form-group val-lessThan255 val-empty">
                     <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
                     <input type="text" class="form-control input" name="lastName" id="lastName"
                            value="{{@lastName}}">
@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col">
                     <!--div for email-->
-                    <div class="form-group  val-lessThan255 val-empty">
+                    <div class="form-group  val-lessThan255 val-empty val-hasSpaces">
                         <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
                         <input type="text" class="form-control input" name="email" id="email"
                                value="{{ @email }}">
@@ -72,8 +72,8 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="form-group">
-                        <label class="font-weight-bold" for="ssn">SSN</label><em>(optional)</em>
+                    <div class="form-group val-lessThan14 val-empty">
+                        <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
                         <input type="text" class="form-control input " name="ssn" id="ssn"
                                value="{{ @ssn }}">
                         <check if="{{ @errors['ssn'] }}">
@@ -81,17 +81,43 @@
                         </check>
                         <div class="errors text-danger"></div>
                     </div>
+                    <div class="form-group">
+                        <check if="{{ @bioCheck === 'on' }}">
+                            <true>
+                                <input class="checkBio" type="checkbox" name="bioCheck" checked="checked">
+                                <label><b>Update your bio</b></label><br>
+                                <div class="form-group not-hidden bio-block">
+                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
+                                    <check if="{{ @errors['check'] }}">
+                                        <span class="err">{{ @errors['check'] }}</span>
+                                    </check>
+                                </div>
+                            </true>
+                            <false>
+                                <input class="checkBio" type="checkbox" name="bioCheck">
+                                <label>Update your bio</b></label><br>
+                                <div class="form-group hidden bio-block">
+                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
+                                </div>
+                            </false>
+                        </check>
+                    </div>
                 </div>
                 <!--div for image-->
                 <div class="col">
-                    <div class="from-group">
-                        <input type="file" class="form-control-file" name="fileToUpload" id="img"><em>(optional)</em>
-                    </div>
-                    <!--div for image preview-->
                     <div>
-                        <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                        <div class="from-group">
+                            <input type="file" class="form-control-file" name="fileToUpload"
+                                   id="img"><em>(optional)</em>
+                        </div>
+                        <!--div for image preview-->
+                        <div>
+                            <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                        </div>
+                        <div class="errors text-danger"></div>
                     </div>
-                    <div class="errors text-danger"></div>
                 </div>
             </div>
             <!--div for button-->

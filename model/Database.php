@@ -182,13 +182,14 @@ class Database
      * @param string $lastName tutor's last name
      * @param string $phone tutor's phone
      * @param string $ssn tutor's ssn
+     * @param string $bio tutor's bio
      * @author laxmi
      */
-    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn)
+    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn,$bio)
     {
-        $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=? WHERE user_id=?";
+        $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=?,tutor_bio =? WHERE user_id=?";
         $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$firstName, $lastName, $phone, $ssn, $user_id]);
+        $statement->execute([$firstName, $lastName, $phone, $ssn, $bio, $user_id]);
     }
 
     /**

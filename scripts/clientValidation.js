@@ -5,6 +5,25 @@
 
 console.log("loaded client validation");
 
+
+//get checkbox using it's id
+let bioTextArea = document.getElementsByClassName("checkBio")[0];
+//onclick call a function
+bioTextArea.onclick = toggleBioTextArea;
+
+/**
+ * this function displays/hide text area for bio when checked/unchecked
+ */
+function toggleBioTextArea() {
+    let getBioTextArea = document.getElementsByClassName("bio-block")[0];
+    if(bioTextArea.checked){
+        getBioTextArea.style.display ="block";
+    }
+    else{
+        getBioTextArea.style.display ="none";
+    }
+}
+
 //Auto formatting for phone number
 $('#phone').keyup(function () {
     let valPhone = this.value.replace(/\D/g, '');
@@ -69,7 +88,7 @@ $("#img").change(function () {
 let validations = [
     ["val-empty", isEmpty],
     ["val-lessThan255", lessThan255],
-    ["val-lessThan10", lessThan14],
+    ["val-lessThan14", lessThan14],
     ["val-hasSpaces", hasSpaces],
 ];
 
@@ -111,10 +130,10 @@ function lessThan255(input, valClass) {
 }
 
 /**
- * Check to see if user input is less than 10 digits
+ * Check to see if user input valid phone and ssn
  * @param input user's input
  * @param valClass from array
- * @returns true if user's input is less than 10 digits
+ * @returns true if user's input valid phone and ssn
  */
 function lessThan14(input, valClass) {
     $('.err').remove();
@@ -125,7 +144,6 @@ function lessThan14(input, valClass) {
     toggleErrors(input, valClass, isValid, "Must be valid");
     return isValid;
 }
-
 /**
  * Check to see if user input spaces
  * @param input user's input
