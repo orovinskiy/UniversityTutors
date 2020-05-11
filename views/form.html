@@ -86,20 +86,26 @@
                             <true>
                                 <input type="checkbox" id="checkBio" name="bioCheck" checked="checked">
                                 <label for="checkBio"><b>Update your bio</b></label><br>
+                                <div class="form-group not-hidden" id="bio-block">
+                                    <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
+
+                                </div>
                             </true>
                             <false>
                                 <input type="checkbox" id="checkBio" name="bioCheck">
                                 <label for="checkBio"><b>Update your bio</b></label><br>
+                                <div class="form-group hidden" id="bio-block">
+                                    <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
+                                    <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
+
+                                </div>
+
                             </false>
                         </check>
                         <check if="{{ @errors['check'] }}">
                             <span class="err">{{ @errors['check'] }}</span>
                         </check>
-
-                    </div>
-                    <div class="form-group" id="bio-block">
-                        <label class="font-weight-bold" for="text">Bio</label><em>(optional)</em>
-                        <textarea class="form-control input " name="bio" id="text"> {{ @bioText }}</textarea>
 
                     </div>
                 </div>
