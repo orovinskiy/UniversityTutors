@@ -96,7 +96,7 @@ class Validate
     }
 
     /**
-     * Validating SSN if provided
+     * Validating SSN
      * @param string ssn tutor's ssn
      * @return bool true if ssn is valid
      */
@@ -105,11 +105,7 @@ class Validate
         $regexSsn = "/^\d{3}-\d{2}-\d{4}$/";
         $ssnResult = false;
         $ssn = trim($ssn);
-        if (!empty($ssn)) {
-            if (preg_match($regexSsn, $ssn)) {
-                $ssnResult = true;
-            }
-        } else {
+        if (preg_match($regexSsn, $ssn)) {
             $ssnResult = true;
         }
         return $ssnResult;
@@ -124,7 +120,7 @@ class Validate
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($checkBox,$file, $newName, $param,$bio)
+    function validForm($checkBox, $file, $newName, $param, $bio)
     {
         global $f3;
         global $db;
@@ -175,13 +171,13 @@ class Validate
         }
 
         //check to see if check box is checked/unchecked
-        if($checkBox=="on"){
+        if ($checkBox == "on") {
             if (empty(trim($bio))) {
                 $isValid = false;
                 $f3->set("errors['check']", "Please enter bio");
                 return $isValid;
             }
-            if(strlen(trim($bio))<100){
+            if (strlen(trim($bio)) < 100) {
                 $isValid = false;
                 $f3->set("errors['check']", "Must be more than 100 characters");
             }

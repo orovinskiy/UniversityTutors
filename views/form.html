@@ -28,7 +28,7 @@
             <legend> Personal Information</legend>
             <div class="row">
                 <!--div for first name-->
-                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                <div class="col form-group val-lessThan255 val-empty">
                     <label class="font-weight-bold" for="firstName">First Name</label><em>*</em>
                     <input type="text" class="input form-control" name="firstName" id="firstName"
                            value="{{ @firstName }}">
@@ -38,7 +38,7 @@
                     <div class="errors text-danger"></div>
                 </div>
                 <!--div for last name-->
-                <div class="col form-group val-lessThan255 val-hasSpaces val-empty">
+                <div class="col form-group val-lessThan255 val-empty">
                     <label class="font-weight-bold" for="lastName">Last Name</label><em>*</em>
                     <input type="text" class="form-control input" name="lastName" id="lastName"
                            value="{{@lastName}}">
@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col">
                     <!--div for email-->
-                    <div class="form-group  val-lessThan255 val-empty">
+                    <div class="form-group  val-lessThan255 val-empty val-hasSpaces">
                         <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
                         <input type="text" class="form-control input" name="email" id="email"
                                value="{{ @email }}">
@@ -72,8 +72,8 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="form-group">
-                        <label class="font-weight-bold" for="ssn">SSN</label><em>(optional)</em>
+                    <div class="form-group val-lessThan14 val-empty">
+                        <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
                         <input type="text" class="form-control input " name="ssn" id="ssn"
                                value="{{ @ssn }}">
                         <check if="{{ @errors['ssn'] }}">
