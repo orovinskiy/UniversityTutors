@@ -116,9 +116,11 @@ class Validate
     }
 
     /**Validating all the required fields name, phone, email, ssn, image
+     * @param bool $checkBox checkbox status
      * @param string $file user's selected file for image
      * @param string $newName name for file
      * @param int $param user id
+     * @param string $bio user's bio
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
@@ -171,11 +173,17 @@ class Validate
                 }
             }
         }
+
+        //check to see if check box is checked/unchecked
         if($checkBox=="on"){
             if (empty(trim($bio))) {
                 $isValid = false;
                 $f3->set("errors['check']", "Please enter bio");
-
+                return $isValid;
+            }
+            if(strlen(trim($bio))<100){
+                $isValid = false;
+                $f3->set("errors['check']", "Must be more than 100 characters");
             }
         }
         return $isValid;
