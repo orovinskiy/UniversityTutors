@@ -35,8 +35,9 @@ class Validate
      */
     function validFirstName($firstName)
     {
-        $firstName = trim($firstName);
-        return ctype_alpha($firstName);
+        return  preg_match_all("/^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/",
+            $firstName,
+            $out, PREG_PATTERN_ORDER);
     }
 
     /**
@@ -46,8 +47,9 @@ class Validate
      */
     function validLastName($last)
     {
-        $last = trim($last);
-        return ctype_alpha($last);
+        return  preg_match_all("/^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*/",
+            $last,
+            $out, PREG_PATTERN_ORDER);
     }
 
     /**
