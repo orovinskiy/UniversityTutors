@@ -35,7 +35,10 @@ $f3->route('GET /', function () {
 //    $result = $GLOBALS['db']->getTutors();
     $result2 = $GLOBALS['db']->getTutor(2020, 1);
 //    $results = $GLOBALS['db']->testDatabase();
-    $newUser = new User(2,2020, $GLOBALS['db']);
+    $newUser = new User("Andy@mail.com", $GLOBALS['db']); //used to test user object
+    //$userAdmin = $newUser->getUserIsAdmin(); //used to test user object
+    //$userID = $newUser->getUserID(); //used to test user object
+    //echo $userAdmin. " and ". $userID; //used to test user object
     $view = new Template();
     echo $view->render("views/home.html");
 });
