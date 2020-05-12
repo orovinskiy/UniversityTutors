@@ -26,10 +26,11 @@ $("body").on("click","input",function()
         $(".notCompletedBox").append(wholeCheckBox);
     }
 
-    if($(this).attr("id") === "ADP Registration"){
-        $(this).is(":checked") ? dataValue = "registered" : dataValue = "none";
+    if($(this).attr("id") === "adp"){
+        $(this).is(":checked") ? dataValue = "registered" : dataValue = "invited";
     }
-    if($(this).attr("id") === "I-9"){
+
+    if($(this).attr("id") === "i9"){
         $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
     }
 

@@ -2,6 +2,7 @@
 Styles for onboarding form
 @author Laxmi Kandel
  */
+
 .err {
     color: #dc3545;
     text-align: center;
@@ -27,11 +28,19 @@ img {
     color: white;
 }
 
+.hidden {
+    display: none;
+}
+
 legend {
     color: cornflowerblue;
     font-size: 125%;
     font-variant: small-caps;
     font-weight: bold;
+}
+
+.not-hidden{
+    display: block;
 }
 
 

@@ -15,7 +15,7 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- DataTables Styles -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
-    <link rel="stylesheet" type="text/css" href="../styles/tutors_style.css">
+    <link rel="stylesheet" type="text/css" href="../styles/tutorsStyle.css">
 </head>
 <body>
 <div class="content">
@@ -23,9 +23,13 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
-        <button class="btn btn-secondary year-change" id ="year-last">Last Year</button>
+        <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }}</h3>
-        <button class="btn btn-secondary year-change" id ="year-next">Next Year</button>
+        <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
+        <br>
+        <check if="{{ @currentYear != @year }}">
+            <button id="current-year" class="btn btn-info mt-3">Set Current Year</button>
+        </check>
     </div>
 
     <!-- Tutors DataTable -->
@@ -52,10 +56,16 @@ Page for admin viewing and management of tutor onboarding data.
         <repeat group="{{ @tutorsData }}" value=" {{ @tutor }}">
             <tr>
                 <!-- Name -->
-                <td>{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
+                <td class="name">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
 
                 <!-- Email -->
-                <td>{{ @tutor['user_email'] }}</td>
+                <td class="email">{{ @tutor['user_email'] }}
+                    <br>
+                    <check if="{{ @currentYear != @year }}">
+                        <button class="btn btn-info d-none import" data-userid="{{ @tutor['user_id'] }}">Import</button>
+                    </check>
+                    <button class="btn btn-danger d-none delete" data-userid="{{ @tutor['user_id'] }}">Delete</button>
+                </td>
 
                 <!-- Onboarding Packet -->
                 <td>
@@ -240,9 +250,11 @@ Page for admin viewing and management of tutor onboarding data.
                 <!-- Placement -->
                 <td>
                     <div class="form-group">
-                        <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_placement" type="text"
-                               class="form-control placement" placeholder="None"
+                        <input data-yearid="{{ @tutor['year_id'] }}" data-column="year_placement"
+                               data-original="{{ @tutor['year_placement'] }}" type="text"
+                               class="form-control placement" placeholder=""
                                value="{{ @tutor['year_placement'] }}">
+                        <button class="btn btn-success w-100 d-none placement-button">Save</button>
                     </div>
                 </td>
             </tr>
@@ -278,8 +290,8 @@ Page for admin viewing and management of tutor onboarding data.
         crossorigin="anonymous"></script>
 
 <!-- DataTables -->
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 
-<script src="../scripts/tutors_script.js"></script>
+<script src="../scripts/tutorsScript.js"></script>
 </body>
 </html>

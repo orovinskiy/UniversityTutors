@@ -29,11 +29,6 @@ $controller = new Controller($f3, $db);
 //default place to upload image files
 $dirName = 'uploads/';
 
-//define variables
-$f3->set("tutorForms", array("ADP Registration", "Adult Sexual Misconduct",
-    "Affirmations and Disclosures", "Handbook Verification", "I-9", "Offer Letter",
-    "Orientation RSVP", "W4"));
-
 // Define a default route
 $f3->route('GET /', function () {
     //below is code to test the database functions
