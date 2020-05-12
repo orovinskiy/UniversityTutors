@@ -201,4 +201,14 @@ class Controller
         }
         return $randomString;
     }
+
+    /**
+     * Function that handles the login page
+     * @author Dallas Sloan
+     */
+    function login()
+    {
+        $view = new Template();
+        echo $view->render("views/login.html");
+    }
 }
