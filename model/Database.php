@@ -345,5 +345,20 @@ class Database
 
         $statement->execute([$user_id, $year]);
     }
+    /**
+     * Get user by it's email
+     * @param int $user_email users email
+     * @return a row of information for user
+     * @author  Dallas Sloan
+     */
+    function getUserByEmail($user_email)
+    {
+        $sql = "SELECT * FROM User WHERE user_email =? ";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_email]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+
 
 }
