@@ -74,8 +74,11 @@
                     <!--div for SSN-->
                     <div class="form-group val-lessThan14 val-empty">
                         <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
-                        <input type="text" class="form-control input " name="ssn" id="ssn"
+                        <input type="text" class="form-control ssnInput" name="ssn" id="ssn"
                                value="{{ @ssn }}">
+                        <input class="form-control output " name="ssn" id="output"
+                               value="{{ @ssn }}">
+
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>
@@ -88,7 +91,7 @@
                                 <label><b>Update your bio</b></label><br>
                                 <div class="form-group not-hidden bio-block">
                                     <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
+                                    <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
                                     <check if="{{ @errors['check'] }}">
                                         <span class="err">{{ @errors['check'] }}</span>
                                     </check>
@@ -99,7 +102,7 @@
                                 <label>Update your bio</b></label><br>
                                 <div class="form-group hidden bio-block">
                                     <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
+                                    <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
                                 </div>
                             </false>
                         </check>

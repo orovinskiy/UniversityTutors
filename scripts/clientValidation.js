@@ -16,11 +16,15 @@ bioTextArea.onclick = toggleBioTextArea;
  */
 function toggleBioTextArea() {
     let getBioTextArea = document.getElementsByClassName("bio-block")[0];
-    if(bioTextArea.checked){
-        getBioTextArea.style.display ="block";
-    }
-    else{
-        getBioTextArea.style.display ="none";
+    if (bioTextArea.checked) {
+        getBioTextArea.style.display = "block";
+    } else {
+        getBioTextArea.style.display = "none";
+        let clearText = document.getElementsByClassName('clearText')[0].value;
+        console.log(clearText);
+        if(clearText.length<100){
+            document.getElementsByClassName('clearText')[0].value = "";
+        }
     }
 }
 
@@ -77,7 +81,7 @@ function readURL(input) {
         reader.onload = function (e) {
             $('#preview').attr('src', e.target.result);
         }
-        reader.readAsDataURL(input.files[0]); 
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -144,6 +148,7 @@ function lessThan14(input, valClass) {
     toggleErrors(input, valClass, isValid, "Must be valid");
     return isValid;
 }
+
 /**
  * Check to see if user input spaces
  * @param input user's input
@@ -190,5 +195,23 @@ function toggleErrors(object, valClass, isValid, message) {
     }
 }
 
+
+//MASKING SSN
+//
+// $('.ssnInput').on('keydown keyup mousedown mouseup', function () {
+//     var res = this.value, //grabs the value
+//         len = res.length, //grabs the length
+//         max = 9, //sets a max chars
+//         stars = len > 0 ? len > 1 ? len > 2 ? len > 3 ? len > 4 ?
+//             'XXX-XX-' : 'XXX-X' : 'XXX-' : 'XX' : 'X' : '', //this provides the masking and formatting
+//         result = stars + res.substring(5); //this is the result
+//     $(this).attr('maxlength', max); //setting the max length
+//     $('.output').val(result);
+//     console.log("this is it"+$('.output').val());
+//     console.log("this is actual user input to pass " + $('.ssnInput').val());
+//     // console.log("clear");
+//     // console.log($('.ssnInput').val());
+//     // $('.ssnInput').val(result); //spits the value into the input
+// });
 
 
