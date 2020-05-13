@@ -216,7 +216,7 @@ class Controller
             //attempt to grab user info from login credentials
             $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
             //check to see if valid input was found
-            if (!is_null($userLogin)){
+            if (!empty($userLogin)){
                 //instantiate new user object
                 $user = new User($_POST['username'], $this->_db);
                 $_SESSION['userID'] = $user->getUserID();
@@ -230,8 +230,8 @@ class Controller
                     $this->_f3->reroute("/tutors/$year");
 
                 }
-                else{
-                    $this->_f3->reroute("/checklist/".$user->getUserID());
+                else {
+                    $this->_f3->reroute("/checklist/" . $user->getUserID());
                 }
             }
             else {
