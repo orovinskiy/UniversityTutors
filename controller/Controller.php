@@ -208,6 +208,10 @@ class Controller
      */
     function login()
     {
+        //checking to see if user if already logged in if so redirects to admin table page
+        if(isset($_SESSION['login'])){
+            $this->redirects();
+        }
         //when form is posted
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             var_dump($_POST);
@@ -219,20 +223,14 @@ class Controller
             if (!empty($userLogin)){
                 //instantiate new user object
                 $user = new User($_POST['username'], $this->_db);
-                $_SESSION['userID'] = $user->getUserID();
+                //saving object to session
+                $_SESSION['user'] = $user;
                 //setting session login to true
                 $_SESSION['login'] = true;
 
-                //checking to see if user is an admin or tutor and redirecting accordingly
-                if ($user->getUserIsAdmin() == 1){
-                    //get current year
-                    $year = $this->_db->getCurrentYear();
-                    $this->_f3->reroute("/tutors/$year");
+                //call redirects method to redirect to correct page
+                $this->redirects();
 
-                }
-                else {
-                    $this->_f3->reroute("/checklist/" . $user->getUserID());
-                }
             }
             else {
                 //login info was not valid set error message
@@ -242,5 +240,32 @@ class Controller
         }
         $view = new Template();
         echo $view->render("views/login.html");
+    }
+
+    /**
+     *private method used to correctly redirect user upon logging into login page
+     * @author Dallas Sloan
+     */
+    private function redirects()
+    {
+        global $user;
+        //checking to see if user is an admin or tutor and redirecting accordingly
+        if ($_SESSION['user']->getUserIsAdmin() == 1){
+            //get current year
+            $year = $this->_db->getCurrentYear();
+            $this->_f3->reroute("/tutors/$year");
+
+        }
+        else {
+            //checking to see if user has filled out their basic info, if not redirected to form
+            $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
+            if ($userInfo['tutor_last'] == null){
+                $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
+            }
+            else { //form has been filled out redirect to checklist
+                $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
+            }
+        }
+
     }
 }
