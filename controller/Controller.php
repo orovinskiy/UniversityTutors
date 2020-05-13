@@ -207,6 +207,8 @@ class Controller
      */
     function adminPage()
     {
+        $this->_f3->set("admins", $this->_db->getAdmins());
+
         $view = new Template();
         echo $view->render('views/admin.html');
     }
