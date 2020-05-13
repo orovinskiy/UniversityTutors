@@ -14,8 +14,8 @@ class User
 
     /**
      * User constructor.
-     * @param $userEmail email of user logging into system
-     * @param $_db database object
+     * @param string $userEmail email of user logging into system
+     * @param object $_db database object to be used with database class
      * @author Dallas Sloan
      */
     public function __construct($userEmail, $_db)

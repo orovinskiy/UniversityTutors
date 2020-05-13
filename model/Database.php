@@ -346,9 +346,9 @@ class Database
         $statement->execute([$user_id, $year]);
     }
     /**
-     * Get user by it's email
+     * Get user by their email
      * @param int $user_email users email
-     * @return a row of information for user
+     * @return array information about user
      * @author  Dallas Sloan
      */
     function getUserByEmail($user_email)
