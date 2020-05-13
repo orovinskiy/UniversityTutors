@@ -208,6 +208,38 @@ class Controller
      */
     function login()
     {
+        //when form is posted
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            var_dump($_POST);
+
+            //todo work with Laxmi to user her js validation file to work with my login form
+            //attempt to grab user info from login credentials
+            $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
+            //check to see if valid input was found
+            if (!is_null($userLogin)){
+                //instantiate new user object
+                $user = new User($_POST['username'], $this->_db);
+                $_SESSION['userID'] = $user->getUserID();
+                //setting session login to true
+                $_SESSION['login'] = true;
+
+                //checking to see if user is an admin or tutor and redirecting accordingly
+                if ($user->getUserIsAdmin() == 1){
+                    //get current year
+                    $year = $this->_db->getCurrentYear();
+                    $this->_f3->reroute("/tutors/$year");
+
+                }
+                else{
+                    $this->_f3->reroute("/checklist/".$user->getUserID());
+                }
+            }
+            else {
+                //login info was not valid set error message
+                $this->_f3->set('loginError', "Invalid Username and/or Password");
+            }
+
+        }
         $view = new Template();
         echo $view->render("views/login.html");
     }
