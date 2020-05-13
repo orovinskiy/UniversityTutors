@@ -185,7 +185,7 @@ class Database
      * @param string $bio tutor's bio
      * @author laxmi
      */
-    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn,$bio)
+    function updateTutor($user_id, $firstName, $lastName, $phone, $ssn, $bio)
     {
         $sql = "UPDATE Tutor SET  tutor_first= ?, tutor_last=?,tutor_phone=?,tutor_ssn=?,tutor_bio =? WHERE user_id=?";
         $statement = $this->_dbh->prepare($sql);
@@ -288,7 +288,8 @@ class Database
      * @param int $user_id The id of the user to be deleted
      * @author Keller Flint
      */
-    function deleteUser($user_id) {
+    function deleteUser($user_id)
+    {
         // delete user data from year
         $sql = "DELETE FROM Year WHERE user_id = ?";
         $statement = $this->_dbh->prepare($sql);
@@ -311,7 +312,8 @@ class Database
      * @return string The current year
      * @author Keller Flint
      */
-    function getCurrentYear() {
+    function getCurrentYear()
+    {
         $sql = "SELECT DISTINCT info_current_year FROM Info";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
@@ -324,7 +326,8 @@ class Database
      * @param string $year The year to set current year to
      * @author Keller Flint
      */
-    function setCurrentYear($year) {
+    function setCurrentYear($year)
+    {
         $sql = "UPDATE Info SET info_current_year = ? WHERE info_id = 1";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$year]);
@@ -336,7 +339,8 @@ class Database
      * @param int $user_id The id of the user we are importing
      * @author Keller Flint
      */
-    function importUser($user_id) {
+    function importUser($user_id)
+    {
         $year = $this->getCurrentYear();
 
         $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
@@ -345,6 +349,7 @@ class Database
 
         $statement->execute([$user_id, $year]);
     }
+
     /**
      * Get user by their email
      * @param int $user_email users email
@@ -359,6 +364,18 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-
+    /**
+     * Get id and email for all admins
+     *
+     * @return array admin id and email data
+     * @author Keller Flint
+     */
+    function getAdmins()
+    {
+        $sql = "SELECT user_id, user_email FROM tutors.User WHERE user_is_admin = 1";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }

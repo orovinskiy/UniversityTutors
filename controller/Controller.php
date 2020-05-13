@@ -101,29 +101,29 @@ class Controller
 
         $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
 
-        if($checkBoxes['year_ADP'] == 'invited'){
+        if ($checkBoxes['year_ADP'] == 'invited') {
             $checkBoxes['year_ADP'] = '0';
         }
-        if($checkBoxes['year_ADP'] == 'registered'){
+        if ($checkBoxes['year_ADP'] == 'registered') {
             $checkBoxes['year_ADP'] = '1';
         }
 
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
         $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
-            "Column" => "year_ADP", "id"=>"adp"),
+            "Column" => "year_ADP", "id" => "adp"),
             "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'],
-                "Column" => "year_sexual_misconduct", "id"=>"sex-miscond"),
+                "Column" => "year_sexual_misconduct", "id" => "sex-miscond"),
             "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'],
-                "Column" => "year_affirmation_disclosures", "id"=>"affirm-disclose"),
+                "Column" => "year_affirmation_disclosures", "id" => "affirm-disclose"),
             "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'],
-                "Column" => "year_handbook_verification", "id"=>"handbook-verify"),
-            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9", "id"=>"i9"),
+                "Column" => "year_handbook_verification", "id" => "handbook-verify"),
+            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9", "id" => "i9"),
             "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
-                "Column" => "year_offer_letter", "id"=>"offer-letter"),
+                "Column" => "year_offer_letter", "id" => "offer-letter"),
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id"=>"orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id"=>"w4")));
+                "Column" => "year_orientation", "id" => "orientation"),
+            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4")));
 
 
         $view = new Template();
@@ -164,12 +164,12 @@ class Controller
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
 
             //if the user input in form is valid
-            if ($this->_val->validForm(isset($_POST['bioCheck']),$_FILES['fileToUpload'],
-                $randomFileName, $param["id"],$_POST['bio'])) {
+            if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
+                $randomFileName, $param["id"], $_POST['bio'])) {
                 //check param id
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
-                        $_POST['phone'], $_POST['ssn'],trim($_POST['bio']));
+                        $_POST['phone'], $_POST['ssn'], trim($_POST['bio']));
                     $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
@@ -200,5 +200,14 @@ class Controller
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    /**
+     * Rendering and logic for admin management page
+     */
+    function adminPage()
+    {
+        $view = new Template();
+        echo $view->render('views/admin.html');
     }
 }
