@@ -76,9 +76,6 @@
                         <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
                         <input type="text" class="form-control ssnInput" name="ssn" id="ssn"
                                value="{{ @ssn }}">
-                        <input class="form-control output " name="ssn" id="output"
-                               value="{{ @ssn }}">
-
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>
