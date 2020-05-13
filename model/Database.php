@@ -359,6 +359,29 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Function to validate whether a user has provided valid credentials upon attempting to login
+     * @param string $username username input into login form
+     * @param string $password password input into login form
+     * @return mixed array containing userID of user logged in if valid, if not valid returns null
+     */
+    function login($username, $password)
+    {
+        //todo hash the password prior to creating the sql statement once we figure out how to securely store pwds
+        //sql statement
+        $sql = "SELECT user_id FROM User 
+                where user_email = ? and user_password = ?";
+
+        //preparing statement
+        $statement = $this->_dbh->prepare($sql);
+
+        //execute statement
+        $statement->execute([$username, $password]);
+
+        //return user_ID that matches parameters or null if not found
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 
 }
