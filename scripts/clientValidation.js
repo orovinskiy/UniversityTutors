@@ -5,28 +5,9 @@
 
 console.log("loaded client validation");
 
+//get the bio text area box
 
-//get checkbox using it's id
-let bioTextArea = document.getElementsByClassName("checkBio")[0];
-//onclick call a function
-bioTextArea.onclick = toggleBioTextArea;
-
-/**
- * this function displays/hide text area for bio when checked/unchecked
- */
-function toggleBioTextArea() {
-    let getBioTextArea = document.getElementsByClassName("bio-block")[0];
-    if (bioTextArea.checked) {
-        getBioTextArea.style.display = "block";
-    } else {
-        getBioTextArea.style.display = "none";
-        let clearText = document.getElementsByClassName('clearText')[0].value;
-        console.log(clearText);
-        if(clearText.length<100){
-            document.getElementsByClassName('clearText')[0].value = "";
-        }
-    }
-}
+$(".input").
 
 //Auto formatting for phone number
 $('#phone').keyup(function () {

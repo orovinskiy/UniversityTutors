@@ -178,18 +178,10 @@ class Validate
                 }
             }
         }
-
-        //check to see if check box is checked/unchecked
-        if ($checkBox == "on") {
-            if (empty(trim($bio))) {
-                $isValid = false;
-                $f3->set("errors['check']", "Please enter bio");
-                return $isValid;
-            }
-            if (strlen(trim($bio)) < 100) {
-                $isValid = false;
-                $f3->set("errors['check']", "Must be more than 100 characters");
-            }
+        //bio validation if it is not empty
+        if (!empty(trim($bio)) && strlen(trim($bio)) < 100) {
+            $isValid = false;
+            $f3->set("errors['check']", "Must be more than 100 characters");
         }
         return $isValid;
     }

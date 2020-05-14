@@ -83,40 +83,23 @@
                         </check>
                         <div class="errors text-danger"></div>
                     </div>
-                    <div class="form-group">
-                        <check if="{{ @bioCheck === 'on' }}">
-                            <true>
-                                <input class="checkBio" type="checkbox" name="bioCheck" checked="checked">
-                                <label><b>Update your bio</b></label><br>
-                                <div class="form-group not-hidden bio-block">
-                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
-                                    <check if="{{ @errors['check'] }}">
-                                        <span class="err">{{ @errors['check'] }}</span>
-                                    </check>
-                                </div>
-                            </true>
-                            <false>
-                                <input class="checkBio" type="checkbox" name="bioCheck">
-                                <label>Update your bio</b></label><br>
-                                <div class="form-group hidden bio-block">
-                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
-                                </div>
-                            </false>
-                        </check>
-                    </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Bio</label><em>(optional)</em>
+                            <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                            <span class="err"> {{ @errors['check'] }}</span>
+                        </div>
                 </div>
                 <!--div for image-->
                 <div class="col">
                     <div>
                         <div class="from-group">
+                            <label class="font-weight-bold" for="img">Upload profile picture</label><em>(optional)</em>
                             <input type="file" class="form-control-file" name="fileToUpload"
-                                   id="img"><em>(optional)</em>
+                                   id="img">
                         </div>
                         <!--div for image preview-->
                         <div>
-                            <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                            <img id="preview" src="../uploads/{{ @image }}" alt="Image will display here ">
                         </div>
                         <div class="errors text-danger"></div>
                     </div>

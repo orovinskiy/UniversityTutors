@@ -186,6 +186,9 @@ class Controller
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
+            if(isset($_FILES['fileToUpload'])){
+                echo "i am down";
+            }
             if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
@@ -212,9 +215,9 @@ class Controller
                     $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
             }
-            $view = new Template();
-            echo $view->render('views/form.html');
         }
+        $view = new Template();
+        echo $view->render('views/form.html');
     }
 
     /**
@@ -282,6 +285,7 @@ class Controller
         return openssl_decrypt($encryptedSsn, $ciphering,
             $decryption_key, $options, $decryption_iv);
     }
+
     /**
      * Function that handles the login page
      * @author Dallas Sloan
@@ -291,18 +295,18 @@ class Controller
         //var_dump($_SESSION);
 
         //checking to see if user if already logged in if so redirects to appropriate page
-        if(isset($_SESSION['user'])){
+        if (isset($_SESSION['user'])) {
             $this->redirects();
         }
         //when form is posted
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //var_dump($_POST);
 
             //todo work with Laxmi to user her js validation file to work with my login form
             //attempt to grab user info from login credentials
             $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
             //check to see if valid input was found
-            if (!empty($userLogin)){
+            if (!empty($userLogin)) {
                 //instantiate new user object
                 $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
                 //saving object to session
@@ -313,8 +317,7 @@ class Controller
                 //call redirects method to redirect to correct page
                 $this->redirects();
 
-            }
-            else {
+            } else {
                 //login info was not valid set error message
                 $this->_f3->set('loginError', "Invalid Username and/or Password");
             }
@@ -344,19 +347,17 @@ class Controller
     private function redirects()
     {
         //checking to see if user is an admin or tutor and redirecting accordingly
-        if ($_SESSION['user']->getUserIsAdmin() == 1){
+        if ($_SESSION['user']->getUserIsAdmin() == 1) {
             //get current year
             $year = $this->_db->getCurrentYear();
             $this->_f3->reroute("/tutors/$year");
 
-        }
-        else {
+        } else {
             //checking to see if user has filled out their basic info, if not redirected to form
             $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
-            if ($userInfo['tutor_last'] == null){
+            if ($userInfo['tutor_last'] == null) {
                 $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
-            }
-            else { //form has been filled out redirect to checklist
+            } else { //form has been filled out redirect to checklist
                 $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
             }
         }
