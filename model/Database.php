@@ -387,7 +387,7 @@ class Database
      */
     function addAdmin($email)
     {
-        $sql = "INSERT INTO User VALUES (DEFAULT, ?, NULL, b'1')";
+        $sql = "INSERT INTO User VALUES (DEFAULT, ?, '1234', b'1')";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$email]);
         return $this->_dbh->lastInsertId();
