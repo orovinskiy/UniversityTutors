@@ -30,7 +30,7 @@ class Controller
     function tutorsPage($year)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        //$this->isLoggedIn(); //comment to remove the login requirement
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -96,7 +96,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        //$this->isLoggedIn(); //comment to remove the login requirement
 
         //get the current year
         $currentYear = date('Y');
@@ -144,7 +144,7 @@ class Controller
     function formPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        //$this->isLoggedIn(); //comment to remove the login requirement
 
         global $dirName;
         //retrieving data form database
@@ -286,6 +286,10 @@ class Controller
         }
     }
 
+    /**
+     *A function to check whether or not a user object has been set for the current session. If it is set the user
+     * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     */
     private function isLoggedIn()
     {
         if (!isset($_SESSION['user'])){
