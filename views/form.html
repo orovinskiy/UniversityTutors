@@ -74,8 +74,10 @@
                     <!--div for SSN-->
                     <div class="form-group val-lessThan14 val-empty">
                         <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
-                        <input type="text" class="form-control ssnInput" name="ssn" id="ssn"
-                               value="{{ @ssn }}">
+                        <check if='{{ @databaseSsn !=""}}'>
+                            <span class="err"> <em>(We already have your SSN, update if there is any change</em>)</span>
+                        </check>
+                        <input type="text" class="form-control ssnInput" name="ssn" id="ssn" value="{{ @ssn }}">
                         <check if="{{ @errors['ssn'] }}">
                             <span class="err">{{ @errors['ssn'] }}</span>
                         </check>

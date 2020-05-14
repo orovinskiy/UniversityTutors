@@ -143,8 +143,7 @@ class Controller
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
         $this->_f3->set("lastName", $this->_db->getTutorById($param["id"])["tutor_last"]);
         $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
-        //decrypted  SSN
-        $this->_f3->set("ssn", $this->decryption($this->_db->getTutorById($param["id"])["tutor_ssn"]));
+        $this->_f3->set("databaseSsn", ($this->_db->getTutorById($param["id"])["tutor_ssn"]));
         $this->_f3->set("bioText", $this->_db->getTutorById($param["id"])["tutor_bio"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
         //get the image form the database
@@ -163,18 +162,19 @@ class Controller
 
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
-
             //if the user input in form is valid
             if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
 
-                //calling encryption function
-                $_POST['ssn'] = $this->encryption($_POST['ssn']);
+                //check if user input ssn for update if not pass the database value
+                if (empty($_POST['ssn'])) {
+                    $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
+                }
 
                 //check param id
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
-                        $_POST['phone'], $_POST['ssn'], trim($_POST['bio']));
+                        $_POST['phone'], $this->encryption($_POST['ssn']), trim($_POST['bio']));
                     $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
@@ -228,7 +228,7 @@ class Controller
         $encryption_key = "SecurityForSSN";
 
         // Use openssl_encrypt() function to encrypt the data
-        return openssl_encrypt($_POST['ssn'], $ciphering,
+        return openssl_encrypt($ssn, $ciphering,
             $encryption_key, $options, $encryption_iv);
     }
 
