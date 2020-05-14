@@ -85,7 +85,7 @@ class Database
         $statement->execute([$userID, $year]);
 
         //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
         //echo "$results";
 
         return $results;
@@ -345,5 +345,20 @@ class Database
 
         $statement->execute([$user_id, $year]);
     }
+    /**
+     * Get user by their email
+     * @param int $user_email users email
+     * @return array information about user
+     * @author  Dallas Sloan
+     */
+    function getUserByEmail($user_email)
+    {
+        $sql = "SELECT * FROM User WHERE user_email =? ";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_email]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+
 
 }
