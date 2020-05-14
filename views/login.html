@@ -1,0 +1,54 @@
+<!--
+Login page for university tutors website
+@author Dallas Sloan
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Style sheet for login page -->
+    <link rel="stylesheet" type="text/css" href="../styles/">
+
+    <title>Tutors</title>
+
+</head>
+<body>
+
+<div class="jumbotron text-center"> <!-- Header -->
+    <h1 class="display-4">University Tutors Login</h1>
+    <p>Admins and Tutors, please login below</p>
+</div>
+<div class="container divCol text-center"> <!--full form div -->
+    <form method="post" action="#">
+        <div class="form-group mt-2"> <!--Username Div -->
+            <label class="h2" for="username">Username </label>
+            <input class="" type="text" size = 30 id="username" name="username">
+            <check if="{{ @errors['username'] }}">
+                <p class="err-validate">{{ @errors['username'] }}</p>
+            </check>
+
+        </div>
+
+        <div class="form-group"> <!-- Password Div -->
+            <label class="h2" for="password">&nbsp;Password </label>
+            <input type="password" size = 30 id="password" name="password">
+            <check if="{{ @errors['password'] }}">
+                <p class="err-validate">{{ @errors['password'] }}</p>
+            </check>
+
+        </div>
+        <button class="btn btn-primary mb-3" type="submit" id="login" name="submit" value="submit">Login</button>
+        <check if="{{ @loginError }}">
+            <p class="err-validate">{{ @loginError }}</p>
+        </check>
+    </form>
+</div>
+</body>
+</html>

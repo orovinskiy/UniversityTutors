@@ -29,6 +29,8 @@ class Controller
      */
     function tutorsPage($year)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -93,6 +95,9 @@ class Controller
      */
     function checklist($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
         //get the current year
         $currentYear = $this->_db->getCurrentYear();
 
@@ -156,6 +161,9 @@ class Controller
 
     function formPage($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -221,7 +229,100 @@ class Controller
     }
 
     /**
+     * Function that handles the login page
+     * @author Dallas Sloan
+     */
+    function login()
+    {
+        //var_dump($_SESSION);
+
+        //checking to see if user if already logged in if so redirects to appropriate page
+        if(isset($_SESSION['user'])){
+            $this->redirects();
+        }
+        //when form is posted
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //var_dump($_POST);
+
+            //todo work with Laxmi to user her js validation file to work with my login form
+            //attempt to grab user info from login credentials
+            $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
+            //check to see if valid input was found
+            if (!empty($userLogin)){
+                //instantiate new user object
+                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                //saving object to session
+                $_SESSION['user'] = $user;
+                //setting session login to true
+                //$_SESSION['user'] = true;
+
+                //call redirects method to redirect to correct page
+                $this->redirects();
+
+            }
+            else {
+                //login info was not valid set error message
+                $this->_f3->set('loginError', "Invalid Username and/or Password");
+            }
+
+        }
+        $view = new Template();
+        echo $view->render("views/login.html");
+    }
+
+    /**
+     * Function that handles the logout process, which resets the session and reroutes to login page
+     * @author Dallas Sloan
+     */
+    function logout()
+    {
+        //destroy session
+        $_SESSION = array();
+
+        //redirect to login page
+        $this->_f3->reroute('/login');
+    }
+
+    /**
+     *private method used to correctly redirect user upon logging into login page
+     * @author Dallas Sloan
+     */
+    private function redirects()
+    {
+        //checking to see if user is an admin or tutor and redirecting accordingly
+        if ($_SESSION['user']->getUserIsAdmin() == 1){
+            //get current year
+            $year = $this->_db->getCurrentYear();
+            $this->_f3->reroute("/tutors/$year");
+
+        }
+        else {
+            //checking to see if user has filled out their basic info, if not redirected to form
+            $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
+            if ($userInfo['tutor_last'] == null){
+                $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
+            }
+            else { //form has been filled out redirect to checklist
+                $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
+            }
+        }
+    }
+
+    /**
+     * A function to check whether or not a user object has been set for the current session. If it is set the user
+     * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @author Dallas Sloan
+     */
+    private function isLoggedIn()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->_f3->reroute('/login');
+        }
+    }
+
+    /**
      * Rendering and logic for admin management page
+     * @author Dallas Sloan
      */
     function adminPage()
     {

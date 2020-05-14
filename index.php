@@ -89,6 +89,23 @@ $f3->route('POST /tutorsAjax', function () {
 });
 
 /**
+ * Route for login page
+ * @author Dallas Sloan
+ */
+$f3->route('GET|POST /login', function () {
+    global $controller;
+    $controller->login();
+});
+
+/**
+ * Route for Logout page.
+ * @author Dallas Sloan
+ */
+$f3->route('GET /logout', function () {
+    global $controller;
+    $controller->logout();
+});
+/**
  * Route for admin management
  * @author Keller Flint
  */
