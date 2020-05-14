@@ -30,7 +30,7 @@ class Controller
     function tutorsPage($year)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn();
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -96,7 +96,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn();
 
         //get the current year
         $currentYear = date('Y');
@@ -144,7 +144,7 @@ class Controller
     function formPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn();
 
         global $dirName;
         //retrieving data form database
@@ -216,15 +216,15 @@ class Controller
      */
     function login()
     {
-        var_dump($_SESSION);
+        //var_dump($_SESSION);
 
         //checking to see if user if already logged in if so redirects to appropriate page
-        if(isset($_SESSION['login'])){
+        if(isset($_SESSION['user'])){
             $this->redirects();
         }
         //when form is posted
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-            var_dump($_POST);
+            //var_dump($_POST);
 
             //todo work with Laxmi to user her js validation file to work with my login form
             //attempt to grab user info from login credentials
@@ -232,11 +232,11 @@ class Controller
             //check to see if valid input was found
             if (!empty($userLogin)){
                 //instantiate new user object
-                $user = new User($_POST['username'], $this->_db);
+                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
                 //saving object to session
                 $_SESSION['user'] = $user;
                 //setting session login to true
-                $_SESSION['login'] = true;
+                //$_SESSION['user'] = true;
 
                 //call redirects method to redirect to correct page
                 $this->redirects();
@@ -252,14 +252,14 @@ class Controller
         echo $view->render("views/login.html");
     }
 
-    /*function logout()
+    function logout()
     {
         //destroy session
         $_SESSION = array();
 
         //redirect to login page
         $this->_f3->reroute('/login');
-    }*/
+    }
 
     /**
      *private method used to correctly redirect user upon logging into login page
@@ -267,7 +267,6 @@ class Controller
      */
     private function redirects()
     {
-        global $user;
         //checking to see if user is an admin or tutor and redirecting accordingly
         if ($_SESSION['user']->getUserIsAdmin() == 1){
             //get current year
@@ -289,7 +288,7 @@ class Controller
 
     private function isLoggedIn()
     {
-        if (!isset($_SESSION['login'])){
+        if (!isset($_SESSION['user'])){
             $this->_f3->reroute('/login');
         }
     }

@@ -369,7 +369,7 @@ class Database
     {
         //todo hash the password prior to creating the sql statement once we figure out how to securely store pwds
         //sql statement
-        $sql = "SELECT user_id FROM User 
+        $sql = "SELECT * FROM User 
                 where user_email = ? and user_password = ?";
 
         //preparing statement
