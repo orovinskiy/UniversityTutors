@@ -5,10 +5,6 @@
 
 console.log("loaded client validation");
 
-//get the bio text area box
-
-$(".input").
-
 //Auto formatting for phone number
 $('#phone').keyup(function () {
     let valPhone = this.value.replace(/\D/g, '');
