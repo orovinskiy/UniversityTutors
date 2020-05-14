@@ -256,7 +256,8 @@ class Database
     function getTutorsChecklist($year, $userID)
     {
         $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
-        year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation FROM
+        year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation,
+         Tutor.user_id, tutor_image, tutor_bio FROM
         Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
 
         $statement = $this->_dbh->prepare($sql);
