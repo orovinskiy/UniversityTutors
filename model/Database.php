@@ -372,7 +372,7 @@ class Database
      */
     function getAdmins()
     {
-        $sql = "SELECT user_id, user_email FROM tutors.User WHERE user_is_admin = 1";
+        $sql = "SELECT user_id, user_email FROM User WHERE user_is_admin = 1";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -387,7 +387,7 @@ class Database
      */
     function addAdmin($email)
     {
-        $sql = "INSERT INTO User VALUES (DEFAULT, ?, '1234', b'1')";
+        $sql = "INSERT INTO User VALUES (DEFAULT, ?, '1234', 1)";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$email]);
         return $this->_dbh->lastInsertId();
