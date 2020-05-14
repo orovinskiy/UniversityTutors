@@ -49,6 +49,8 @@ class Controller
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
 
+        $this->_db->userInYear(1, "2021");
+
         $view = new Template();
         echo $view->render("views/tutors.html");
     }

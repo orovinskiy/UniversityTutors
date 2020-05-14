@@ -344,6 +344,11 @@ class Database
     {
         $year = $this->getCurrentYear();
 
+        // Cannot add a user to the same year twice
+        if ($this->userInYear($user_id, $year)) {
+            return;
+        }
+
         $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
 
         $statement = $this->_dbh->prepare($sql);
@@ -415,6 +420,15 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$email]);
         return $this->_dbh->lastInsertId();
+    }
+
+    function userInYear($id, $year)
+    {
+        $sql = "SELECT user_id FROM Year WHERE user_id = ? AND year_start = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$id, $year]);
+
+        return $statement->fetch(PDO::FETCH_ASSOC)["user_id"] != NULL;
     }
 
 }
