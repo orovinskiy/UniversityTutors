@@ -9,6 +9,10 @@ Styles for the admin tutors table
     -webkit-transform: scale(2) translateY(-5.5px);;
 }
 
+.filter {
+    width: 10%;
+}
+
 .placement {
     transform: translateY(8px);
     -webkit-transform: translateY(8px);;

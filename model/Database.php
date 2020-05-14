@@ -31,20 +31,61 @@ class Database
      * function to retrieve all data within Year table to show all information from Year table, joining with the User,
      * and Tutor table to show all information needed within admin datatable
      * @param string $year the year you would like to see information for. Default parameter is 2020
+     * @param string $status how the tutor data is filtered
      * @return array Returns array of all rows within Year table
      * @author Dallas Sloan
      */
-    function getTutors($year = '2020')
+    function getTutors($year = '2020', $status = "all")
     {
         //defining query
 
-        $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
+        if ($status == "complete") {
+            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
+                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
+                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
+                    Year.year_placement from Year
+                    JOIN Tutor on Year.user_id = Tutor.user_id
+                    JOIN User on Year.user_id = User.user_id WHERE
+                    year_start = ? AND 
+                    year_packet_sent = 1 AND 
+                    (year_background = 'clear' OR year_background = 'flag') AND 
+                    (year_reference = 'clear' OR year_reference = 'flag') AND
+                    year_offer_letter = 1 AND
+                    year_affirmation_disclosures = 1 AND
+                    year_sexual_misconduct = 1 AND
+                    year_w4 = 1 AND
+                    year_handbook_verification = 1 AND
+                    year_ADP = 'registered' AND
+                    year_i9 = 'admin' AND
+                    year_orientation = 1";
+        } else if ($status == "incomplete") {
+            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
+                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
+                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
+                    Year.year_placement from Year
+                    JOIN Tutor on Year.user_id = Tutor.user_id
+                    JOIN User on Year.user_id = User.user_id WHERE
+                    year_start = ? AND 
+                    (year_packet_sent = 0 OR 
+                    (year_background != 'clear' AND year_background != 'flag') OR 
+                    (year_reference != 'clear' AND year_reference != 'flag') OR
+                    year_offer_letter = 0 OR
+                    year_affirmation_disclosures = 0 OR
+                    year_sexual_misconduct = 0 OR
+                    year_w4 = 0 OR
+                    year_handbook_verification = 0 OR
+                    year_ADP != 'registered' OR
+                    year_i9 != 'admin' OR
+                    year_orientation = 0)";
+        } else {
+            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
                     Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
                     Year.year_placement from Year
                     JOIN Tutor on Year.user_id = Tutor.user_id
                     JOIN User on Year.user_id = User.user_id
                     where Year.year_start = ?";
+        }
 
         //Preparing statement
         $statement = $this->_dbh->prepare($sql);
