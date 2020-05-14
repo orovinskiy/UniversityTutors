@@ -99,7 +99,7 @@ class Controller
         //$this->isLoggedIn(); //comment to remove the login requirement
 
         //get the current year
-        $currentYear = date('Y');
+        $currentYear = $this->_db->getCurrentYear();
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
         $checkBoxes = $checkBoxes[0];
@@ -113,7 +113,23 @@ class Controller
             $checkBoxes['year_ADP'] = '1';
         }
 
+        if($checkBoxes['tutor_image'] == '' || empty($checkBoxes['tutor_image'])){
+            $checkBoxes['tutor_image'] = 'formEmpty';
+        }
+        else{
+            $checkBoxes['tutor_image'] = 'formFull';
+        }
+
+        if($checkBoxes['tutor_bio'] == '' || empty($checkBoxes['tutor_bio'])){
+            $checkBoxes['tutor_bio'] = 'formEmpty';
+        }
+        else{
+            $checkBoxes['tutor_bio'] = 'formFull';
+        }
+
+        $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
+        $this->_f3->set('userID', $checkBoxes['user_id']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
         $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
             "Column" => "year_ADP", "id" => "adp"),
@@ -127,8 +143,10 @@ class Controller
             "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
                 "Column" => "year_offer_letter", "id" => "offer-letter"),
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id" => "orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4")));
+                "Column" => "year_orientation", "id"=>"orientation"),
+            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
+            "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
+            "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
 
 
         $view = new Template();

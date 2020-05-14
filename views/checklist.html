@@ -17,6 +17,7 @@ what forms they have already completed
 
     <!-- Welcome Intro -->
     <p class="yearID" data-id="{{@yearID}}">Welcome, {{@userName}}</p>
+    <p>Academic year: {{@currentYear}} - {{@currentYear+1}}</p>
 
     <div class="row">
         <div id="notCompleted" class="col-12">
@@ -28,7 +29,7 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checkboxes}}" key="{{@name}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['Value'] == 0 || @isChecked['Value']=='none'}}">
+                        <check if="{{@isChecked['Value'] == '0' || @isChecked['Value']=='none' || @isChecked['Value'] == 'formEmpty'}}">
                             <div class="col-6 mb-3">
                                 <section class="card">
                                     <check if="{{@isChecked['Value'] == 'none'}}">
@@ -36,17 +37,28 @@ what forms they have already completed
                                     </check>
                                     <h2 class="card-title text-center">{{@name}}</h2>
                                     <div class="card-subtitle">
-                                        <div class="form-check mt-3 mb-5 mr-5 text-center">
-                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
-                                                   id="{{@isChecked['id']}}" name="doorInter[]"
-                                                <check if="{{@isChecked['Value'] == 'none'}}">
-                                                    disabled
-                                                </check>
-                                            >
-                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
-                                                Complete
-                                            </label>
-                                        </div>
+                                            <check if="@isChecked['Value'] !== 'formEmpty'">
+                                                <true>
+                                                    <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox"
+                                                           value="{{@isChecked['Column']}}"
+                                                       id="{{@isChecked['id']}}" name="doorInter[]"
+                                                    <check if="{{@isChecked['Value'] == 'none'}}">
+                                                        disabled
+                                                    </check>
+                                                    >
+                                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
+                                                        Complete
+                                                    </label>
+                                                    </div>
+                                                </true>
+                                                <false>
+                                                    <p class="text-center">
+                                                        Please update your {{@name}}. It is located in the
+                                                        Form.
+                                                    </p>
+                                                </false>
+                                            </check>
                                     </div>
                                 </section>
                             </div>
@@ -64,18 +76,28 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checkboxes}}" key="{{@name2}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['Value'] == 1}}">
+                        <check if="{{@isChecked['Value'] == '1' || @isChecked['Value'] == 'formFull'}}">
                             <div class="col-6 mb-3">
                                 <section class="card">
                                     <h2 class="card-title text-center">{{@name2}}</h2>
                                     <div class="card-subtitle">
-                                        <div class="form-check mt-3 mb-5 mr-5 text-center">
-                                            <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
-                                                   id="{{@isChecked['id']}}" name="doorInter[]" checked>
-                                            <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
-                                                Completed
-                                            </label>
-                                        </div>
+                                        <check if="@isChecked['Value'] !== 'formFull'">
+                                            <true><div class="form-check mt-3 mb-5 mr-5 text-center">
+                                                <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox" value="{{@isChecked['Column']}}"
+                                                       id="{{@isChecked['id']}}" name="doorInter[]" checked>
+                                                <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['id']}}">
+                                                    Completed
+                                                </label>
+                                            </div>
+                                            </true>
+                                            <false>
+                                                <p class="text-center">
+                                                    You have Successfully updated your {{@name2}}. If you
+                                                    would like to update it, it will be located in the
+                                                    Form.
+                                                </p>
+                                            </false>
+                                        </check>
                                     </div>
                                 </section>
                             </div>
