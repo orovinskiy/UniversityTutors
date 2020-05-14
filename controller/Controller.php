@@ -29,6 +29,8 @@ class Controller
      */
     function tutorsPage($year)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn();
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -93,6 +95,9 @@ class Controller
      */
     function checklist($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn();
+
         //get the current year
         $currentYear = date('Y');
 
@@ -138,6 +143,9 @@ class Controller
 
     function formPage($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn();
+
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -208,7 +216,9 @@ class Controller
      */
     function login()
     {
-        //checking to see if user if already logged in if so redirects to admin table page
+        var_dump($_SESSION);
+
+        //checking to see if user if already logged in if so redirects to appropriate page
         if(isset($_SESSION['login'])){
             $this->redirects();
         }
@@ -242,6 +252,15 @@ class Controller
         echo $view->render("views/login.html");
     }
 
+    /*function logout()
+    {
+        //destroy session
+        $_SESSION = array();
+
+        //redirect to login page
+        $this->_f3->reroute('/login');
+    }*/
+
     /**
      *private method used to correctly redirect user upon logging into login page
      * @author Dallas Sloan
@@ -266,6 +285,12 @@ class Controller
                 $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
             }
         }
+    }
 
+    private function isLoggedIn()
+    {
+        if (!isset($_SESSION['login'])){
+            $this->_f3->reroute('/login');
+        }
     }
 }

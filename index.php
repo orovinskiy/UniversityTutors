@@ -97,4 +97,13 @@ $f3->route('GET|POST /login', function () {
     $controller->login();
 });
 
+/**
+ * Route for Logout page.
+ * @author Dallas Sloan
+ */
+$f3->route('GET /logout', function () {
+    global $controller;
+    $controller->logout();
+});
+
 $f3->run();
