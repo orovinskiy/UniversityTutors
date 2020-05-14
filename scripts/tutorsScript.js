@@ -10,6 +10,9 @@ $(document).ready(function () {
     });
 });
 
+// Stores current filter so when page is reloaded, it is reloaded with the appropriate filter
+let status = $("#status").val();
+
 // Event listener for updating checkboxes
 $(".checkbox-big").on("click", function () {
 
@@ -90,7 +93,7 @@ $("#add-tutor-button").on("click", function () {
 
         //refresh page to load new user into table
         let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year);
+        window.location.href = ("/tutors/" + year + "&" + status);
     });
 });
 
@@ -113,7 +116,7 @@ $(".year-change").on("click", function () {
     //alert("This is the current year: "+ year + "Did we get the right button? : " +change);
 
     //refresh page with new year
-    window.location.href = ("/tutors/" + year);
+    window.location.href = ("/tutors/" + year + "&all");
 });
 
 // hide delete and import buttons on window click
@@ -151,7 +154,7 @@ $(".delete").on("click", function () {
         });
 
         let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year);
+        window.location.href = ("/tutors/" + year + "&" + status);
     }
 });
 
@@ -167,7 +170,7 @@ $(".import").on("click", function () {
         });
 
         let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year);
+        window.location.href = ("/tutors/" + year + "&" + status);
     }
 });
 
@@ -181,5 +184,5 @@ $("#current-year").on("click", function () {
     });
 
     // refresh data
-    window.location.href = ("/tutors/" + year);
+    window.location.href = ("/tutors/" + year + "&" + status);
 });

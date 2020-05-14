@@ -36,6 +36,7 @@ Page for admin viewing and management of tutor onboarding data.
 
         <!-- Filter buttons -->
         <div class="mt-3">
+            <input type="hidden" value="{{ @status }}" id="status">
             <check if="{{ @status == 'incomplete' }}">
                 <true>
                     <button class="btn btn-primary filter">Incomplete</button>
