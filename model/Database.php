@@ -378,4 +378,19 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Add a new admin
+     *
+     * @param string $email email of the new admin
+     * @return int id of the new admin
+     * @author Keller Flint
+     */
+    function addAdmin($email)
+    {
+        $sql = "INSERT INTO User VALUES (DEFAULT, ?, NULL, b'1')";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$email]);
+        return $this->_dbh->lastInsertId();
+    }
+
 }

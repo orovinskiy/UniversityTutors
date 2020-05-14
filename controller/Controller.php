@@ -207,6 +207,18 @@ class Controller
      */
     function adminPage()
     {
+        // TODO check if logged in user is admin
+
+        // delete user
+        if (isset($_POST["id"])) {
+            $this->_db->deleteUser($_POST["id"]);
+        }
+
+        // add user
+        if (isset($_POST["email"])) {
+            $this->_db->addAdmin($_POST["email"]);
+        }
+
         $this->_f3->set("admins", $this->_db->getAdmins());
 
         $view = new Template();

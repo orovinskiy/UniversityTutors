@@ -8,7 +8,7 @@ Schema for application's database.
 CREATE TABLE User (
     user_id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255) NOT NULL,
-    user_password varchar(255) NOT NULL,
+    user_password varchar(255) NULL,
     user_is_admin bit NOT NULL,
 
     PRIMARY KEY (user_id)

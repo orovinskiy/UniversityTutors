@@ -1,8 +1,7 @@
 <include href="views/navbar.html"/>
 
-<!-- TODO check if logged in user is admin -->
+<!-- Show active admins with delete option -->
 <h2 class="m-1">Manage Admins</h2>
-
 <repeat group="{{ @admins }}" value="{{ @admin }}">
     <form action="#" method="post" class="m-3">
         <input type="hidden" name="id" value="{{ @admin['user_id'] }}">
@@ -12,11 +11,13 @@
     </form>
 </repeat>
 <br><br>
+
+<!-- Add a new admin -->
 <h2 class="m-1">Add Admin</h2>
 <form class="w-25 m-3" action="#" method="post">
     <div class="form-group">
         <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="someone@example.com">
+        <input type="text" class="form-control" id="email" name="email" placeholder="someone@example.com">
     </div>
     <button class="btn btn-success">Add admin</button>
 </form>
