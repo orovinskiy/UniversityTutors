@@ -24,7 +24,7 @@ Page for admin viewing and management of tutor onboarding data.
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
-        <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }}</h3>
+        <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year+1}}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
         <br>
         <check if="{{ @currentYear != @year }}">

@@ -8,23 +8,22 @@
 
 class User
 {
-    private $userIsAdmin;
     private $userID;
-    private $_db;
+    private $userEmail;
+    private $userIsAdmin;
 
     /**
      * User constructor.
+     * @param string $userID ID of user
      * @param string $userEmail email of user logging into system
-     * @param object $_db database object to be used with database class
+     * @param string $userIsAdmin whether or not user is admin. If if admin 0 if not admin
      * @author Dallas Sloan
      */
-    public function __construct($userEmail, $_db)
+    public function __construct($userID, $userEmail, $userIsAdmin)
     {
-        $this->_db = $_db;
-        $userInfo = $this->_db->getUserByEmail($userEmail);
-        $this->userID = $userInfo['user_id'];
-        $this->userIsAdmin = $userInfo['user_is_admin'];
-        //var_dump($userInfo); //used for testing
+        $this->userID = $userID;
+        $this->userEmail = $userEmail;
+        $this->userIsAdmin = $userIsAdmin;
     }
 
     /**

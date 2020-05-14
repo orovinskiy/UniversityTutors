@@ -48,7 +48,7 @@ $f3->route('GET /', function () {
  * Route for checklist
  * @author Oleg
  */
-$f3->route('GET /checklist/@userId', function ($f3,$param) {
+$f3->route('GET /checklist/@userId', function ($f3, $param) {
     $GLOBALS['controller']->checklist($param);
 });
 
@@ -87,4 +87,31 @@ $f3->route('POST /tutorsAjax', function () {
     global $controller;
     $controller->tutorsAjax();
 });
+
+/**
+ * Route for login page
+ * @author Dallas Sloan
+ */
+$f3->route('GET|POST /login', function () {
+    global $controller;
+    $controller->login();
+});
+
+/**
+ * Route for Logout page.
+ * @author Dallas Sloan
+ */
+$f3->route('GET /logout', function () {
+    global $controller;
+    $controller->logout();
+});
+/**
+ * Route for admin management
+ * @author Keller Flint
+ */
+$f3->route('GET|POST /admin', function () {
+    global $controller;
+    $controller->adminPage();
+});
+
 $f3->run();

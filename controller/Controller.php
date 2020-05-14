@@ -29,6 +29,8 @@ class Controller
      */
     function tutorsPage($year)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -93,8 +95,11 @@ class Controller
      */
     function checklist($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
         //get the current year
-        $currentYear = date('Y');
+        $currentYear = $this->_db->getCurrentYear();
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
         $checkBoxes = $checkBoxes[0];
@@ -108,7 +113,21 @@ class Controller
             $checkBoxes['year_ADP'] = '1';
         }
 
+        if ($checkBoxes['tutor_image'] == '' || empty($checkBoxes['tutor_image'])) {
+            $checkBoxes['tutor_image'] = 'formEmpty';
+        } else {
+            $checkBoxes['tutor_image'] = 'formFull';
+        }
+
+        if ($checkBoxes['tutor_bio'] == '' || empty($checkBoxes['tutor_bio'])) {
+            $checkBoxes['tutor_bio'] = 'formEmpty';
+        } else {
+            $checkBoxes['tutor_bio'] = 'formFull';
+        }
+
+        $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
+        $this->_f3->set('userID', $checkBoxes['user_id']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
         $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
             "Column" => "year_ADP", "id" => "adp"),
@@ -123,8 +142,9 @@ class Controller
                 "Column" => "year_offer_letter", "id" => "offer-letter"),
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
                 "Column" => "year_orientation", "id" => "orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4")));
-
+            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
+            "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
+            "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
 
         $view = new Template();
         echo $view->render("views/checklist.html");
@@ -138,6 +158,9 @@ class Controller
 
     function formPage($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -165,7 +188,6 @@ class Controller
             //if the user input in form is valid
             if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
-
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn'])) {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
@@ -175,20 +197,24 @@ class Controller
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
                         $_POST['phone'], $this->encryption($_POST['ssn']), trim($_POST['bio']));
-                    $this->_db->updateEmail($param["id"], trim($_POST['email']));
+                    //check param id
+                    if ($param["id"] != 0) {
+                        $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
+                            $_POST['phone'], $_POST['ssn'], trim($_POST['bio']));
+                        $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
-                    //if file name  is not empty save  file to uploads dir and store it in database
-                    if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                        //if file name  is not empty save  file to uploads dir and store it in database
+                        if (!empty($_FILES['fileToUpload']['name'])) {
+                            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
+                            $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                        }
                     }
+                    $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
-                $this->_f3->reroute("/checklist/" . $param["id"]);
             }
+            $view = new Template();
+            echo $view->render('views/form.html');
         }
-        $view = new Template();
-        echo $view->render('views/form.html');
-
     }
 
     /**
@@ -255,5 +281,120 @@ class Controller
         // Use openssl_decrypt() function to decrypt the data
         return openssl_decrypt($encryptedSsn, $ciphering,
             $decryption_key, $options, $decryption_iv);
+    }
+    /**
+     * Function that handles the login page
+     * @author Dallas Sloan
+     */
+    function login()
+    {
+        //var_dump($_SESSION);
+
+        //checking to see if user if already logged in if so redirects to appropriate page
+        if(isset($_SESSION['user'])){
+            $this->redirects();
+        }
+        //when form is posted
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //var_dump($_POST);
+
+            //todo work with Laxmi to user her js validation file to work with my login form
+            //attempt to grab user info from login credentials
+            $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
+            //check to see if valid input was found
+            if (!empty($userLogin)){
+                //instantiate new user object
+                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                //saving object to session
+                $_SESSION['user'] = $user;
+                //setting session login to true
+                //$_SESSION['user'] = true;
+
+                //call redirects method to redirect to correct page
+                $this->redirects();
+
+            }
+            else {
+                //login info was not valid set error message
+                $this->_f3->set('loginError', "Invalid Username and/or Password");
+            }
+
+        }
+        $view = new Template();
+        echo $view->render("views/login.html");
+    }
+
+    /**
+     * Function that handles the logout process, which resets the session and reroutes to login page
+     * @author Dallas Sloan
+     */
+    function logout()
+    {
+        //destroy session
+        $_SESSION = array();
+
+        //redirect to login page
+        $this->_f3->reroute('/login');
+    }
+
+    /**
+     *private method used to correctly redirect user upon logging into login page
+     * @author Dallas Sloan
+     */
+    private function redirects()
+    {
+        //checking to see if user is an admin or tutor and redirecting accordingly
+        if ($_SESSION['user']->getUserIsAdmin() == 1){
+            //get current year
+            $year = $this->_db->getCurrentYear();
+            $this->_f3->reroute("/tutors/$year");
+
+        }
+        else {
+            //checking to see if user has filled out their basic info, if not redirected to form
+            $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
+            if ($userInfo['tutor_last'] == null){
+                $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
+            }
+            else { //form has been filled out redirect to checklist
+                $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
+            }
+        }
+    }
+
+    /**
+     * A function to check whether or not a user object has been set for the current session. If it is set the user
+     * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @author Dallas Sloan
+     */
+    private function isLoggedIn()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->_f3->reroute('/login');
+        }
+    }
+
+    /**
+     * Rendering and logic for admin management page
+     * @author Dallas Sloan
+     */
+    function adminPage()
+    {
+        // TODO check if logged in user is admin
+
+        // delete user
+        if (isset($_POST["id"])) {
+            $this->_db->deleteUser($_POST["id"]);
+        }
+
+        // add user
+        if (isset($_POST["email"])) {
+            $this->_db->addAdmin($_POST["email"]);
+        }
+
+        $this->_f3->set("admins", $this->_db->getAdmins());
+
+        $view = new Template();
+        echo $view->render('views/admin.html');
     }
 }
