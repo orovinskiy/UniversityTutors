@@ -369,7 +369,7 @@ class Database
      * Function to validate whether a user has provided valid credentials upon attempting to login
      * @param string $username username input into login form
      * @param string $password password input into login form
-     * @return mixed array containing userID of user logged in if valid, if not valid returns null
+     * @return array containing all columns from User table if user logged in is valid, if not valid returns null
      */
     function login($username, $password)
     {

@@ -270,6 +270,10 @@ class Controller
         echo $view->render("views/login.html");
     }
 
+    /**
+     * Function that handles the logout process, which resets the session and reroutes to login page
+     * @author Dallas Sloan
+     */
     function logout()
     {
         //destroy session
@@ -307,6 +311,7 @@ class Controller
     /**
      * A function to check whether or not a user object has been set for the current session. If it is set the user
      * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @author Dallas Sloan
      */
     private function isLoggedIn()
     {
@@ -317,6 +322,7 @@ class Controller
 
     /**
      * Rendering and logic for admin management page
+     * @author Dallas Sloan
      */
     function adminPage()
     {
