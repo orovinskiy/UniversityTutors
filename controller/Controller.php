@@ -24,10 +24,10 @@ class Controller
 
     /**
      * Logic and rendering for tutors page
-     * @param string $year The year to load tutors data for
+     * @param array $param The parameters passed to the route
      * @author Keller Flint
      */
-    function tutorsPage($year)
+    function tutorsPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
@@ -36,15 +36,16 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         // Get tutor data for current year
-        $tutorsData = $this->_db->getTutors($year);
+        $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
 
         // Set values for select dropdowns
         $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
-        $this->_f3->set("year", $year);
+        $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
+        $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);

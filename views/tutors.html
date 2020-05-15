@@ -12,6 +12,8 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Font for dropdown caret -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- DataTables Styles -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
@@ -30,6 +32,36 @@ Page for admin viewing and management of tutor onboarding data.
         <check if="{{ @currentYear != @year }}">
             <button id="current-year" class="btn btn-info mt-3">Set Current Year</button>
         </check>
+        <br>
+
+        <!-- Filter buttons -->
+        <div class="mt-3">
+            <input type="hidden" value="{{ @status }}" id="status">
+            <check if="{{ @status == 'incomplete' }}">
+                <true>
+                    <button class="btn btn-primary filter">Incomplete</button>
+                </true>
+                <false>
+                    <a href="/tutors/{{ @year }}&incomplete" class="btn btn-secondary filter">Incomplete</a>
+                </false>
+            </check>
+            <check if="{{ @status == 'all' }}">
+                <true>
+                    <button class="btn btn-primary filter">All</button>
+                </true>
+                <false>
+                    <a href="/tutors/{{ @year }}&all" class="btn btn-secondary filter">All</a>
+                </false>
+            </check>
+            <check if="{{ @status == 'complete' }}">
+                <true>
+                    <button class="btn btn-primary filter">Complete</button>
+                </true>
+                <false>
+                    <a href="/tutors/{{ @year }}&complete" class="btn btn-secondary filter">Complete</a>
+                </false>
+            </check>
+        </div>
     </div>
 
     <!-- Tutors DataTable -->
@@ -59,7 +91,9 @@ Page for admin viewing and management of tutor onboarding data.
                 <td class="name">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</td>
 
                 <!-- Email -->
-                <td class="email">{{ @tutor['user_email'] }}
+                <td class="email">
+                    {{ @tutor['user_email'] }}
+                    <i class="fa fa-caret-down float-right" style="font-size:18px"></i>
                     <br>
                     <check if="{{ @currentYear != @year }}">
                         <button class="btn btn-info d-none import" data-userid="{{ @tutor['user_id'] }}">Import</button>
