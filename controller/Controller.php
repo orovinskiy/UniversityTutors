@@ -346,7 +346,10 @@ class Controller
     }
 
     /**
+     * Page displaying additional information about a tutor
+     *
      * @param array $param Param array containing the id of the tutor we want to load
+     * @author Keller Flint
      */
     function tutorInfoPage($param) {
 
