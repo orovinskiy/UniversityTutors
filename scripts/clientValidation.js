@@ -81,7 +81,7 @@ let validations = [
  */
 function isEmpty(input, valClass) {
     let isValid = false;
-    if (input.val().trim() === "") {
+    if (input.val() == "") {
         isValid = true;
     }
     toggleErrors(input, valClass, !isValid, "Cannot be empty.");

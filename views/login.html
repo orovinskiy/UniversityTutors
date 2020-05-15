@@ -27,22 +27,22 @@ Login page for university tutors website
 </div>
 <div class="container divCol text-center"> <!--full form div -->
     <form method="post" action="#">
-        <div class="form-group mt-2"> <!--Username Div -->
+        <div class="form-group mt-2 val-empty val-hasSpaces"> <!--Username Div -->
             <label class="h2" for="username">Username </label>
-            <input class="" type="text" size = 30 id="username" name="username">
+            <input class="input" type="text" size=30 id="username" name="username">
             <check if="{{ @errors['username'] }}">
                 <p class="err-validate">{{ @errors['username'] }}</p>
             </check>
-
+            <div class="errors text-danger ml-5"></div>
         </div>
 
-        <div class="form-group"> <!-- Password Div -->
+        <div class="form-group val-empty val-hasSpaces"> <!-- Password Div -->
             <label class="h2" for="password">&nbsp;Password </label>
-            <input type="password" size = 30 id="password" name="password">
+            <input class="input" type="password" size=30 id="password" name="password">
             <check if="{{ @errors['password'] }}">
                 <p class="err-validate">{{ @errors['password'] }}</p>
             </check>
-
+            <div class="errors text-danger ml-5"></div>
         </div>
         <button class="btn btn-primary mb-3" type="submit" id="login" name="submit" value="submit">Login</button>
         <check if="{{ @loginError }}">
@@ -50,5 +50,15 @@ Login page for university tutors website
         </check>
     </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="../scripts/clientValidation.js"></script>
 </body>
 </html>
