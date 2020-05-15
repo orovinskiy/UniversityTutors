@@ -186,9 +186,6 @@ class Controller
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
-            if(isset($_FILES['fileToUpload'])){
-                echo "i am down";
-            }
             if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value

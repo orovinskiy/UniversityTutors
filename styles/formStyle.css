@@ -26,6 +26,7 @@ img {
 .jumbotron {
     background-color: cornflowerblue;
     color: white;
+    margin-top: 5px;
 }
 
 legend {
