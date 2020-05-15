@@ -26,7 +26,7 @@ $('#phone').keyup(function () {
 });
 
 ////Auto formatting for SSN
-$('#ssn').keyup(function () {
+$('.ssnInput').keyup(function () {
     let val = this.value.replace(/\D/g, '');
     let newVal = '';
     if (val.length > 4) {
@@ -119,13 +119,12 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().trim() != "") {
+    if (input.val().trim() != "" && input.val().length !=14) {
         isValid = true;
     }
-    toggleErrors(input, valClass, isValid, "Must be valid");
+    toggleErrors(input, valClass, !isValid, "Must be valid");
     return isValid;
 }
-
 /**
  * Check to see if user input spaces
  * @param input user's input

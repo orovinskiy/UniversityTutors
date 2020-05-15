@@ -2,7 +2,8 @@
    Form for OnBoarding process
    @author Laxmi Kandel
    -->
-<include href="views/navbar.html"/><!-- This brings in the navbar -->
+<include href="views/navbar.html"/>
+<!-- This brings in the navbar -->
 <link rel="stylesheet" type="text/css" href="../styles/formStyle.css">
 <div class="container">
     <div class="jumbotron">
@@ -61,16 +62,26 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="form-group val-lessThan14 val-empty">
-                        <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
+                    <div class="form-group val-empty">
+                        <label class="font-weight-bold">SSN</label><em>*</em>
                         <check if='{{ @databaseSsn !=""}}'>
-                            <span class="err"> <em>(We already have your SSN, update if there is any change</em>)</span>
+                            <true>
+                                <span class="err"> <em>(We already have your SSN, update if there is any change</em>)</span>
+                                <input type="text" class="form-control input ssnInput" name="ssn"
+                                       value="{{ @ssn }}">
+                                <check if="{{ @errors['ssn'] }}">
+                                    <span class="err">{{ @errors['ssn'] }}</span>
+                                </check>
+                            </true>
+                            <false>
+                                <input type="text" class="form-control input ssnInput" name="ssn"
+                                       value="{{ @ssn }}">
+                                <check if="{{ @errors['ssn'] }}">
+                                    <span class="err">{{ @errors['ssn'] }}</span>
+                                </check>
+                                <div class="errors text-danger"></div>
+                            </false>
                         </check>
-                        <input type="text" class="form-control ssnInput" name="ssn" id="ssn" value="{{ @ssn }}">
-                        <check if="{{ @errors['ssn'] }}">
-                            <span class="err">{{ @errors['ssn'] }}</span>
-                        </check>
-                        <div class="errors text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold">Bio</label><em>(optional)</em>
