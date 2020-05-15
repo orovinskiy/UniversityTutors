@@ -42,7 +42,7 @@ Page for admin viewing and management of tutor onboarding data.
                     <button class="btn btn-primary filter">Incomplete</button>
                 </true>
                 <false>
-                    <a href="/tutors/{{ @year }}&incomplete"><button class="btn btn-secondary filter">Incomplete</button></a>
+                    <a href="/tutors/{{ @year }}&incomplete" class="btn btn-secondary filter">Incomplete</a>
                 </false>
             </check>
             <check if="{{ @status == 'all' }}">
@@ -50,7 +50,7 @@ Page for admin viewing and management of tutor onboarding data.
                     <button class="btn btn-primary filter">All</button>
                 </true>
                 <false>
-                    <a href="/tutors/{{ @year }}&all"><button class="btn btn-secondary filter">All</button></a>
+                    <a href="/tutors/{{ @year }}&all" class="btn btn-secondary filter">All</a>
                 </false>
             </check>
             <check if="{{ @status == 'complete' }}">
@@ -58,7 +58,7 @@ Page for admin viewing and management of tutor onboarding data.
                     <button class="btn btn-primary filter">Complete</button>
                 </true>
                 <false>
-                    <a href="/tutors/{{ @year }}&complete"><button class="btn btn-secondary filter">Complete</button></a>
+                    <a href="/tutors/{{ @year }}&complete" class="btn btn-secondary filter">Complete</a>
                 </false>
             </check>
         </div>
