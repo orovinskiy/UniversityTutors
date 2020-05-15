@@ -41,6 +41,7 @@ class Controller
         $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
+        $this->_f3->set("SPSOptions", array("none" => "Not Done", "tutor" => "Tutor Done", "admin" => "Admin Done"));
         $this->_f3->set("year", $year);
         $this->_f3->set("currentYear", $currentYear);
 
@@ -100,26 +101,15 @@ class Controller
         $checkBoxes = $checkBoxes[0];
 
         $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
+        empty($checkBoxes['tutor_image']) ? $checkBoxes['tutor_image'] = 'formEmpty' : $checkBoxes['tutor_image'] = 'formFull';
+        empty($checkBoxes['tutor_bio']) ? $checkBoxes['tutor_bio'] = 'formEmpty' : $checkBoxes['tutor_bio'] = 'formFull';
+        $checkBoxes['year_SPS'] == 'none' ? $checkBoxes['year_SPS'] = '0' : $checkBoxes['year_SPS'] = '1';
 
         if ($checkBoxes['year_ADP'] == 'invited') {
             $checkBoxes['year_ADP'] = '0';
         }
         if ($checkBoxes['year_ADP'] == 'registered') {
             $checkBoxes['year_ADP'] = '1';
-        }
-
-        if($checkBoxes['tutor_image'] == '' || empty($checkBoxes['tutor_image'])){
-            $checkBoxes['tutor_image'] = 'formEmpty';
-        }
-        else{
-            $checkBoxes['tutor_image'] = 'formFull';
-        }
-
-        if($checkBoxes['tutor_bio'] == '' || empty($checkBoxes['tutor_bio'])){
-            $checkBoxes['tutor_bio'] = 'formEmpty';
-        }
-        else{
-            $checkBoxes['tutor_bio'] = 'formFull';
         }
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
@@ -140,6 +130,7 @@ class Controller
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
                 "Column" => "year_orientation", "id"=>"orientation"),
             "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
+            "SPS" => array("Value" => $checkBoxes['year_SPS'], "Column" => "year_SPS", "id" => "sps"),
             "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
             "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
 

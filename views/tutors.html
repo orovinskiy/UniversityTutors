@@ -46,6 +46,7 @@ Page for admin viewing and management of tutor onboarding data.
             <th class="text-center">Sexual Misconduct</th>
             <th class="text-center">W4</th>
             <th class="text-center">Handbook Verification</th>
+            <th class="text-center">SPS</th>
             <th class="text-center">ADP Registration</th>
             <th class="text-center test">I-9</th>
             <th class="text-center">Orientation</th>
@@ -195,6 +196,23 @@ Page for admin viewing and management of tutor onboarding data.
                             </false>
                         </check>
                     </div>
+                </td>
+
+                <!-- SPS Form -->
+                <td>
+                    <select data-yearid="{{ @tutor['year_id'] }}" data-column="year_SPS"
+                            class="form-control tutor-select">
+                        <repeat group=" {{ @SPSOptions }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_SPS'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
                 </td>
 
                 <!-- ADP Enrollment -->

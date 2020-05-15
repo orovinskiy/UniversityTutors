@@ -40,7 +40,7 @@ class Database
 
         $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
+                    Year.year_w4, Year.year_handbook_verification, Year.year_SPS, Year.year_ADP, Year.year_i9, Year.year_orientation,
                     Year.year_placement from Year
                     JOIN Tutor on Year.user_id = Tutor.user_id
                     JOIN User on Year.user_id = User.user_id
@@ -72,7 +72,7 @@ class Database
         $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
                     Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
                     Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement from Year
+                    Year.year_placement Year.year_SPS from Year
                     JOIN Tutor on Year.user_id = Tutor.user_id
                     JOIN User on Year.user_id = User.user_id
                     where User.user_id = ?
@@ -143,7 +143,7 @@ class Database
         $statement->execute();
 
         // add new year data
-        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none','none', 'none', b'0', NULL)";
 
         $statement = $this->_dbh->prepare($sql);
 
@@ -257,7 +257,7 @@ class Database
     {
         $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
         year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation,
-         Tutor.user_id, tutor_image, tutor_bio FROM
+         Tutor.user_id, tutor_image, tutor_bio, year_SPS FROM
         Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -344,7 +344,7 @@ class Database
     {
         $year = $this->getCurrentYear();
 
-        $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none', 'none', b'0', NULL)";
+        $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none','none', 'none', b'0', NULL)";
 
         $statement = $this->_dbh->prepare($sql);
 
