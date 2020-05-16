@@ -74,9 +74,9 @@ $f3->route('GET|POST /form/@id', function ($f3, $param) {
  * Route for admin viewing and management of tutors.
  * @author Keller Flint
  */
-$f3->route('GET /tutors/@year', function ($f3, $param) {
+$f3->route('GET /tutors/@year&@status', function ($f3, $param) {
     global $controller;
-    $controller->tutorsPage($param['year']);
+    $controller->tutorsPage($param);
 });
 
 /**
