@@ -344,4 +344,19 @@ class Controller
         $view = new Template();
         echo $view->render('views/admin.html');
     }
+
+    /**
+     * Page displaying additional information about a tutor
+     *
+     * @param array $param Param array containing the id of the tutor we want to load
+     * @author Keller Flint
+     */
+    function tutorInfoPage($param) {
+
+        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
+        $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+
+        $view = new Template();
+        echo $view->render('views/tutorInfo.html');
+    }
 }

@@ -114,4 +114,12 @@ $f3->route('GET|POST /admin', function () {
     $controller->adminPage();
 });
 
+/**
+ * Route for tutor info page
+ */
+$f3->route('GET /tutor/@id', function ($f3, $param) {
+    global $controller;
+    $controller->tutorInfoPage($param);
+});
+
 $f3->run();
