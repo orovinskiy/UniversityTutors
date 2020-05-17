@@ -75,7 +75,7 @@ Page for admin viewing and management of tutor onboarding data.
         <repeat group="{{ @tutorsData }}" value=" {{ @tutor }}">
             <tr>
                 <!-- Name -->
-                <td class="name"><a href="/tutor/{{ @tutor['user_id'] }}">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</a></td>
+                <td class="name"><a href="../tutor/{{ @tutor['user_id'] }}">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</a></td>
 
                 <!-- Email -->
                 <td class="email">
