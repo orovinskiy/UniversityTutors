@@ -66,7 +66,7 @@
                         <label class="font-weight-bold">SSN</label><em>*</em>
                         <check if='{{ @databaseSsn !=""}}'>
                             <true>
-                                <span class="err"> <em>(We already have your SSN, update if there is any change</em>)</span>
+                                <span> <em>(We already have your SSN, update if there is any change</em>)</span>
                                 <input type="text" class="form-control input ssnInput" name="ssn"
                                        value="{{ @ssn }}">
                                 <check if="{{ @errors['ssn'] }}">

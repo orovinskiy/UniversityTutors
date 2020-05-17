@@ -332,7 +332,8 @@ class Controller
         if ($_SESSION['user']->getUserIsAdmin() == 1) {
             //get current year
             $year = $this->_db->getCurrentYear();
-            $this->_f3->reroute("/tutors/$year");
+            $this->_f3->reroute("/tutors/$year&all");
+
 
         } else {
             //checking to see if user has filled out their basic info, if not redirected to form
