@@ -359,7 +359,7 @@ class Controller
 
     /**
      * Rendering and logic for admin management page
-     * @author Dallas Sloan
+     * @author Keller Flint
      */
     function adminPage()
     {
@@ -372,12 +372,31 @@ class Controller
 
         // add user
         if (isset($_POST["email"])) {
-            $this->_db->addAdmin($_POST["email"]);
+            if($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
+                $this->_db->addAdmin($_POST["email"]);
+            } else {
+                $this->_f3->set("emailError", "Please enter a valid email address.");
+            }
         }
 
         $this->_f3->set("admins", $this->_db->getAdmins());
 
         $view = new Template();
         echo $view->render('views/admin.html');
+    }
+
+    /**
+     * Page displaying additional information about a tutor
+     *
+     * @param array $param Param array containing the id of the tutor we want to load
+     * @author Keller Flint
+     */
+    function tutorInfoPage($param) {
+
+        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
+        $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+
+        $view = new Template();
+        echo $view->render('views/tutorInfo.html');
     }
 }
