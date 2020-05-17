@@ -12,6 +12,20 @@ class Controller
     private $_val;
 
     /**
+     * This function gets the info to display a correct navbar
+     * @param array $link array of links to get to different pages
+     * @param array $style array of stylesheet links to connect the correct one
+     * @param string $title This will be the title of the page
+     * @author Oleg
+     */
+    private function navBuilder($link,$style,$title)
+    {
+        $this->_f3->set('link',$link);
+        $this->_f3->set('style',$style);
+        $this->_f3->set('title',$title);
+    }
+
+    /**
      * Controller constructor
      * @param $f3 Object The fat free instance
      */
@@ -32,6 +46,12 @@ class Controller
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
 
+        //This is for building up a navbar
+        $this->navBuilder(array('Admin Manager'=>'../admin','Logout'=>'../logout'),
+            array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+                'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
+                '../styles/tutorsStyle.css'),'Tutors');
+
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
 
@@ -43,6 +63,7 @@ class Controller
         $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
+        $this->_f3->set("SPSOptions", array("none" => "Not Done", "tutor" => "Tutor Done", "admin" => "Admin Done"));
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
         $this->_f3->set("status", $param["status"]);
@@ -99,6 +120,10 @@ class Controller
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
 
+        //this is for building up a navbar
+        $this->navBuilder(array('Form'=>'../form/'.$param['userId'],'Logout'=>'../logout'),array('../styles/checklist.css')
+            ,'Tutor Checklist');
+
         //get the current year
         $currentYear = $this->_db->getCurrentYear();
 
@@ -106,24 +131,15 @@ class Controller
         $checkBoxes = $checkBoxes[0];
 
         $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
+        empty($checkBoxes['tutor_image']) ? $checkBoxes['tutor_image'] = 'formEmpty' : $checkBoxes['tutor_image'] = 'formFull';
+        empty($checkBoxes['tutor_bio']) ? $checkBoxes['tutor_bio'] = 'formEmpty' : $checkBoxes['tutor_bio'] = 'formFull';
+        $checkBoxes['year_SPS'] == 'none' ? $checkBoxes['year_SPS'] = '0' : $checkBoxes['year_SPS'] = '1';
 
         if ($checkBoxes['year_ADP'] == 'invited') {
             $checkBoxes['year_ADP'] = '0';
         }
         if ($checkBoxes['year_ADP'] == 'registered') {
             $checkBoxes['year_ADP'] = '1';
-        }
-
-        if ($checkBoxes['tutor_image'] == '' || empty($checkBoxes['tutor_image'])) {
-            $checkBoxes['tutor_image'] = 'formEmpty';
-        } else {
-            $checkBoxes['tutor_image'] = 'formFull';
-        }
-
-        if ($checkBoxes['tutor_bio'] == '' || empty($checkBoxes['tutor_bio'])) {
-            $checkBoxes['tutor_bio'] = 'formEmpty';
-        } else {
-            $checkBoxes['tutor_bio'] = 'formFull';
         }
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
@@ -142,10 +158,12 @@ class Controller
             "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
                 "Column" => "year_offer_letter", "id" => "offer-letter"),
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id" => "orientation"),
+                "Column" => "year_orientation", "id"=>"orientation"),
             "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
+            "SPS" => array("Value" => $checkBoxes['year_SPS'], "Column" => "year_SPS", "id" => "sps"),
             "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
             "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
+
 
         $view = new Template();
         echo $view->render("views/checklist.html");
@@ -161,6 +179,12 @@ class Controller
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
+
+
+        //this is for building up a navbar
+        $this->navBuilder(array('Checklist'=>'../checklist/'.$param["id"],'Logout'=>'../logout')
+            ,array('../styles/formStyle.css'), 'Onboarding Form');
+
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -365,6 +389,8 @@ class Controller
     function adminPage()
     {
         // TODO check if logged in user is admin
+        $this->navBuilder(array('Tutors Info'=>'/tutors/'.$this->_db->getCurrentYear().'&all','Logout'=>'logout'),
+            '','Admin Manager');
 
         // delete user
         if (isset($_POST["id"])) {
@@ -394,8 +420,13 @@ class Controller
      */
     function tutorInfoPage($param) {
 
+        //This is the navbar generating
+        $this->navBuilder(array('Tutors Info'=>'../tutors/'.$this->_db->getCurrentYear().'&all',
+            'Admin Manager'=>'../admin', 'Logout'=>'../logout'),'','Tutor');
+
         $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+        $this->_f3->set("decryptedSsn", $this->decryption($this->_db->getTutorById($param["id"])["tutor_ssn"]));
 
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
