@@ -398,7 +398,7 @@ class Controller
     function adminPage()
     {
         // TODO check if logged in user is admin
-        $this->navBuilder(array('Tutors Info'=>'/tutors/'.$this->_db->getCurrentYear().'&all','Logout'=>'logout'),
+        $this->navBuilder(array('Tutors Info'=>'../tutors/'.$this->_db->getCurrentYear().'&all','Logout'=>'logout'),
             '','Admin Manager');
 
         // delete user

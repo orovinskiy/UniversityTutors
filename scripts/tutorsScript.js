@@ -22,7 +22,7 @@ $(".checkbox-big").on("click", function () {
     let yearId = $(this).data("yearid");
 
     // Update database via ajax
-    $.post("/tutorsAjax", {
+    $.post("../tutorsAjax", {
         column: column,
         value: value,
         yearId: yearId
@@ -38,7 +38,7 @@ $(".tutor-select").on("change", function () {
     let yearId = $(this).data("yearid");
 
     // Update database via ajax
-    $.post("/tutorsAjax", {
+    $.post("../tutorsAjax", {
         column: column,
         value: value,
         yearId: yearId
@@ -67,7 +67,7 @@ $(".placement-button").on("click", function () {
     let yearId = input.data("yearid");
 
     // Update database via ajax
-    $.post("/tutorsAjax", {
+    $.post("../tutorsAjax", {
         column: column,
         value: value,
         yearId: yearId
@@ -85,7 +85,7 @@ $("#add-tutor-button").on("click", function () {
     let year = $(this).data("year");
 
     // Update database via ajax
-    $.post("/tutorsAjax", {
+    $.post("../tutorsAjax", {
         email: email,
         year: year
     }, function (result) {
@@ -93,7 +93,7 @@ $("#add-tutor-button").on("click", function () {
 
         //refresh page to load new user into table
         let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year + "&" + status);
+        window.location.href = ("../tutors/" + year + "&" + status);
     });
 });
 
@@ -116,7 +116,7 @@ $(".year-change").on("click", function () {
     //alert("This is the current year: "+ year + "Did we get the right button? : " +change);
 
     //refresh page with new year
-    window.location.href = ("/tutors/" + year + "&all");
+    window.location.href = ("../tutors/" + year + "&all");
 });
 
 // hide delete and import buttons on window click
@@ -148,13 +148,13 @@ $(".delete").on("click", function () {
         let user_id = $(this).data("userid");
 
         // ajax deletion
-        $.post("/tutorsAjax", {
+        $.post("../tutorsAjax", {
             delete: true,
             user_id: user_id
         });
 
         let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year + "&" + status);
+        window.location.href = ("../tutors/" + year + "&" + status);
     }
 });
 
@@ -165,12 +165,9 @@ $(".import").on("click", function () {
         let user_id = $(this).data("userid");
 
         // ajax deletion
-        $.post("/tutorsAjax", {
+        $.post("../tutorsAjax", {
             user_id: user_id
         });
-
-        let year = $("#year-current").data("year");
-        window.location.href = ("/tutors/" + year + "&" + status);
     }
 });
 
@@ -179,10 +176,10 @@ $("#current-year").on("click", function () {
 
     let year = $("#year-current").data("year");
 
-    $.post("/tutorsAjax", {
+    $.post("../tutorsAjax", {
         current_year: year
     });
 
     // refresh data
-    window.location.href = ("/tutors/" + year + "&" + status);
+    window.location.href = ("../tutors/" + year + "&" + status);
 });
