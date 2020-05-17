@@ -4,22 +4,8 @@ Page for admin viewing and management of tutor onboarding data.
 @author Keller Flint
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tutors</title>
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Font for dropdown caret -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- DataTables Styles -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<include href="views/navbar.html"/>
 
-    <link rel="stylesheet" type="text/css" href="../styles/tutorsStyle.css">
-</head>
-<body>
 <div class="content">
 
     <!-- Title and year info/controls -->
@@ -78,6 +64,7 @@ Page for admin viewing and management of tutor onboarding data.
             <th class="text-center">Sexual Misconduct</th>
             <th class="text-center">W4</th>
             <th class="text-center">Handbook Verification</th>
+            <th class="text-center">SPS</th>
             <th class="text-center">ADP Registration</th>
             <th class="text-center test">I-9</th>
             <th class="text-center">Orientation</th>
@@ -229,6 +216,23 @@ Page for admin viewing and management of tutor onboarding data.
                             </false>
                         </check>
                     </div>
+                </td>
+
+                <!-- SPS Form -->
+                <td>
+                    <select data-yearid="{{ @tutor['year_id'] }}" data-column="year_SPS"
+                            class="form-control tutor-select">
+                        <repeat group=" {{ @SPSOptions }}" key="{{ @key }}" value="{{ @value }}">
+                            <check if="{{ @key == @tutor['year_SPS'] }}">
+                                <true>
+                                    <option value="{{ @key }}" selected>{{ @value }}</option>
+                                </true>
+                                <false>
+                                    <option value="{{ @key }}">{{ @value }}</option>
+                                </false>
+                            </check>
+                        </repeat>
+                    </select>
                 </td>
 
                 <!-- ADP Enrollment -->

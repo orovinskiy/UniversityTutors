@@ -34,6 +34,10 @@ $("body").on("click","input",function()
         $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
     }
 
+    if($(this).attr("id") === "sps"){
+        $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
+    }
+
     //Post to makeBox to save the data
     $.post("../makeBox",
         {
