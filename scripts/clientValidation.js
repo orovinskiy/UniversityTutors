@@ -119,7 +119,7 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().trim() != "" && input.val().length !=14) {
+    if (input.val().trim() != "" && input.val().length <= 14) {
         isValid = true;
     }
     toggleErrors(input, valClass, !isValid, "Must be valid");

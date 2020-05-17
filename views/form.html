@@ -66,7 +66,7 @@
                         <label class="font-weight-bold">SSN</label><em>*</em>
                         <check if='{{ @databaseSsn !=""}}'>
                             <true>
-                                <span> <em>(We already have your SSN, update if there is any change</em>)</span>
+                                <span> <em>(We already have your SSN, update if there is any change)</em></span>
                                 <input type="text" class="form-control input ssnInput" name="ssn"
                                        value="{{ @ssn }}">
                                 <check if="{{ @errors['ssn'] }}">
@@ -84,9 +84,18 @@
                         </check>
                     </div>
                     <div class="form-group">
-                        <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                        <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
-                        <span class="err"> {{ @errors['check'] }}</span>
+                        <label class="font-weight-bold">Bio</label>
+                        <check if='{{ @bioText !="" }}'>
+                            <true>
+                                <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                                <span class="err"> {{ @errors['check'] }}</span>
+                            </true>
+                            <false>
+                                <span><em>(Not submitted yet)</em></span>
+                                <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                                <span class="err"> {{ @errors['check'] }}</span>
+                            </false>
+                        </check>
                     </div>
                 </div>
                 <!--div for image-->
