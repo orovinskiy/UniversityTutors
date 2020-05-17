@@ -419,7 +419,6 @@ class Database
      */
     function login($username, $password)
     {
-        //todo hash the password prior to creating the sql statement once we figure out how to securely store pwds
         //sql statement
         $sql = "SELECT * FROM User 
                 where user_email = ? and user_password = ?";

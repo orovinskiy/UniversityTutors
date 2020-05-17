@@ -8,6 +8,8 @@
 define("DB_DSN", "mysql:host=database;dbname=tutors");
 define("DB_USERNAME", "root");
 define("DB_PASSWORD", 'password');
+define("ENCRYPTION_KEY", 'SecurityForSSN');
+define("DECRYPTION_KEY", 'SecurityForSSN');
 
 /*
 Server Settings:

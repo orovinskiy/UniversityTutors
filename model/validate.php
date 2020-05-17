@@ -121,7 +121,6 @@ class Validate
     }
 
     /**Validating all the required fields name, phone, email, ssn, image
-     * @param bool $checkBox checkbox status
      * @param string $file user's selected file for image
      * @param string $newName name for file
      * @param int $param user id
@@ -129,7 +128,7 @@ class Validate
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($checkBox, $file, $newName, $param, $bio)
+    function validForm($file, $newName, $param, $bio)
     {
         global $f3;
         global $db;

@@ -161,7 +161,6 @@ class Controller
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
-
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -182,33 +181,26 @@ class Controller
             $this->_f3->set('phone', $_POST['phone']);
             $this->_f3->set('ssn', $_POST['ssn']);
             $this->_f3->set('bioText', $_POST['bio']);
-            $this->_f3->set('bioCheck', $_POST['bioCheck']);
 
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
-            if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
+            if ($this->_val->validForm($_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn'])) {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
                 }
-
                 //check param id
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
                         $_POST['phone'], $this->encryption($_POST['ssn']), trim($_POST['bio']));
-                    //check param id
-                    if ($param["id"] != 0) {
-                        $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
-                            $_POST['phone'], $_POST['ssn'], trim($_POST['bio']));
-                        $this->_db->updateEmail($param["id"], trim($_POST['email']));
+                    $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
-                        //if file name  is not empty save  file to uploads dir and store it in database
-                        if (!empty($_FILES['fileToUpload']['name'])) {
-                            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                            $this->_db->uploadTutorImage($randomFileName, $param["id"]);
-                        }
+                    //if file name  is not empty save  file to uploads dir and store it in database
+                    if (!empty($_FILES['fileToUpload']['name'])) {
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
+                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
@@ -251,12 +243,9 @@ class Controller
         // Non-NULL Initialization Vector for encryption
         $encryption_iv = '1234567891011121';
 
-        // Store the encryption key
-        $encryption_key = "SecurityForSSN";
-
         // Use openssl_encrypt() function to encrypt the data
         return openssl_encrypt($ssn, $ciphering,
-            $encryption_key, $options, $encryption_iv);
+            ENCRYPTION_KEY, $options, $encryption_iv);
     }
 
 
@@ -276,12 +265,9 @@ class Controller
         // Non-NULL Initialization Vector for decryption
         $decryption_iv = '1234567891011121';
 
-        // Store the decryption key
-        $decryption_key = "SecurityForSSN";
-
         // Use openssl_decrypt() function to decrypt the data
         return openssl_decrypt($encryptedSsn, $ciphering,
-            $decryption_key, $options, $decryption_iv);
+            DECRYPTION_KEY, $options, $decryption_iv);
     }
 
     /**
@@ -299,7 +285,6 @@ class Controller
         //when form is posted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //var_dump($_POST);
-           echo  md5($_POST['password']);
             //attempt to grab user info from login credentials
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
