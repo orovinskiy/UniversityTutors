@@ -2,7 +2,7 @@
    Form for OnBoarding process
    @author Laxmi Kandel
    -->
-<include href="views/navbar.html">
+<include href="views/navbar.html"/>
 
 <div class="container">
     <div class="jumbotron">
@@ -61,49 +61,50 @@
                         <div class="errors text-danger"></div>
                     </div>
                     <!--div for SSN-->
-                    <div class="form-group val-lessThan14 val-empty">
-                        <label class="font-weight-bold" for="ssn">SSN</label><em>*</em>
-                        <input type="text" class="form-control input " name="ssn" id="ssn"
-                               value="{{ @ssn }}">
-                        <check if="{{ @errors['ssn'] }}">
-                            <span class="err">{{ @errors['ssn'] }}</span>
-                        </check>
-                        <div class="errors text-danger"></div>
-                    </div>
-                    <div class="form-group">
-                        <check if="{{ @bioCheck === 'on' }}">
+                    <div class="form-group val-empty">
+                        <label class="font-weight-bold">SSN</label><em>*</em>
+                        <check if='{{ @databaseSsn !=""}}'>
                             <true>
-                                <input class="checkBio" type="checkbox" name="bioCheck" checked="checked">
-                                <label><b>Update your bio</b></label><br>
-                                <div class="form-group not-hidden bio-block">
-                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
-                                    <check if="{{ @errors['check'] }}">
-                                        <span class="err">{{ @errors['check'] }}</span>
-                                    </check>
-                                </div>
+                                <span> <em>(We already have your SSN, update if there is any change)</em></span>
+                                <input type="text" class="form-control input ssnInput" name="ssn"
+                                       value="{{ @ssn }}">
+                                <check if="{{ @errors['ssn'] }}">
+                                    <span class="err">{{ @errors['ssn'] }}</span>
+                                </check>
                             </true>
                             <false>
-                                <input class="checkBio" type="checkbox" name="bioCheck">
-                                <label>Update your bio</b></label><br>
-                                <div class="form-group hidden bio-block">
-                                    <label class="font-weight-bold">Bio</label><em>(optional)</em>
-                                    <textarea class="form-control input " name="bio"> {{ @bioText }}</textarea>
-                                </div>
+                                <input type="text" class="form-control input ssnInput" name="ssn"
+                                       value="{{ @ssn }}">
+                                <check if="{{ @errors['ssn'] }}">
+                                    <span class="err">{{ @errors['ssn'] }}</span>
+                                </check>
+                                <div class="errors text-danger"></div>
                             </false>
                         </check>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Bio</label>
+                        <check if='{{ @bioText =="" }}'>
+                        <span><em>(Not updated yet)</em></span>
+                        </check>
+                        <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                        <span class="err"> {{ @errors['check'] }}</span>
                     </div>
                 </div>
                 <!--div for image-->
                 <div class="col">
                     <div>
                         <div class="from-group">
+                            <label class="font-weight-bold" for="img">Upload profile picture</label>
+                            <check if ='{{ @image =="" }}'>
+                                <span> <em>(Not uploaded yet)</em></span>
+                            </check>
                             <input type="file" class="form-control-file" name="fileToUpload"
-                                   id="img"><em>(optional)</em>
+                                   id="img">
                         </div>
                         <!--div for image preview-->
                         <div>
-                            <img id="preview" src="../uploads/{{ @image }}" alt="Your Image">
+                            <img id="preview" src="../uploads/{{ @image }}" alt="Image will display here ">
                         </div>
                         <div class="errors text-danger"></div>
                     </div>

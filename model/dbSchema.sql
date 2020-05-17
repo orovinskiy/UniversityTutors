@@ -70,16 +70,16 @@ Test Data
 @author Dallas Sloan, Oleg
 */
 
-INSERT INTO User Values (default,"Bobby@mail.com","bobTroll!!",0),(default,"Andy@mail.com","AndyHot!!",0),(default,"CoolGuy@mail.com","notCool!!",0),
-(default,"Jasmine@mail.com","IgotNada!!",0),(default,"Admin@mail.com","Admin101!!",1),(default,"carGuy@mail.com","TrucksLOL!!",0),
-(default,"BenBro@mail.com","BenRules!!",0),(default,"meow@mail.com","CatKing!!",0),(default,"tiger@mail.com","tigerRule!!",0),
-(default,"HappyFam@mail.com","famisCool!!",0),(default,"flyinPho@mail.com","iLikePho!!",0),(default,"whoDis@mail.com","newPhone!!",0),
-(default,"jdoe@mail.greenriver.edu", "password", b'1'),
-(default, "kflint@mail.greenriver.edu", "password", b'1'),
-(default,"sguy@mail.greenriver.edu", "password", b'0'),
-(default,"tostrich@mail.greenriver.edu", "password", b'0'),
-(default,"test@mail.greenriver.edu", "password", b'0'),
-(default,"jsmith@mail.greenriver.edu", "password", b'0');
+INSERT INTO User Values (default,"Bobby@mail.com",MD5("bobTroll!!"),0),(default,"Andy@mail.com",MD5("AndyHot!!"),0),(default,"CoolGuy@mail.com",MD5("notCool!!"),0),
+(default,"Jasmine@mail.com",MD5("IgotNada!!"),0),(default,"Admin@mail.com",MD5("Admin101!!"),1),(default,"carGuy@mail.com",MD5("TrucksLOL!!"),0),
+(default,"BenBro@mail.com",MD5("BenRules!!"),0),(default,"meow@mail.com",MD5("CatKing!!"),0),(default,"tiger@mail.com",MD5("tigerRule!!"),0),
+(default,"HappyFam@mail.com",MD5("famisCool!!"),0),(default,"flyinPho@mail.com",MD5("iLikePho!!"),0),(default,"whoDis@mail.com",MD5("newPhone!!"),0),
+(default,"jdoe@mail.greenriver.edu", MD5("password"), b'1'),
+(default, "kflint@mail.greenriver.edu", MD5("password"), b'1'),
+(default,"sguy@mail.greenriver.edu", MD5("password"), b'0'),
+(default,"tostrich@mail.greenriver.edu", MD5("password"), b'0'),
+(default,"test@mail.greenriver.edu", MD5("password"), b'0'),
+(default,"jsmith@mail.greenriver.edu", MD5("password"), b'0');
 
 INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","image.jpg",null),("2","Andy","Shmuck","(253) 786-5426","937-20-0573","image.jpg",null),
 ("3","Richard","Fanny","(222) 222-4444","073-96-1074","image.jpg",null),("4","Jasmine","Riely","(206) 037-1056","658-43-0123","image.jpg",null),

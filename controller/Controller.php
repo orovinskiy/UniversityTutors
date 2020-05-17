@@ -180,6 +180,7 @@ class Controller
         //checking to see if user is logged in. If not logged in, will redirect to login page
         //$this->isLoggedIn(); //comment to remove the login requirement
 
+
         //this is for building up a navbar
         $this->navBuilder(array('Checklist'=>'../checklist/'.$param["id"],'Logout'=>'../logout')
             ,array('../styles/formStyle.css'), 'Onboarding Form');
@@ -189,7 +190,7 @@ class Controller
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
         $this->_f3->set("lastName", $this->_db->getTutorById($param["id"])["tutor_last"]);
         $this->_f3->set("phone", $this->_db->getTutorById($param["id"])["tutor_phone"]);
-        $this->_f3->set("ssn", $this->_db->getTutorById($param["id"])["tutor_ssn"]);
+        $this->_f3->set("databaseSsn", ($this->_db->getTutorById($param["id"])["tutor_ssn"]));
         $this->_f3->set("bioText", $this->_db->getTutorById($param["id"])["tutor_bio"]);
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
         //get the image form the database
@@ -204,18 +205,20 @@ class Controller
             $this->_f3->set('phone', $_POST['phone']);
             $this->_f3->set('ssn', $_POST['ssn']);
             $this->_f3->set('bioText', $_POST['bio']);
-            $this->_f3->set('bioCheck', $_POST['bioCheck']);
 
             //store randomly generated string for user input image
             $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
-
             //if the user input in form is valid
-            if ($this->_val->validForm(isset($_POST['bioCheck']), $_FILES['fileToUpload'],
+            if ($this->_val->validForm($_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
+                //check if user input ssn for update if not pass the database value
+                if (empty($_POST['ssn'])) {
+                    $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
+                }
                 //check param id
                 if ($param["id"] != 0) {
                     $this->_db->updateTutor($param["id"], trim($_POST['firstName']), trim($_POST['lastName']),
-                        $_POST['phone'], $_POST['ssn'], trim($_POST['bio']));
+                        $_POST['phone'], $this->encryption($_POST['ssn']), trim($_POST['bio']));
                     $this->_db->updateEmail($param["id"], trim($_POST['email']));
 
                     //if file name  is not empty save  file to uploads dir and store it in database
@@ -223,13 +226,12 @@ class Controller
                         move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
                         $this->_db->uploadTutorImage($randomFileName, $param["id"]);
                     }
+                    $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
-                $this->_f3->reroute("/checklist/" . $param["id"]);
             }
         }
         $view = new Template();
         echo $view->render('views/form.html');
-
     }
 
     /**
@@ -248,6 +250,50 @@ class Controller
         return $randomString;
     }
 
+
+    /**function to encrypt the user input SSN
+     * @param string $ssn takes user input SSN
+     * @return string encrypted string if successful otherwise false
+     * @author  Laxmi
+     */
+    function encryption($ssn)
+    {
+        //store cipher method
+        $ciphering = "AES-128-CTR";
+
+        // Use OpenSSl Encryption method
+        $options = 0;
+
+        // Non-NULL Initialization Vector for encryption
+        $encryption_iv = '1234567891011121';
+
+        // Use openssl_encrypt() function to encrypt the data
+        return openssl_encrypt($ssn, $ciphering,
+            ENCRYPTION_KEY, $options, $encryption_iv);
+    }
+
+
+    /**
+     * function to decrypt user input SSN
+     * @param string $encryptedSsn takes encrypted string
+     * @return string decrypted string if successful otherwise false
+     */
+    function decryption($encryptedSsn)
+    {
+        //store cipher method
+        $ciphering = "AES-128-CTR";
+
+        // Use OpenSSl Encryption method
+        $options = 0;
+
+        // Non-NULL Initialization Vector for decryption
+        $decryption_iv = '1234567891011121';
+
+        // Use openssl_decrypt() function to decrypt the data
+        return openssl_decrypt($encryptedSsn, $ciphering,
+            DECRYPTION_KEY, $options, $decryption_iv);
+    }
+
     /**
      * Function that handles the login page
      * @author Dallas Sloan
@@ -257,18 +303,16 @@ class Controller
         //var_dump($_SESSION);
 
         //checking to see if user if already logged in if so redirects to appropriate page
-        if(isset($_SESSION['user'])){
+        if (isset($_SESSION['user'])) {
             $this->redirects();
         }
         //when form is posted
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //var_dump($_POST);
-
-            //todo work with Laxmi to user her js validation file to work with my login form
             //attempt to grab user info from login credentials
-            $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
+            $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
-            if (!empty($userLogin)){
+            if (!empty($userLogin)) {
                 //instantiate new user object
                 $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
                 //saving object to session
@@ -279,8 +323,7 @@ class Controller
                 //call redirects method to redirect to correct page
                 $this->redirects();
 
-            }
-            else {
+            } else {
                 //login info was not valid set error message
                 $this->_f3->set('loginError', "Invalid Username and/or Password");
             }
@@ -310,19 +353,18 @@ class Controller
     private function redirects()
     {
         //checking to see if user is an admin or tutor and redirecting accordingly
-        if ($_SESSION['user']->getUserIsAdmin() == 1){
+        if ($_SESSION['user']->getUserIsAdmin() == 1) {
             //get current year
             $year = $this->_db->getCurrentYear();
-            $this->_f3->reroute("/tutors/$year");
+            $this->_f3->reroute("/tutors/$year&all");
 
-        }
-        else {
+
+        } else {
             //checking to see if user has filled out their basic info, if not redirected to form
             $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
-            if ($userInfo['tutor_last'] == null){
+            if ($userInfo['tutor_last'] == null) {
                 $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
-            }
-            else { //form has been filled out redirect to checklist
+            } else { //form has been filled out redirect to checklist
                 $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
             }
         }
@@ -384,6 +426,7 @@ class Controller
 
         $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+        $this->_f3->set("decryptedSsn", $this->decryption($this->_db->getTutorById($param["id"])["tutor_ssn"]));
 
         $view = new Template();
         echo $view->render('views/tutorInfo.html');

@@ -26,10 +26,7 @@ img {
 .jumbotron {
     background-color: cornflowerblue;
     color: white;
-}
-
-.hidden {
-    display: none;
+    margin-top: 5px;
 }
 
 legend {
@@ -37,10 +34,6 @@ legend {
     font-size: 125%;
     font-variant: small-caps;
     font-weight: bold;
-}
-
-.not-hidden{
-    display: block;
 }
 
 

@@ -5,25 +5,6 @@
 
 console.log("loaded client validation");
 
-
-//get checkbox using it's id
-let bioTextArea = document.getElementsByClassName("checkBio")[0];
-//onclick call a function
-bioTextArea.onclick = toggleBioTextArea;
-
-/**
- * this function displays/hide text area for bio when checked/unchecked
- */
-function toggleBioTextArea() {
-    let getBioTextArea = document.getElementsByClassName("bio-block")[0];
-    if(bioTextArea.checked){
-        getBioTextArea.style.display ="block";
-    }
-    else{
-        getBioTextArea.style.display ="none";
-    }
-}
-
 //Auto formatting for phone number
 $('#phone').keyup(function () {
     let valPhone = this.value.replace(/\D/g, '');
@@ -45,7 +26,7 @@ $('#phone').keyup(function () {
 });
 
 ////Auto formatting for SSN
-$('#ssn').keyup(function () {
+$('.ssnInput').keyup(function () {
     let val = this.value.replace(/\D/g, '');
     let newVal = '';
     if (val.length > 4) {
@@ -77,7 +58,7 @@ function readURL(input) {
         reader.onload = function (e) {
             $('#preview').attr('src', e.target.result);
         }
-        reader.readAsDataURL(input.files[0]); 
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -100,7 +81,7 @@ let validations = [
  */
 function isEmpty(input, valClass) {
     let isValid = false;
-    if (input.val().trim() === "") {
+    if (input.val() == "") {
         isValid = true;
     }
     toggleErrors(input, valClass, !isValid, "Cannot be empty.");
@@ -138,10 +119,10 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().trim() != "") {
+    if (input.val().trim() != "" && input.val().length <= 14) {
         isValid = true;
     }
-    toggleErrors(input, valClass, isValid, "Must be valid");
+    toggleErrors(input, valClass, !isValid, "Must be valid");
     return isValid;
 }
 /**
