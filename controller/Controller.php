@@ -342,7 +342,7 @@ class Controller
 
     /**
      * Rendering and logic for admin management page
-     * @author Dallas Sloan
+     * @author Keller Flint
      */
     function adminPage()
     {
@@ -357,7 +357,11 @@ class Controller
 
         // add user
         if (isset($_POST["email"])) {
-            $this->_db->addAdmin($_POST["email"]);
+            if($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
+                $this->_db->addAdmin($_POST["email"]);
+            } else {
+                $this->_f3->set("emailError", "Please enter a valid email address.");
+            }
         }
 
         $this->_f3->set("admins", $this->_db->getAdmins());
