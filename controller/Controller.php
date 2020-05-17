@@ -13,9 +13,9 @@ class Controller
 
     /**
      * This function gets the info to display a correct navbar
-     * @param $link array of links to get to different pages
-     * @param $style array of stylesheet links to connect the correct one
-     * @param $title string This will be the title of the page
+     * @param array $link array of links to get to different pages
+     * @param array $style array of stylesheet links to connect the correct one
+     * @param string $title This will be the title of the page
      * @author Oleg
      */
     private function navBuilder($link,$style,$title)
