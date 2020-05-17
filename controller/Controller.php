@@ -5,6 +5,9 @@
  * @author Keller Flint
  */
 
+//including the mail.php file to enable emailing
+require_once ("mail.php");
+
 class Controller
 {
     private $_f3; //router
@@ -84,9 +87,15 @@ class Controller
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         } else if (isset($_POST["email"])) {
-            // TODO create function to generate and send email to tutor
+            // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"])) {
-                echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+                //send email
+                $success = $this->sendEmail($_POST["email"]);
+                //checking to see if email was sent successfully
+                if (!$success) {
+                    echo "Sending of email was unsuccessful";
+                }
+                    echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
             } else {
                 echo "ERROR: Email already exists";
             }
@@ -431,4 +440,22 @@ class Controller
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
     }
+
+    /**
+     * Function that creates and sends an email to specified recipient
+     * @param String $to email address of email recipient
+     * @return bool returns true if email was sent successfully false if not sent successfully
+     * @throws phpmailerException
+     * @author Dallas Sloan
+     */
+    function sendEmail($to){
+        //creating variables for input params for email
+        $from = 'universitytutors@kold-tutors.greenriverdev.com';
+        $fromName = "University Tutors Admin";
+        $subject = "Welcome New Tutor!";
+        $body = "We will need to get with Liz to know exactly what she wants to send in the email";
+        $success = smtpmailer($to, $from, $fromName, $subject, $body);
+        return $success;
+    }
+
 }
