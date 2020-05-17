@@ -84,17 +84,11 @@
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold">Bio</label>
-                        <check if='{{ @bioText !="" }}'>
-                            <true>
-                                <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
-                                <span class="err"> {{ @errors['check'] }}</span>
-                            </true>
-                            <false>
-                                <span><em>(Not submitted yet)</em></span>
-                                <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
-                                <span class="err"> {{ @errors['check'] }}</span>
-                            </false>
+                        <check if='{{ @bioText =="" }}'>
+                        <span><em>(Not updated yet)</em></span>
                         </check>
+                        <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                        <span class="err"> {{ @errors['check'] }}</span>
                     </div>
                 </div>
                 <!--div for image-->
