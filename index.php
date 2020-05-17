@@ -74,9 +74,9 @@ $f3->route('GET|POST /form/@id', function ($f3, $param) {
  * Route for admin viewing and management of tutors.
  * @author Keller Flint
  */
-$f3->route('GET /tutors/@year', function ($f3, $param) {
+$f3->route('GET /tutors/@year&@status', function ($f3, $param) {
     global $controller;
-    $controller->tutorsPage($param['year']);
+    $controller->tutorsPage($param);
 });
 
 /**
@@ -89,12 +89,37 @@ $f3->route('POST /tutorsAjax', function () {
 });
 
 /**
+ * Route for login page
+ * @author Dallas Sloan
+ */
+$f3->route('GET|POST /login', function () {
+    global $controller;
+    $controller->login();
+});
+
+/**
+ * Route for Logout page.
+ * @author Dallas Sloan
+ */
+$f3->route('GET /logout', function () {
+    global $controller;
+    $controller->logout();
+});
+/**
  * Route for admin management
  * @author Keller Flint
  */
 $f3->route('GET|POST /admin', function () {
     global $controller;
     $controller->adminPage();
+});
+
+/**
+ * Route for tutor info page
+ */
+$f3->route('GET /tutor/@id', function ($f3, $param) {
+    global $controller;
+    $controller->tutorInfoPage($param);
 });
 
 $f3->run();

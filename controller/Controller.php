@@ -12,6 +12,20 @@ class Controller
     private $_val;
 
     /**
+     * This function gets the info to display a correct navbar
+     * @param $link array of links to get to different pages
+     * @param $style array of stylesheet links to connect the correct one
+     * @param $title string This will be the title of the page
+     * @author Oleg
+     */
+    private function navBuilder($link,$style,$title)
+    {
+        $this->_f3->set('link',$link);
+        $this->_f3->set('style',$style);
+        $this->_f3->set('title',$title);
+    }
+
+    /**
      * Controller constructor
      * @param $f3 Object The fat free instance
      */
@@ -24,17 +38,25 @@ class Controller
 
     /**
      * Logic and rendering for tutors page
-     * @param string $year The year to load tutors data for
+     * @param array $param The parameters passed to the route
      * @author Keller Flint
      */
-    function tutorsPage($year)
+    function tutorsPage($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
+        //This is for building up a navbar
+        $this->navBuilder(array('Admin Manager'=>'../admin','Logout'=>'../logout'),
+            array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+                'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
+                '../styles/tutorsStyle.css'),'Tutors');
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
 
         // Get tutor data for current year
-        $tutorsData = $this->_db->getTutors($year);
+        $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
 
         // Set values for select dropdowns
         $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
@@ -42,8 +64,9 @@ class Controller
         $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
         $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
         $this->_f3->set("SPSOptions", array("none" => "Not Done", "tutor" => "Tutor Done", "admin" => "Admin Done"));
-        $this->_f3->set("year", $year);
+        $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
+        $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
@@ -94,6 +117,13 @@ class Controller
      */
     function checklist($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
+        //this is for building up a navbar
+        $this->navBuilder(array('Form'=>'../form/'.$param['userId'],'Logout'=>'../logout'),array('../styles/checklist.css')
+            ,'Tutor Checklist');
+
         //get the current year
         $currentYear = $this->_db->getCurrentYear();
 
@@ -147,6 +177,13 @@ class Controller
 
     function formPage($param)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        //$this->isLoggedIn(); //comment to remove the login requirement
+
+        //this is for building up a navbar
+        $this->navBuilder(array('Checklist'=>'../checklist/'.$param["id"],'Logout'=>'../logout')
+            ,array('../styles/formStyle.css'), 'Onboarding Form');
+
         global $dirName;
         //retrieving data form database
         $this->_f3->set("firstName", $this->_db->getTutorById($param["id"])["tutor_first"]);
@@ -212,11 +249,106 @@ class Controller
     }
 
     /**
+     * Function that handles the login page
+     * @author Dallas Sloan
+     */
+    function login()
+    {
+        //var_dump($_SESSION);
+
+        //checking to see if user if already logged in if so redirects to appropriate page
+        if(isset($_SESSION['user'])){
+            $this->redirects();
+        }
+        //when form is posted
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //var_dump($_POST);
+
+            //todo work with Laxmi to user her js validation file to work with my login form
+            //attempt to grab user info from login credentials
+            $userLogin = $this->_db->login($_POST['username'], $_POST['password']);
+            //check to see if valid input was found
+            if (!empty($userLogin)){
+                //instantiate new user object
+                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                //saving object to session
+                $_SESSION['user'] = $user;
+                //setting session login to true
+                //$_SESSION['user'] = true;
+
+                //call redirects method to redirect to correct page
+                $this->redirects();
+
+            }
+            else {
+                //login info was not valid set error message
+                $this->_f3->set('loginError', "Invalid Username and/or Password");
+            }
+
+        }
+        $view = new Template();
+        echo $view->render("views/login.html");
+    }
+
+    /**
+     * Function that handles the logout process, which resets the session and reroutes to login page
+     * @author Dallas Sloan
+     */
+    function logout()
+    {
+        //destroy session
+        $_SESSION = array();
+
+        //redirect to login page
+        $this->_f3->reroute('/login');
+    }
+
+    /**
+     *private method used to correctly redirect user upon logging into login page
+     * @author Dallas Sloan
+     */
+    private function redirects()
+    {
+        //checking to see if user is an admin or tutor and redirecting accordingly
+        if ($_SESSION['user']->getUserIsAdmin() == 1){
+            //get current year
+            $year = $this->_db->getCurrentYear();
+            $this->_f3->reroute("/tutors/$year");
+
+        }
+        else {
+            //checking to see if user has filled out their basic info, if not redirected to form
+            $userInfo = $this->_db->getTutorById($_SESSION['user']->getUserID());
+            if ($userInfo['tutor_last'] == null){
+                $this->_f3->reroute("/form/" . $_SESSION['user']->getUserID());
+            }
+            else { //form has been filled out redirect to checklist
+                $this->_f3->reroute("/checklist/" . $_SESSION['user']->getUserID());
+            }
+        }
+    }
+
+    /**
+     * A function to check whether or not a user object has been set for the current session. If it is set the user
+     * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @author Dallas Sloan
+     */
+    private function isLoggedIn()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->_f3->reroute('/login');
+        }
+    }
+
+    /**
      * Rendering and logic for admin management page
+     * @author Dallas Sloan
      */
     function adminPage()
     {
         // TODO check if logged in user is admin
+        $this->navBuilder(array('Tutors Info'=>'/tutors/'.$this->_db->getCurrentYear().'&all','Logout'=>'logout'),
+            '','Admin Manager');
 
         // delete user
         if (isset($_POST["id"])) {
@@ -232,5 +364,24 @@ class Controller
 
         $view = new Template();
         echo $view->render('views/admin.html');
+    }
+
+    /**
+     * Page displaying additional information about a tutor
+     *
+     * @param array $param Param array containing the id of the tutor we want to load
+     * @author Keller Flint
+     */
+    function tutorInfoPage($param) {
+
+        //This is the navbar generating
+        $this->navBuilder(array('Tutors Info'=>'../tutors/'.$this->_db->getCurrentYear().'&all',
+            'Admin Manager'=>'../admin', 'Logout'=>'../logout'),'','Tutor');
+
+        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
+        $this->_f3->set("user", $this->_db->getUserById($param["id"]));
+
+        $view = new Template();
+        echo $view->render('views/tutorInfo.html');
     }
 }
