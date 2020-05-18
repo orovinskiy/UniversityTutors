@@ -432,7 +432,7 @@ class Controller
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
 
-        $tutor =  $this->_db->getTutorById($param["id"]);
+        $tutor = $this->_db->getTutorById($param["id"]);
 
         $this->_f3->set("tutor", $tutor);
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
@@ -469,7 +469,13 @@ class Controller
     function adminAjax()
     {
         if (isset($_POST["delete_id"])) {
-            $this->_db->deleteUser($_POST["delete_id"]);
+
+            // Admins cannot delete themselves
+            if ($_SESSION['user']->getUserID() != $_POST["delete_id"]) {
+                $this->_db->deleteUser($_POST["delete_id"]);
+            } else {
+                echo "Admins cannot delete themselves";
+            }
         }
     }
 

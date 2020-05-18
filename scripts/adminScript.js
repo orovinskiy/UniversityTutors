@@ -7,8 +7,11 @@ $(".delete").on("click", function () {
 
         // Update database via ajax
         $.post("../adminAjax", {
-            delete_id: id,
-            success: function () {
+            delete_id: id
+        }, function (result) {
+            if (result) {
+                alert("ERROR: " + result);
+            } else {
                 window.location.href = ("../admin");
             }
         });
