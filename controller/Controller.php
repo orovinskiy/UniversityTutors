@@ -6,7 +6,7 @@
  */
 
 //including the mail.php file to enable emailing
-require_once ("mail.php");
+require_once("mail.php");
 
 class Controller
 {
@@ -21,11 +21,11 @@ class Controller
      * @param string $title This will be the title of the page
      * @author Oleg
      */
-    private function navBuilder($link,$style,$title)
+    private function navBuilder($link, $style, $title)
     {
-        $this->_f3->set('link',$link);
-        $this->_f3->set('style',$style);
-        $this->_f3->set('title',$title);
+        $this->_f3->set('link', $link);
+        $this->_f3->set('style', $style);
+        $this->_f3->set('title', $title);
     }
 
     /**
@@ -50,10 +50,10 @@ class Controller
         //$this->isLoggedIn(); //comment to remove the login requirement
 
         //This is for building up a navbar
-        $this->navBuilder(array('Admin Manager'=>'../admin','Logout'=>'../logout'),
+        $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
                 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
-                '../styles/tutorsStyle.css'),'Tutors');
+                '../styles/tutorsStyle.css'), 'Tutors');
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -88,16 +88,18 @@ class Controller
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor DONE!!
-            if ($this->_val->uniqueEmail($_POST["email"])) {
+            if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //send email
                 $success = $this->sendEmail($_POST["email"]);
                 //checking to see if email was sent successfully
                 if (!$success) {
                     echo "Sending of email was unsuccessful";
+                } else {
+                    echo "Email successfully sent to " . $_POST["email"];
                 }
-                    echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+                $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
             } else {
-                echo "ERROR: Email already exists";
+                echo "Invalid email address";
             }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
@@ -130,8 +132,8 @@ class Controller
         //$this->isLoggedIn(); //comment to remove the login requirement
 
         //this is for building up a navbar
-        $this->navBuilder(array('Form'=>'../form/'.$param['userId'],'Logout'=>'../logout'),array('../styles/checklist.css')
-            ,'Tutor Checklist');
+        $this->navBuilder(array('Form' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
+            , 'Tutor Checklist');
 
         //get the current year
         $currentYear = $this->_db->getCurrentYear();
@@ -167,7 +169,7 @@ class Controller
             "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
                 "Column" => "year_offer_letter", "id" => "offer-letter"),
             "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id"=>"orientation"),
+                "Column" => "year_orientation", "id" => "orientation"),
             "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
             "SPS" => array("Value" => $checkBoxes['year_SPS'], "Column" => "year_SPS", "id" => "sps"),
             "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
@@ -191,8 +193,8 @@ class Controller
 
 
         //this is for building up a navbar
-        $this->navBuilder(array('Checklist'=>'../checklist/'.$param["id"],'Logout'=>'../logout')
-            ,array('../styles/formStyle.css'), 'Onboarding Form');
+        $this->navBuilder(array('Checklist' => '../checklist/' . $param["id"], 'Logout' => '../logout')
+            , array('../styles/formStyle.css'), 'Onboarding Form');
 
         global $dirName;
         //retrieving data form database
@@ -398,17 +400,13 @@ class Controller
     function adminPage()
     {
         // TODO check if logged in user is admin
-        $this->navBuilder(array('Tutors Info'=>'../tutors/'.$this->_db->getCurrentYear().'&all','Logout'=>'logout'),
-            '','Admin Manager');
 
-        // delete user
-        if (isset($_POST["id"])) {
-            $this->_db->deleteUser($_POST["id"]);
-        }
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
+            '', 'Admin Manager');
 
         // add user
         if (isset($_POST["email"])) {
-            if($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
+            if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 $this->_db->addAdmin($_POST["email"]);
             } else {
                 $this->_f3->set("emailError", "Please enter a valid email address.");
@@ -427,15 +425,19 @@ class Controller
      * @param array $param Param array containing the id of the tutor we want to load
      * @author Keller Flint
      */
-    function tutorInfoPage($param) {
+    function tutorInfoPage($param)
+    {
 
         //This is the navbar generating
-        $this->navBuilder(array('Tutors Info'=>'../tutors/'.$this->_db->getCurrentYear().'&all',
-            'Admin Manager'=>'../admin', 'Logout'=>'../logout'),'','Tutor');
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
 
-        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
+        $tutor = $this->_db->getTutorById($param["id"]);
+
+        $this->_f3->set("tutor", $tutor);
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
-        $this->_f3->set("decryptedSsn", $this->decryption($this->_db->getTutorById($param["id"])["tutor_ssn"]));
+
+        $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
 
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
@@ -448,7 +450,8 @@ class Controller
      * @throws phpmailerException
      * @author Dallas Sloan
      */
-    function sendEmail($to){
+    function sendEmail($to)
+    {
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
         $fromName = "University Tutors Admin";
@@ -456,6 +459,24 @@ class Controller
         $body = "We will need to get with Liz to know exactly what she wants to send in the email";
         $success = smtpmailer($to, $from, $fromName, $subject, $body);
         return $success;
+    }
+
+    /**
+     * Ajax logic for admin page
+     *
+     * @author Keller Flint
+     */
+    function adminAjax()
+    {
+        if (isset($_POST["delete_id"])) {
+
+            // Admins cannot delete themselves
+            if ($_SESSION['user']->getUserID() != $_POST["delete_id"]) {
+                $this->_db->deleteUser($_POST["delete_id"]);
+            } else {
+                echo "Admins cannot delete themselves";
+            }
+        }
     }
 
 }

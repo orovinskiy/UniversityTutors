@@ -122,4 +122,12 @@ $f3->route('GET /tutor/@id', function ($f3, $param) {
     $controller->tutorInfoPage($param);
 });
 
+/**
+ * Route for adminAjax
+ */
+$f3->route('POST /adminAjax', function () {
+    global $controller;
+    $controller->adminAjax();
+});
+
 $f3->run();
