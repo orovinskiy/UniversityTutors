@@ -42,7 +42,7 @@
                 <div class="col">
                     <!--div for email-->
                     <div class="form-group  val-lessThan255 val-empty val-hasSpaces">
-                        <label class="font-weight-bold" for="email">Email </label><em>(update email if you want)</em>
+                        <label class="font-weight-bold" for="email">Email </label>
                         <input type="text" class="form-control input" name="email" id="email"
                                value="{{ @email }}">
                         <check if="{{ @errors['email'] }}">
@@ -65,7 +65,8 @@
                         <label class="font-weight-bold">SSN</label><em>*</em>
                         <check if='{{ @databaseSsn !=""}}'>
                             <true>
-                                <span> <em>(We already have your SSN, update if there is any change)</em></span>
+                                <!-- No longer need words -->
+                                <!--<span> <em>(We already have your SSN, update if there is any change)</em></span>-->
                                 <input type="text" class="form-control input ssnInput" name="ssn"
                                        value="{{ @ssn }}">
                                 <check if="{{ @errors['ssn'] }}">
@@ -84,11 +85,12 @@
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold">Bio</label>
-                        <check if='{{ @bioText =="" }}'>
+                        <!--<check if='{{ @bioText =="" }}'>
                         <span><em>(Not updated yet)</em></span>
-                        </check>
-                        <textarea class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
+                        </check>--> <!--Removing the not updated yet text, not needed. [DS] -->
+                        <textarea rows = 8 class="form-control input clearText" name="bio"> {{ @bioText }}</textarea>
                         <span class="err"> {{ @errors['check'] }}</span>
+                        <h5 id = "count" class = mt-2></h5> <!-- Area for text counter -->
                     </div>
                 </div>
                 <!--div for image-->

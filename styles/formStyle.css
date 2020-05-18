@@ -3,6 +3,12 @@ Styles for onboarding form
 @author Laxmi Kandel
  */
 
+#count {
+    font-size: x-small;
+    color: #878a85;
+    padding-top: 1px;
+}
+
 .err {
     color: #dc3545;
     text-align: center;
