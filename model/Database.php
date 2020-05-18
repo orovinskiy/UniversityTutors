@@ -187,14 +187,16 @@ class Database
      * @return int The new user's id
      * @author Keller Flint
      */
-    function addNewTutor($year, $email)
+    function addNewTutor($year, $email, $password)
     {
+        //hash the password parameter
+        $password = md5($password);
         // add new user
-        $sql = "insert into User values(default, ?, MD5('newTutors'), b'0')";
+        $sql = "insert into User values(default, ?, ?, b'0')";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$email]);
+        $statement->execute([$email, $password]);
 
         $id = $this->_dbh->lastInsertId();
 

@@ -89,15 +89,17 @@ class Controller
         } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
+                //creating temp password and add new tutor
+                $tempPassword = $this->generateRandomString();
+                $this->_db->addNewTutor($_POST["year"], $_POST["email"], $tempPassword);
                 //send email
-                $success = $this->sendEmail($_POST["email"]);
+                $success = $this->sendEmail($_POST["email"], $tempPassword);
                 //checking to see if email was sent successfully
                 if (!$success) {
                     echo "Sending of email was unsuccessful";
                 } else {
                     echo "Email successfully sent to " . $_POST["email"];
                 }
-                $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
             } else {
                 echo "Invalid email address";
             }
@@ -451,17 +453,21 @@ class Controller
     /**
      * Function that creates and sends an email to specified recipient
      * @param String $to email address of email recipient
+     * @param String $tempPassword randomly generated password
      * @return bool returns true if email was sent successfully false if not sent successfully
      * @throws phpmailerException
      * @author Dallas Sloan
      */
-    function sendEmail($to)
+    function sendEmail($to, $tempPassword)
     {
+        $loginLink = "<a href='http://kold-tutors.greenriverdev.com/UniversityTutors/login'>Login Here</a>";
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
         $fromName = "University Tutors Admin";
         $subject = "Welcome New Tutor!";
-        $body = "We will need to get with Liz to know exactly what she wants to send in the email";
+        $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
+                Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
+                "<p>$loginLink</p>";
         $success = smtpmailer($to, $from, $fromName, $subject, $body);
         return $success;
     }
