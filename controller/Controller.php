@@ -132,7 +132,7 @@ class Controller
         //$this->isLoggedIn(); //comment to remove the login requirement
 
         //this is for building up a navbar
-        $this->navBuilder(array('Form' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
+        $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
             , 'Tutor Checklist');
 
         //get the current year
