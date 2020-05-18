@@ -119,7 +119,9 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().trim() != "" && input.val().length <= 14) {
+    //inputting 15 for 1 character buffer when user types too quickly, js will correct length,
+    // don't need the error message to stay when it's auto-corrected **edited by DS**
+    if (input.val().trim() != "" && input.val().length > 15) {
         isValid = true;
     }
     toggleErrors(input, valClass, !isValid, "Must be valid");
