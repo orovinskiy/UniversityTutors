@@ -155,7 +155,7 @@ class Controller
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
-        $this->_f3->set('userID', $checkBoxes['user_id']);
+        $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
         $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
             "Column" => "year_ADP", "id" => "adp"),
