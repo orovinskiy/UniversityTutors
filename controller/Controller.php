@@ -206,6 +206,11 @@ class Controller
         $this->_f3->set("email", $this->_db->getUserById($param["id"])["user_email"]);
         //get the image form the database
         $this->_f3->set("image", $this->_db->getTutorById($param["id"])["tutor_image"]);
+        //getting ssn decrypting and only showing last 4 digits and setting hive
+        $ssn = $this->decryption($this->_db->getTutorByID($param["id"])['tutor_ssn']);
+        $masked = $this->ssnMask($ssn);
+        //echo $masked;
+        $this->_f3->set("ssn", $masked);
 
         //when request is sent
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -223,7 +228,7 @@ class Controller
             if ($this->_val->validForm($_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
-                if (empty($_POST['ssn'])) {
+                if (empty($_POST['ssn']) || substr($_POST['ssn'], 0, 3) == "XXX") {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
                 }
                 //check param id
@@ -477,6 +482,13 @@ class Controller
                 echo "Admins cannot delete themselves";
             }
         }
+    }
+
+    private function ssnMask($ssn)
+    {
+        $lastFour  = substr($ssn, -4);
+        $masked = "XXX-XX-".$lastFour;
+        return $masked;
     }
 
 }
