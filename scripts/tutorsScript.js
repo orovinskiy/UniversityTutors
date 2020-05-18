@@ -178,8 +178,8 @@ $("#current-year").on("click", function () {
 
     $.post("../tutorsAjax", {
         current_year: year
+    }, function () {
+        // refresh data
+        window.location.href = ("../tutors/" + year + "&" + status);
     });
-
-    // refresh data
-    window.location.href = ("../tutors/" + year + "&" + status);
 });
