@@ -502,9 +502,38 @@ class Controller
      */
     private function ssnMask($ssn)
     {
-        $lastFour  = substr($ssn, -4);
-        $masked = "XXX-XX-".$lastFour;
+        $lastFour = substr($ssn, -4);
+        $masked = "XXX-XX-" . $lastFour;
         return $masked;
+    }
+
+    /**
+     * Page to update a user's password
+     *
+     * @param int $id The user id
+     * @author Keller Flint
+     */
+    function passwordPage($id)
+    {
+        if ($_SESSION['user']->getUserID() != $id) {
+            $this->_f3->reroute("/login");
+        }
+
+        if (isset($_POST["new"])) {
+            if ($this->_db->confirmPassword($id, md5($_POST["current"]))) {
+                if ($_POST["new"] == $_POST["confirm"]) {
+                    $this->_db->updatePassword($id, md5($_POST["new"]));
+                    $this->redirects();
+                } else {
+                    $this->_f3->set("confirmError", "Passwords do not match");
+                }
+            } else {
+                $this->_f3->set("passwordError", "Invalid login credentials");
+            }
+        }
+
+        $view = new Template();
+        echo $view->render('views/password.html');
     }
 
 }

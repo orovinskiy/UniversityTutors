@@ -129,6 +129,7 @@
             <check if="{{ @errors['wrongFileType'] }}">
                 <span class="err text-danger">{{ @errors['wrongFileType'] }}</span>
             </check>
+            <a class="btn btn-info" href="../reset/{{@SESSION['user']->getUserID()}}">Reset Password</a>
         </fieldset>
     </form>
 </div>

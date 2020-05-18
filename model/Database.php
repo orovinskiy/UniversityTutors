@@ -495,4 +495,39 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC)["user_id"] != NULL;
     }
 
+    /**
+     * Returns true if password is correct for the given user
+     *
+     * @param int $userId The user's id
+     * @param string $userPassword The user's password
+     * @return bool True if password is corret for given user
+     * @author Keller Flint
+     */
+    function confirmPassword($userId, $userPassword)
+    {
+        var_dump($userId);
+        var_dump($userPassword);
+
+        $sql = "SELECT user_id FROM User WHERE user_id = ? AND user_password = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$userId, $userPassword]);
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC)["user_id"];
+
+        return $result == $userId;
+    }
+
+    /**
+     * Updates the password for the given user
+     *
+     * @param int $userId The user's id
+     * @param string $userPassword The new password
+     * @author Keller Flint
+     */
+    function updatePassword($userId, $userPassword) {
+        $sql = "UPDATE User SET user_password = ? WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$userPassword, $userId]);
+    }
+
 }

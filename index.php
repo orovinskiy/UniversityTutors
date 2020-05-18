@@ -116,6 +116,7 @@ $f3->route('GET|POST /admin', function () {
 
 /**
  * Route for tutor info page
+ * @author Keller Flint
  */
 $f3->route('GET /tutor/@id', function ($f3, $param) {
     global $controller;
@@ -124,10 +125,20 @@ $f3->route('GET /tutor/@id', function ($f3, $param) {
 
 /**
  * Route for adminAjax
+ * @author Keller Flint
  */
 $f3->route('POST /adminAjax', function () {
     global $controller;
     $controller->adminAjax();
+});
+
+/**
+ * Route for resetting password
+ * @author Keller Flint
+ */
+$f3->route('GET|POST /reset/@id', function ($f3, $param) {
+    global $controller;
+    $controller->passwordPage($param["id"]);
 });
 
 $f3->run();
