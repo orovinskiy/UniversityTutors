@@ -84,13 +84,17 @@ $("#add-tutor-button").on("click", function () {
     let email = $("#add-tutor-input").val();
     let year = $(this).data("year");
 
+    let emailStatus = setInterval(function() {
+        $("#email-status").html("Sending email...");
+    });
+
     // Update database via ajax
     $.post("../tutorsAjax", {
         email: email,
         year: year
     }, function (result) {
-        alert("Email was sent (in theory). You will need to refresh to page to see the new tutor in the table. [DEBUG] user_id = " + result);
-
+        $("#email-status").html();
+        alert(result);
         //refresh page to load new user into table
         let year = $("#year-current").data("year");
         window.location.href = ("../tutors/" + year + "&" + status);

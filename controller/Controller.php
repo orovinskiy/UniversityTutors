@@ -88,16 +88,18 @@ class Controller
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor DONE!!
-            if ($this->_val->uniqueEmail($_POST["email"])) {
+            if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //send email
                 $success = $this->sendEmail($_POST["email"]);
                 //checking to see if email was sent successfully
                 if (!$success) {
                     echo "Sending of email was unsuccessful";
+                } else {
+                    echo "Email successfully sent to " . $_POST["email"];
                 }
-                echo $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
+                $this->_db->addNewTutor($_POST["year"], $_POST["email"]);
             } else {
-                echo "ERROR: Email already exists";
+                echo "Invalid email address";
             }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
