@@ -47,7 +47,7 @@ class Controller
     function tutorsPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn(); //comment to remove the login requirement
+        $this->isLoggedIn();
 
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
@@ -131,7 +131,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn(); //comment to remove the login requirement
+        $this->isLoggedIn();
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -191,7 +191,7 @@ class Controller
     function formPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn(); //comment to remove the login requirement
+        $this->isLoggedIn();
 
 
         //this is for building up a navbar
@@ -318,8 +318,6 @@ class Controller
      */
     function login()
     {
-        //var_dump($_SESSION);
-
         //checking to see if user if already logged in if so redirects to appropriate page
         if (isset($_SESSION['user'])) {
             $this->redirects();
@@ -439,6 +437,9 @@ class Controller
     function tutorInfoPage($param)
     {
 
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        $this->isLoggedIn();
+
         //This is the navbar generating
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
@@ -515,6 +516,9 @@ class Controller
      */
     function passwordPage($id)
     {
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        $this->isLoggedIn();
+
         if ($_SESSION['user']->getUserID() != $id) {
             $this->_f3->reroute("/login");
         }
