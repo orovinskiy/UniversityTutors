@@ -146,7 +146,27 @@ class Database
     function updateYearData($column, $value, $yearId)
     {
 
-        // TODO validate $column against php array of column names used in db to prevent sql injection
+        // Valid columns
+        $validColumns = array("year_ADP",
+            "year_affirmation_disclosures",
+            "year_background",
+            "year_handbook_verification",
+            "year_i9",
+            "year_offer_letter",
+            "year_orientation",
+            "year_packet_sent",
+            "year_placement",
+            "year_reference",
+            "year_sexual_misconduct",
+            "year_SPS",
+            "year_w4"
+        );
+
+        // Check that column name is valid to prevent SQL injection
+        if (!in_array($column, $validColumns)) {
+            return;
+        }
+
         if ($value == '0' || $value == '1') {
             $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
         } else {
