@@ -406,7 +406,11 @@ class Controller
      */
     function adminPage()
     {
-        // TODO check if logged in user is admin
+        // TODO check if logged in user is admin DONE
+        //checking to see if user is logged in. If not logged in, will redirect to login page
+        $this->isLoggedIn(); //comment to remove the login requirement
+
+
 
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
             '', 'Admin Manager');
