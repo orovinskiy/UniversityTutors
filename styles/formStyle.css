@@ -19,10 +19,16 @@ fieldset {
     padding: 2em;
 }
 
-img {
-    width: 200px;
-}
 
+/*img {
+    width: 200px;
+}*/
+
+
+.img-fluid {
+    max-width: 75%;
+    height: auto;
+}
 .jumbotron {
     background-color: cornflowerblue;
     color: white;
