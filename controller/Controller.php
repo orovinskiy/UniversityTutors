@@ -484,6 +484,12 @@ class Controller
         }
     }
 
+    /**
+     * Function to mask SSN by hiding all characters but last 4 digits
+     * @param String $ssn to be masked
+     * @return string ssn that has been masked
+     * @author Dallas Sloan
+     */
     private function ssnMask($ssn)
     {
         $lastFour  = substr($ssn, -4);
