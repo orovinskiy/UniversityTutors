@@ -432,9 +432,12 @@ class Controller
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
 
-        $this->_f3->set("tutor", $this->_db->getTutorById($param["id"]));
+        $tutor =  $this->_db->getTutorById($param["id"]);
+
+        $this->_f3->set("tutor", $tutor);
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
-        $this->_f3->set("decryptedSsn", $this->decryption($this->_db->getTutorById($param["id"])["tutor_ssn"]));
+
+        $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
 
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
