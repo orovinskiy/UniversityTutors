@@ -3,6 +3,12 @@ Styles for onboarding form
 @author Laxmi Kandel
  */
 
+#count {
+    font-size: x-small;
+    color: #878a85;
+    padding-top: 1px;
+}
+
 .err {
     color: #dc3545;
     text-align: center;
@@ -19,10 +25,16 @@ fieldset {
     padding: 2em;
 }
 
-img {
-    width: 200px;
-}
 
+/*img {
+    width: 200px;
+}*/
+
+
+.img-fluid {
+    max-width: 75%;
+    height: auto;
+}
 .jumbotron {
     background-color: cornflowerblue;
     color: white;

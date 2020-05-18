@@ -108,6 +108,11 @@ class Validate
         $regexSsn = "/^\d{3}-\d{2}-\d{4}$/";
         $ssnResult = false;
         $ssn = trim($ssn);
+        //checking to see if SSN is masked, if so marking as valid
+        if (substr($ssn, 0, 3) == "XXX") {
+            return true;
+        }
+
         if (preg_match($regexSsn, $ssn)) {
             $ssnResult = true;
         }

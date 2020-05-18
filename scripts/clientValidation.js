@@ -119,7 +119,9 @@ function lessThan255(input, valClass) {
 function lessThan14(input, valClass) {
     $('.err').remove();
     let isValid = false;
-    if (input.val().trim() != "" && input.val().length <= 14) {
+    //inputting 15 for 1 character buffer when user types too quickly, js will correct length,
+    // don't need the error message to stay when it's auto-corrected **edited by DS**
+    if (input.val().trim() != "" && input.val().length > 15) {
         isValid = true;
     }
     toggleErrors(input, valClass, !isValid, "Must be valid");
@@ -170,6 +172,20 @@ function toggleErrors(object, valClass, isValid, message) {
         console.log("removed");
     }
 }
+
+//Helper Function to count characters within Bio text area
+$('.clearText').on("input", function() {
+    let minCount = 100;
+    let currentCount = $(this).val().length;
+    currentCount = minCount - currentCount;
+    //console.log(currentCount); //current count
+    //checking to see if min count has been reached
+    if (currentCount <= 0) {
+        document.getElementById("count").innerHTML = "Minimum word count reached!";
+    } else {
+        document.getElementById("count").innerHTML = "Mimimum Characters Remaining: " + currentCount;
+}
+});
 
 
 
