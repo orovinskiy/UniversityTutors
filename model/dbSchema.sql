@@ -36,13 +36,13 @@ CREATE TABLE Info (
     PRIMARY KEY (info_id)
 );
 
-/* YearData table for referencing which user/year data is being tracked for */
-CREATE TABLE YearData (
-    yearData_id int NOT NULL AUTO_INCREMENT,
+/* TutorYear table for referencing which tutor/year data is being tracked for */
+CREATE TABLE TutorYear (
+    tutorYear_id int NOT NULL AUTO_INCREMENT,
     user_id int NOT NULL,
-    yearData_year year NOT NULL,
+    tutorYear_year year NOT NULL,
 
-    PRIMARY KEY (yearData_id),
+    PRIMARY KEY (tutorYear_id),
     FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE State(
     state_id int NOT NULL AUTO_INCREMENT,
     item_id int NOT NULL,
     state_name varchar(255) NULL, /* NULL because it could be text in which case one state entry is required to define if it is for the tutor or the admin*/
-    state_set_by enum("default", "user", "admin") NOT NULL,
+    state_set_by enum("default", "tutor", "admin") NOT NULL,
     state_text varchar(5000) NULL,
     state_order int NOT NULL,
     state_is_done int NOT NULL,
@@ -71,22 +71,22 @@ CREATE TABLE State(
     FOREIGN KEY (item_id) REFERENCES Item (item_id) ON UPDATE CASCADE
 );
 
-/* Contains item data for each YearData */
-CREATE TABLE ItemYearData (
+/* Contains item data for each TutorYear */
+CREATE TABLE ItemTutorYear (
     item_id int NOT NULL,
-    yearData_id int NOT NULL,
+    tutorYear_id int NOT NULL,
     state_id int NOT NULL,
-    itemYearData_file varchar(255) NULL,
+    itemTutorYear_file varchar(255) NULL,
 
-    PRIMARY KEY (item_id, yearData_id),
+    PRIMARY KEY (item_id, tutorYear_id),
     FOREIGN KEY (item_id) REFERENCES Item (item_id) ON UPDATE CASCADE,
-    FOREIGN KEY (yearData_id) REFERENCES YearData (yearData_id) ON UPDATE CASCADE,
+    FOREIGN KEY (tutorYear_id) REFERENCES TutorYear (tutorYear_id) ON UPDATE CASCADE,
     FOREIGN KEY (state_id) REFERENCES State (state_id) ON UPDATE CASCADE
 );
 
 
 
-INSERT INTO Info Value (1, "2020");
+INSERT INTO Info Value (1, 2020);
 
 /*
 Test Data
@@ -124,9 +124,9 @@ INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","imag
 
 /* Item Test Data */
 
-/* YearData */
-INSERT INTO `tutors`.`YearData` (`yearData_id`, `user_id`, `yearData_year`) VALUES ('1', '1', 2020);
-INSERT INTO `tutors`.`YearData` (`yearData_id`, `user_id`, `yearData_year`) VALUES ('2', '2', 2020);
+/* TutorYear */
+INSERT INTO `tutors`.`TutorYear` (`tutorYear_id`, `user_id`, `tutorYear_year`) VALUES ('1', '1', 2020);
+INSERT INTO `tutors`.`TutorYear` (`tutorYear_id`, `user_id`, `tutorYear_year`) VALUES ('2', '2', 2020);
 
 /* Background */
 INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('1', 'Backgroud Check', 'select', b'0');
@@ -141,10 +141,18 @@ INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_uploa
 
 INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('5', '2', 'Not Done', 'default', '1', '0');
 INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('6', '2', 'Invited', 'admin', '2', '0');
-INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('7', '2', 'Registered', 'user', 'Once you have registered for ADP, check this box.', '3', '1');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('7', '2', 'Registered', 'tutor', 'Once you have registered for ADP, check this box.', '3', '1');
 
 /* A & D */
 INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('3', 'A & D', 'checkbox', b'0');
 
 INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('8', '3', 'false', 'default', 'Read A& D and check the box.', '1', '0');
-INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('9', '3', 'true', 'user', '2', '1');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('9', '3', 'true', 'tutor', '2', '1');
+
+/* ItemTutorYear */
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '1', '1');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '2', '4');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '1', '5');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '2', '7');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '1', '8');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '2', '9');
