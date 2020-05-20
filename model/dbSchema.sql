@@ -28,29 +28,7 @@ CREATE TABLE Tutor (
     FOREIGN KEY (user_id) REFERENCES User (user_id) ON UPDATE CASCADE
 );
 
-/* Year table containing the onboarding data for tutors each year. */
-CREATE TABLE Year (
-    year_id int NOT NULL AUTO_INCREMENT,
-    user_id int NOT NULL,
-    year_start year NOT NULL,
-    year_packet_sent bit NOT NULL,
-    year_background enum('none', 'sent', 'clear', 'flag') NOT NULL,
-    year_reference enum('none', 'incomplete', 'clear', 'flag') NOT NULL,
-    year_offer_letter bit NOT NULL,
-    year_affirmation_disclosures bit NOT NULL,
-    year_sexual_misconduct bit NOT NULL,
-    year_w4 bit NOT NULL,
-    year_handbook_verification bit NOT NULL,
-    year_SPS enum('none', 'tutor', 'admin') NOT NULL,
-    year_ADP enum('none', 'invited', 'registered') NOT NULL,
-    year_i9 enum('none', 'tutor', 'admin') NOT NULL,
-    year_orientation bit NOT NULL,
-    year_placement varchar(255) NULL,
-
-    PRIMARY KEY (year_id),
-    FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
-);
-
+/* Set default year */
 CREATE TABLE Info (
     info_id int NOT NULL,
     info_current_year year NOT NULL,
@@ -58,10 +36,55 @@ CREATE TABLE Info (
     PRIMARY KEY (info_id)
 );
 
-/*
-Set default year
-@author Keller Flint
- */
+/* YearData table for referencing which user/year data is being tracked for */
+CREATE TABLE YearData (
+    yearData_id int NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    yearData_year year NOT NULL,
+
+    PRIMARY KEY (yearData_id),
+    FOREIGN KEY (user_id) REFERENCES Tutor (user_id) ON UPDATE CASCADE
+);
+
+/* Contain items to be tracked */
+CREATE TABLE Item(
+    item_id int NOT NULL AUTO_INCREMENT,
+    item_name varchar(255) NOT NULL,
+    item_type enum("checkbox", "select") NOT NULL,
+    item_is_upload bit NOT NULL,
+    item_file varchar(255) NULL,
+
+    PRIMARY KEY (item_id)
+);
+
+/* Contains possible states for items */
+CREATE TABLE State(
+    state_id int NOT NULL AUTO_INCREMENT,
+    item_id int NOT NULL,
+    state_name varchar(255) NULL, /* NULL because it could be text in which case one state entry is required to define if it is for the tutor or the admin*/
+    state_set_by enum("default", "user", "admin") NOT NULL,
+    state_text varchar(5000) NULL,
+    state_order int NOT NULL,
+    state_is_done int NOT NULL,
+
+    PRIMARY KEY (state_id),
+    FOREIGN KEY (item_id) REFERENCES Item (item_id) ON UPDATE CASCADE
+);
+
+/* Contains item data for each YearData */
+CREATE TABLE ItemYearData (
+    item_id int NOT NULL,
+    yearData_id int NOT NULL,
+    state_id int NOT NULL,
+    itemYearData_file varchar(255) NULL,
+
+    PRIMARY KEY (item_id, yearData_id),
+    FOREIGN KEY (item_id) REFERENCES Item (item_id) ON UPDATE CASCADE,
+    FOREIGN KEY (yearData_id) REFERENCES YearData (yearData_id) ON UPDATE CASCADE,
+    FOREIGN KEY (state_id) REFERENCES State (state_id) ON UPDATE CASCADE
+);
+
+
 
 INSERT INTO Info Value (1, "2020");
 
@@ -97,22 +120,31 @@ INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","imag
 (15, "Dave", "Test", "(202) 222-4444",null,null,null),
 (16, "Joe", "Smith", "(292) 222-4444",null,null,null);
 
-INSERT INTO Year VALUES (default,"1","2020",1,"sent","clear",0,1,1,0,1,"none","invited","tutor",1,"Fredwork"),
-(default,"2","2020",1,"flag","none",1,1,0,0,0,"none","registered","none",1,"Green Elementry"),
-(default,"3","2020",0,"clear","incomplete",0,0,1,1,1,"none","none","admin",1,"Somplace Elementry"),
-(default,"4","2020",1,"none","flag",1,1,0,0,0,"tutor","registered","none",0,"AwsomeVill Elementry"),
-(default,"5","2020",1,"clear","clear",0,1,0,1,1,"tutor","none","tutor",1,"Fredwork High"),
-(default,"7","2020",0,"none","incomplete",1,1,1,1,1,"none","invited","none",1,"WASU Elementry"),
-(default,"8","2020",0,"flag","clear",0,0,0,0,0,"none","none","none",0,"NoWhere Elementry"),
-(default,"9","2020",1,"clear","none",1,0,0,1,0,"admin","invited","admin",0,"Grassvill Elementry"),
-(default,"10","2020",1,"sent","none",0,1,0,0,1,"admin","invited","none",1,"Gamevill Elementry"),
-(default,"11","2020",0,"flag","incomplete",1,1,1,0,1,"none","registered","tutor",1,"NoneExistence Elementry"),
-(default,"12","2020",1,"none","clear",0,0,1,1,1,"tutor","none","tutor",0,"Some Elementry"),
-(default,13,2020,b'1',"sent","flag",b'1', b'0',b'0',b'1',b'0',"none","invited", "none", b'0', "not placed"),
-(default,13,2019,b'1',"clear","flag",b'1', b'1',b'0',b'0',b'0',"admin","invited", "none", b'0', "not placed"),
-(default,14,2020,b'1',"none","incomplete",b'1', b'1',b'0',b'1',b'0',"tutor","invited", "none", b'1', "Seattle High"),
-(default,14,2017,b'0',"none","incomplete",b'0', b'0',b'0',b'0',b'0',"none","registered", "tutor", b'0', "Not Placed"),
-(default,15,2020,b'1',"flag","none",b'0', b'1',b'1',b'1',b'1',"none","none", "none", b'1', "Test Middle School"),
-(default,16,2018,b'1',"clear","clear",b'1', b'0',b'0',b'0',b'1',"admin","registered", "admin", b'0', "Test High School"),
-(default,16,2019,b'1',"clear","flag",b'0', b'0',b'1',b'1',b'1',"none","invited", "tutor", b'1', "Ranier"),
-(default,16,2020,b'0',"none","incomplete",b'1', b'1',b'1',b'1',b'1',"none","none", "none", b'1', "Test High School");
+
+
+/* Item Test Data */
+
+/* YearData */
+INSERT INTO `tutors`.`YearData` (`yearData_id`, `user_id`, `yearData_year`) VALUES ('1', '1', 2020);
+INSERT INTO `tutors`.`YearData` (`yearData_id`, `user_id`, `yearData_year`) VALUES ('2', '2', 2020);
+
+/* Background */
+INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('1', 'Backgroud Check', 'select', b'0');
+
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('1', '1', 'Not Done', 'default', '1', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('2', '1', 'In Progress', 'admin', '2', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('3', '1', 'Clear', 'admin', '3', '1');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('4', '1', 'Flag', 'admin', '4', '1');
+
+/* ADP */
+INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('2', 'ADP', 'select', b'0');
+
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('5', '2', 'Not Done', 'default', '1', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('6', '2', 'Invited', 'admin', '2', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('7', '2', 'Registered', 'user', 'Once you have registered for ADP, check this box.', '3', '1');
+
+/* A & D */
+INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('3', 'A & D', 'checkbox', b'0');
+
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('8', '3', 'false', 'default', 'Read A& D and check the box.', '1', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('9', '3', 'true', 'user', '2', '1');
