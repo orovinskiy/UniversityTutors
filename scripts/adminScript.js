@@ -6,13 +6,13 @@ $(".delete").on("click", function () {
         console.log(id);
 
         // Update database via ajax
-        $.post("../adminAjax", {
+        $.post("adminAjax", {
             delete_id: id
         }, function (result) {
             if (result) {
                 alert("ERROR: " + result);
             } else {
-                window.location.href = ("../admin");
+                window.location.href = ("admin");
             }
         });
 

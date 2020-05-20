@@ -70,7 +70,7 @@ Test Data
 @author Dallas Sloan, Oleg
 */
 
-INSERT INTO User Values (default,"Bobby@mail.com",MD5("bobTroll!!"),0),(default,"Andy@mail.com",MD5("AndyHot!!"),0),(default,"CoolGuy@mail.com",MD5("notCool!!"),0),
+INSERT INTO User Values (default,"bob@mail.com",MD5("1234"),0),(default,"Andy@mail.com",MD5("AndyHot!!"),0),(default,"CoolGuy@mail.com",MD5("notCool!!"),0),
 (default,"Jasmine@mail.com",MD5("IgotNada!!"),0),(default,"admin@mail.com",MD5("1234"),1),(default,"carGuy@mail.com",MD5("TrucksLOL!!"),0),
 (default,"BenBro@mail.com",MD5("BenRules!!"),0),(default,"meow@mail.com",MD5("CatKing!!"),0),(default,"tiger@mail.com",MD5("tigerRule!!"),0),
 (default,"HappyFam@mail.com",MD5("famisCool!!"),0),(default,"flyinPho@mail.com",MD5("iLikePho!!"),0),(default,"whoDis@mail.com",MD5("newPhone!!"),0),
