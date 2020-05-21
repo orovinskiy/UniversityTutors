@@ -503,6 +503,9 @@ class Controller
      */
     private function ssnMask($ssn)
     {
+        if ($ssn == '') {
+            return $ssn;
+        }
         $lastFour = substr($ssn, -4);
         $masked = "XXX-XX-" . $lastFour;
         return $masked;
