@@ -168,10 +168,15 @@ $(".import").on("click", function () {
     if (result) {
         let user_id = $(this).data("userid");
 
-        // ajax deletion
+        // ajax importing
         $.post("../tutorsAjax", {
             user_id: user_id
         });
+        //hide Import button after displaying success message
+        let results = confirm("Tutor imported successfully ");
+        if(results){
+            $(".import").hide();
+        }
     }
 });
 

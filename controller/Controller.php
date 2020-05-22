@@ -101,7 +101,12 @@ class Controller
                     echo "Email successfully sent to " . $_POST["email"];
                 }
             } else {
-                echo "Invalid email address";
+                //checking for duplicate email
+                if (!$this->_val->uniqueEmail($_POST["email"])) {
+                    echo "Duplicate email address";
+                } else {
+                    echo "Invalid email address";
+                }
             }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
