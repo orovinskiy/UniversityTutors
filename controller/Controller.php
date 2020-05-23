@@ -551,6 +551,8 @@ class Controller
     function editPage($itemId)
     {
 
+        // TODO make forms sticky
+
         // Save Item
         if (isset($_POST["itemSave"])) {
             if ($this->_val->validateItem($_POST["itemName"])) {
@@ -562,16 +564,19 @@ class Controller
 
         // Save State
         if (isset($_POST["stateSave"])) {
-            // TODO validation
+            if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
 
-            // Changing isDone to an int
-            if (!isset($_POST["stateIsDone"])) {
-                $_POST["stateIsDone"] = 0;
+                // Changing isDone to an int
+                if (!isset($_POST["stateIsDone"])) {
+                    $_POST["stateIsDone"] = 0;
+                } else {
+                    $_POST["stateIsDone"] = 1;
+                }
+
+                $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
             } else {
-                $_POST["stateIsDone"] = 1;
+                $this->_f3->set("errors", $this->_val->getErrors());
             }
-
-            $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
         }
 
         // Move Up

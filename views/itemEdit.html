@@ -70,6 +70,9 @@ Page to create, edit and delete items in the table
                         <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
                                value="{{ @state['state_name'] }}"
                                name="stateName">
+                        <check if="{{ isset(@errors['stateName' . @state['state_id']]) }}">
+                            <span class="text-danger">{{ @errors['stateName' . @state['state_id']] }}</span>
+                        </check>
                     </div>
                     <div class="col-2"></div>
 
@@ -109,6 +112,9 @@ Page to create, edit and delete items in the table
                         <label for="description-{{ @state['state_id'] }}">Description</label>
                         <textarea class="form-control" id="description-{{ @state['state_id'] }}" rows="3"
                                   name="stateText">{{ @state['state_text'] }}</textarea>
+                        <check if="{{ isset(@errors['stateText' . @state['state_id']]) }}">
+                            <span class="text-danger">{{ @errors['stateText' . @state['state_id']] }}</span>
+                        </check>
                     </div>
                 </div>
 
