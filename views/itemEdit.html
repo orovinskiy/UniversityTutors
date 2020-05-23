@@ -15,6 +15,7 @@ Page to create, edit and delete items in the table
     <div class="form-group w-25 d-inline-block">
         <label for="item-name">Item Name</label>
         <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
+        <span class="text-danger">{{ @errors["itemName"] }}</span>
     </div>
 
     <!-- Item type -->

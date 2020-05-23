@@ -553,9 +553,11 @@ class Controller
 
         // Save Item
         if (isset($_POST["itemSave"])) {
-            // TODO validation
-
-            $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
+            if ($this->_val->validateItem($_POST["itemName"])) {
+                $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
+            } else {
+                $this->_f3->set("errors", $this->_val->getErrors());
+            }
         }
 
         // Save State
