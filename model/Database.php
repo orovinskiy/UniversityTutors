@@ -524,10 +524,42 @@ class Database
      * @param string $userPassword The new password
      * @author Keller Flint
      */
-    function updatePassword($userId, $userPassword) {
+    function updatePassword($userId, $userPassword)
+    {
         $sql = "UPDATE User SET user_password = ? WHERE user_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$userPassword, $userId]);
+    }
+
+    /* START OF EDIT FUNCTIONS */
+
+    /**
+     * Returns all data for the given item
+     *
+     * @param int $itemId The id of the item
+     * @return array data for the given item
+     * @author Keller Flint
+     */
+    function getItem($itemId)
+    {
+        $sql = "SELECT * FROM Item WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Returns all state data for the given item
+     *
+     * @param int $itemId The id of the item
+     * @return array All state data for the given item
+     */
+    function getStates($itemId)
+    {
+        $sql = "SELECT * FROM State WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

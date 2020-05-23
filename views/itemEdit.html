@@ -1,0 +1,52 @@
+<!--
+Page to create, edit and delete items in the table
+@author Keller Flint
+-->
+
+<include href="views/navbar.html"/>
+
+<h1 class="text-center">ADP</h1>
+
+<form class="text-center" method="POST" action="">
+    <div class="form-group w-25 d-inline-block">
+        <label for="item-name">Item Name</label>
+        <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
+    </div>
+    <div class="form-group w-25 d-inline-block">
+        <label for="item-type">Item Type</label>
+        <select class="form-control" id="item-type" name="type">
+            <option value="checkbox">Checkbox</option>
+            <option value="select">Dropdown</option>
+        </select>
+    </div>
+    <div class="d-inline-block">
+        <input type="file" class="form-control-file" name="fileToUpload"
+               id="img">
+    </div>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input" id="upload-required">
+        <label class="form-check-label" for="upload-required">Tutor Upload Required</label>
+    </div>
+</form>
+
+<repeat group="{{ @stateData }}" value="{{ @state }}">
+    <form class="m-5">
+        <div class="form-group w-25 d-inline-block">
+            <label for="name-{{ @state['state_id'] }}"></label>
+            <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
+                   value="{{ @state['state_name'] }}"
+                   name="stateName">
+        </div>
+        <div class="form-group w-25 d-inline-block">
+            <label for="complete-by-{{ @state['state_id'] }}">Item Type</label>
+            <select class="form-control" id="complete-by-{{ @state['state_id'] }}" name="stateCompleteBy">
+                <option value="default">Default</option>
+                <option value="tutor">Tutor</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+    </form>
+</repeat>
+
+</body>
+</html>

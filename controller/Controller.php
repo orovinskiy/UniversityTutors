@@ -543,4 +543,19 @@ class Controller
         echo $view->render('views/password.html');
     }
 
+    /**
+     * Page to edit table items
+     *
+     * @param int $itemId The id of the item being edited
+     * @author Keller Flint
+     */
+    function editPage($itemId) {
+
+        $this->_f3->set("item", $this->_db->getItem($itemId));
+        $this->_f3->set("stateData", $this->_db->getStates($itemId));
+
+        $view = new Template();
+        echo $view->render('views/itemEdit.html');
+    }
+
 }
