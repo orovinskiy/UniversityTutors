@@ -562,4 +562,19 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Returns highest order of the states for an item
+     *
+     * @param int $itemId The id of the item
+     * @return int The highest order of the states for an item
+     * @author Keller Flint
+     */
+    function getMaxState($itemId)
+    {
+        $sql = "SELECT MAX(state_order) AS max FROM State WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)['max'];
+    }
+
 }

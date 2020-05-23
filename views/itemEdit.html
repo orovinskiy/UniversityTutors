@@ -5,13 +5,18 @@ Page to create, edit and delete items in the table
 
 <include href="views/navbar.html"/>
 
-<h1 class="text-center">ADP</h1>
+<h1 class="text-center m-3">{{ @item['item_name'] }}</h1>
 
+<!-- Form to edit item data -->
 <form class="text-center" method="POST" action="">
+
+    <!-- Item name -->
     <div class="form-group w-25 d-inline-block">
         <label for="item-name">Item Name</label>
         <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
     </div>
+
+    <!-- Item type -->
     <div class="form-group w-25 d-inline-block">
         <label for="item-type">Item Type</label>
         <select class="form-control" id="item-type" name="type">
@@ -19,6 +24,7 @@ Page to create, edit and delete items in the table
             <option value="select">Dropdown</option>
         </select>
     </div>
+    <!--
     <div class="d-inline-block">
         <input type="file" class="form-control-file" name="fileToUpload"
                id="img">
@@ -27,26 +33,85 @@ Page to create, edit and delete items in the table
         <input type="checkbox" class="form-check-input" id="upload-required">
         <label class="form-check-label" for="upload-required">Tutor Upload Required</label>
     </div>
+    -->
 </form>
 
-<repeat group="{{ @stateData }}" value="{{ @state }}">
-    <form class="m-5">
-        <div class="form-group w-25 d-inline-block">
-            <label for="name-{{ @state['state_id'] }}"></label>
-            <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
-                   value="{{ @state['state_name'] }}"
-                   name="stateName">
-        </div>
-        <div class="form-group w-25 d-inline-block">
-            <label for="complete-by-{{ @state['state_id'] }}">Item Type</label>
-            <select class="form-control" id="complete-by-{{ @state['state_id'] }}" name="stateCompleteBy">
-                <option value="default">Default</option>
-                <option value="tutor">Tutor</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-    </form>
-</repeat>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <!-- Creates form for each state associated with the item -->
+        <repeat group="{{ @stateData }}" value="{{ @state }}">
+            <form class="text-center w-100 border p-3 m-3 bg-light rounded">
+                <h4>{{ @state['state_name'] }}</h4>
+                <div class="row">
+
+                    <!-- state name -->
+                    <div class="form-group d-inline-block col-5">
+                        <label for="name-{{ @state['state_id'] }}">Name</label>
+                        <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
+                               value="{{ @state['state_name'] }}"
+                               name="stateName">
+                    </div>
+                    <div class="col-2"></div>
+
+                    <!-- state set_by -->
+                    <div class="form-group d-inline-block col-5">
+                        <label for="set-by-{{ @state['state_id'] }}">Set By</label>
+                        <select class="form-control" id="set-by-{{ @state['state_id'] }}" name="stateSetBy">
+                            <check if="@state['state_set_by'] == 'default'">
+                                <true>
+                                    <option value="default" selected>Default</option>
+                                </true>
+                                <false>
+                                    <option value="default">Default</option>
+                                </false>
+                            </check>
+                            <check if="@state['state_set_by'] == 'tutor'">
+                                <true>
+                                    <option value="tutor" selected>Tutor</option>
+                                </true>
+                                <false>
+                                    <option value="tutor">Tutor</option>
+                                </false>
+                            </check>
+                            <check if="@state['state_set_by'] == 'admin'">
+                                <true>
+                                    <option value="admin" selected>Admin</option>
+                                </true>
+                                <false>
+                                    <option value="admin">Admin</option>
+                                </false>
+                            </check>
+                        </select>
+                    </div>
+
+                    <!-- state text -->
+                    <div class="form-group col-12">
+                        <label for="description-{{ @state['state_id'] }}">Description</label>
+                        <textarea class="form-control" id="description-{{ @state['state_id'] }}" rows="3"
+                                  name="stateText">{{ @state['state_text'] }}</textarea>
+                    </div>
+                </div>
+
+                <!-- States counts as done checkbox -->
+                <div class="form-check text-left">
+                    <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}">
+                    <label class="form-check-label" for="done-{{ @state['state_id'] }}">{{ @item['item_name'] }} is
+                        complete</label>
+                </div>
+
+                <!-- Button to change state order -->
+                <check if="{{ @state['state_order'] != 1 }}">
+                    <button class="btn btn-secondary m-3 w-25">Move Up</button>
+                </check>
+                <check if="{{ @state['state_order'] != @maxState }}">
+                    <button class="btn btn-secondary m-3 w-25">Move Down</button>
+                </check>
+
+            </form>
+        </repeat>
+    </div>
+</div>
 
 </body>
 </html>
