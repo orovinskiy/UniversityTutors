@@ -561,6 +561,16 @@ class Controller
         // Save State
         if (isset($_POST["stateSave"])) {
             // TODO validation
+            var_dump($_POST);
+
+            // Changing isDone to an int
+            if (!isset($_POST["stateIsDone"])) {
+                $_POST["stateIsDone"] = 0;
+            } else {
+                $_POST["stateIsDone"] = 1;
+            }
+
+            $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
         }
 
         // Move Up

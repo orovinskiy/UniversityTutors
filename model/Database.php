@@ -593,4 +593,21 @@ class Database
         $statement->execute([$itemName, $itemType, $itemId]);
     }
 
+    /**
+     * Updates data for the given state
+     *
+     * @param int $stateId Id of the state
+     * @param string $stateName The state's name
+     * @param string $stateSetBy Who the state is set by
+     * @param string $stateText The description text for the state
+     * @param string $stateIsDone If this state counts as done for the item
+     * @author Keller Flint
+     */
+    function updateState($stateId, $stateName, $stateSetBy, $stateText, $stateIsDone)
+    {
+        $sql = "UPDATE State SET state_name = ?, state_set_by= ?, state_text = ?, state_is_done = ? WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateName, $stateSetBy, $stateText, $stateIsDone, $stateId]);
+    }
+
 }
