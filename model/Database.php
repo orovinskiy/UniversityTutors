@@ -578,4 +578,19 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC)['max'];
     }
 
+    /**
+     * Updates data for the given item
+     *
+     * @param int $itemId Id of the item
+     * @param string $itemName The item's name
+     * @param string $itemType The item's type
+     * @author Keller Flint
+     */
+    function updateItem($itemId, $itemName, $itemType)
+    {
+        $sql = "UPDATE Item SET item_name = ?, item_type = ? WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemName, $itemType, $itemId]);
+    }
+
 }

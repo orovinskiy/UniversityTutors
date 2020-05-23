@@ -9,6 +9,7 @@ Page to create, edit and delete items in the table
 
 <!-- Form to edit item data -->
 <form class="text-center" method="POST" action="#">
+    <input type="hidden" name="itemId" value="{{ @item['item_id'] }}">
 
     <!-- Item name -->
     <div class="form-group w-25 d-inline-block">
@@ -19,7 +20,7 @@ Page to create, edit and delete items in the table
     <!-- Item type -->
     <div class="form-group w-25 d-inline-block">
         <label for="item-type">Item Type</label>
-        <select class="form-control" id="item-type" name="type">
+        <select class="form-control" id="item-type" name="itemType">
             <check if="{{ @item['item_type'] == 'checkbox' }}">
                 <true>
                     <option value="checkbox" selected>Checkbox</option>

@@ -409,7 +409,6 @@ class Controller
         $this->isLoggedIn(); //comment to remove the login requirement
 
 
-
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
             '', 'Admin Manager');
 
@@ -472,7 +471,7 @@ class Controller
         $subject = "Welcome New Tutor!";
         $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
-                "<p>$loginLink</p>";
+            "<p>$loginLink</p>";
         $success = smtpmailer($to, $from, $fromName, $subject, $body);
         return $success;
     }
@@ -549,16 +548,29 @@ class Controller
      * @param int $itemId The id of the item being edited
      * @author Keller Flint
      */
-    function editPage($itemId) {
+    function editPage($itemId)
+    {
 
+        // Save Item
         if (isset($_POST["itemSave"])) {
-            echo "item";
+            // TODO validation
             var_dump($_POST);
+            $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
         }
 
+        // Save State
         if (isset($_POST["stateSave"])) {
-            echo "state";
-            var_dump($_POST);
+            // TODO validation
+        }
+
+        // Move Up
+        if (isset($_POST["moveUp"])) {
+
+        }
+
+        // Move Down
+        if (isset($_POST["moveDown"])) {
+
         }
 
         $this->_f3->set("item", $this->_db->getItem($itemId));
