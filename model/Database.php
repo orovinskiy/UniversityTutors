@@ -553,6 +553,7 @@ class Database
      *
      * @param int $itemId The id of the item
      * @return array All state data for the given item
+     * @author
      */
     function getStates($itemId)
     {

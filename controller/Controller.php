@@ -551,6 +551,16 @@ class Controller
      */
     function editPage($itemId) {
 
+        if (isset($_POST["itemSave"])) {
+            echo "item";
+            var_dump($_POST);
+        }
+
+        if (isset($_POST["stateSave"])) {
+            echo "state";
+            var_dump($_POST);
+        }
+
         $this->_f3->set("item", $this->_db->getItem($itemId));
         $this->_f3->set("stateData", $this->_db->getStates($itemId));
         $this->_f3->set("maxState", $this->_db->getMaxState($itemId));

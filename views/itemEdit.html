@@ -8,7 +8,7 @@ Page to create, edit and delete items in the table
 <h1 class="text-center m-3">{{ @item['item_name'] }}</h1>
 
 <!-- Form to edit item data -->
-<form class="text-center" method="POST" action="">
+<form class="text-center" method="POST" action="#">
 
     <!-- Item name -->
     <div class="form-group w-25 d-inline-block">
@@ -48,6 +48,8 @@ Page to create, edit and delete items in the table
         <label class="form-check-label" for="upload-required">Tutor Upload Required</label>
     </div>
     -->
+    <br>
+    <button type="submit" class="btn btn-success" name="itemSave" value="itemSave">Save Item</button>
 </form>
 
 <div class="row">
@@ -55,8 +57,9 @@ Page to create, edit and delete items in the table
     <div class="col-6">
         <!-- Creates form for each state associated with the item -->
         <repeat group="{{ @stateData }}" value="{{ @state }}">
-            <form class="text-center w-100 border p-3 m-3 bg-light rounded">
+            <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">
                 <h4>{{ @state['state_name'] }}</h4>
+                <input type="hidden" name="stateId" value="{{ @state['state_id'] }}">
                 <div class="row">
 
                     <!-- state name -->
@@ -111,11 +114,13 @@ Page to create, edit and delete items in the table
                 <div class="form-check text-left">
                     <check if="{{ @state['state_is_done'] == 1 }}">
                         <true>
-                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}" checked>
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}"
+                                   name="stateIsDone" checked>
 
                         </true>
                         <false>
-                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}">
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}"
+                                   name="stateIsDone">
                         </false>
                     </check>
                     <label class="form-check-label" for="done-{{ @state['state_id'] }}">{{ @item['item_name'] }} is
@@ -124,12 +129,16 @@ Page to create, edit and delete items in the table
 
                 <!-- Button to change state order -->
                 <check if="{{ @state['state_order'] != 1 }}">
-                    <button class="btn btn-secondary m-3 w-25">Move Up</button>
+                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveUp" value="moveUp">Move Up
+                    </button>
                 </check>
                 <check if="{{ @state['state_order'] != @maxState }}">
-                    <button class="btn btn-secondary m-3 w-25">Move Down</button>
+                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveDown" value="moveDown">Move
+                        Down
+                    </button>
                 </check>
-
+                <button type="submit" class="btn btn-success float-right" name="stateSave" value="stateSave">Save
+                </button>
             </form>
         </repeat>
     </div>
