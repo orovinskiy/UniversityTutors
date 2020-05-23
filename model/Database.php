@@ -664,5 +664,37 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Returns the item id for a given state
+     *
+     * @param int $stateId The id of the state
+     * @return int The item's id
+     * @author Keller Flint
+     */
+    function getItemByState($stateId)
+    {
+        $sql = "SELECT item_id FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["item_id"];
+    }
+
+    /**
+     * Returns the number of states for an item
+     *
+     * @param int $itemId The item's id
+     * @param string $state The state to count
+     * @return int The number of default states for an item
+     * @author Keller Flint
+     */
+    function getStateCount($itemId, $state)
+    {
+        $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?;";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $state]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+    }
+
+
 
 }

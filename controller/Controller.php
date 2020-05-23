@@ -31,6 +31,7 @@ class Controller
     /**
      * Controller constructor
      * @param $f3 Object The fat free instance
+     * @param $db Object The database object
      */
     function __construct($f3, $db)
     {
@@ -564,7 +565,7 @@ class Controller
 
         // Save State
         if (isset($_POST["stateSave"])) {
-            if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+            if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"])) {
 
                 // Changing isDone to an int
                 if (!isset($_POST["stateIsDone"])) {
@@ -592,6 +593,14 @@ class Controller
         $this->_f3->set("item", $this->_db->getItem($itemId));
         $this->_f3->set("stateData", $this->_db->getStates($itemId));
         $this->_f3->set("maxState", $this->_db->getMaxState($itemId));
+
+        // Check for default state warnings
+        $defaults = $this->_db->getStateCount($itemId, "default");
+        if ($defaults > 1) {
+            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
+        } else if ($defaults < 1) {
+            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
+        }
 
         $view = new Template();
         echo $view->render('views/itemEdit.html');

@@ -57,6 +57,9 @@ Page to create, edit and delete items in the table
 <div class="row">
     <div class="col-3"></div>
     <div class="col-6">
+        <check if="{{ isset(@defaultWarning) }}">
+            <h2 class="text-danger">{{ @defaultWarning }}</h2>
+        </check>
         <!-- Creates form for each state associated with the item -->
         <repeat group="{{ @stateData }}" value="{{ @state }}">
             <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">

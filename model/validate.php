@@ -255,6 +255,15 @@ class Validate
         return $isValid;
     }
 
+    /**
+     * Returns true if the state data is valid
+     *
+     * @param int $stateId The id of the state
+     * @param string $stateName The name of the state
+     * @param string $stateText The description of the state
+     * @return bool Returns true if the state data is valid
+     * @author Keller Flint
+     */
     function validateState($stateId, $stateName, $stateText)
     {
         $isValid = true;
