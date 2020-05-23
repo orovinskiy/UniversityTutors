@@ -20,8 +20,22 @@ Page to create, edit and delete items in the table
     <div class="form-group w-25 d-inline-block">
         <label for="item-type">Item Type</label>
         <select class="form-control" id="item-type" name="type">
-            <option value="checkbox">Checkbox</option>
-            <option value="select">Dropdown</option>
+            <check if="{{ @item['item_type'] == 'checkbox' }}">
+                <true>
+                    <option value="checkbox" selected>Checkbox</option>
+                </true>
+                <false>
+                    <option value="checkbox">Checkbox</option>
+                </false>
+            </check>
+            <check if="{{ @item['item_type'] == 'select' }}">
+                <true>
+                    <option value="select" selected>Dropdown</option>
+                </true>
+                <false>
+                    <option value="select">Dropdown</option>
+                </false>
+            </check>
         </select>
     </div>
     <!--
@@ -95,7 +109,15 @@ Page to create, edit and delete items in the table
 
                 <!-- States counts as done checkbox -->
                 <div class="form-check text-left">
-                    <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}">
+                    <check if="{{ @state['state_is_done'] == 1 }}">
+                        <true>
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}" checked>
+
+                        </true>
+                        <false>
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}">
+                        </false>
+                    </check>
                     <label class="form-check-label" for="done-{{ @state['state_id'] }}">{{ @item['item_name'] }} is
                         complete</label>
                 </div>
