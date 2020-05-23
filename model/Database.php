@@ -557,7 +557,7 @@ class Database
      */
     function getStates($itemId)
     {
-        $sql = "SELECT * FROM State WHERE item_id = ?";
+        $sql = "SELECT * FROM State WHERE item_id = ? ORDER BY state_order ASC";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -609,5 +609,60 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$stateName, $stateSetBy, $stateText, $stateIsDone, $stateId]);
     }
+
+
+    /**
+     * Moves a state up or down relative to other states in the same item
+     *
+     * @param int $stateId The id of the state being moved
+     * @param int $direction The direction the state is being moved (-1 for up, 1 for down)
+     * @author Keller Flint
+     */
+    function updateStateOrder($stateId, $direction)
+    {
+        if ($direction != 1 && $direction != -1) {
+            throw new InvalidArgumentException("direction must be either 1 or -1");
+        }
+
+        $thisState = $this->getState($stateId);
+        $otherState = $this->getStateByOrder($thisState["item_id"], $thisState["state_order"] + $direction);
+
+        $sql = "UPDATE State SET state_order = ? WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$thisState["state_order"], $otherState["state_id"]]);
+        $statement->execute([$otherState["state_order"], $thisState["state_id"]]);
+    }
+
+    /**
+     * Get a state by it's order in an item
+     *
+     * @param int $itemId The id of the item the state is associated with
+     * @param int $order The order of the state in the item
+     * @return array The state's data
+     * @author Keller Flint
+     */
+    function getStateByOrder($itemId, $order)
+    {
+        $sql = "SELECT * FROM State WHERE item_id = ? AND state_order = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $order]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get a state by it's id
+     *
+     * @param int $stateId The id of the state
+     * @return array The state's data
+     * @author Keller Flint
+     */
+    function getState($stateId)
+    {
+        $sql = "SELECT * FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 }

@@ -554,14 +554,13 @@ class Controller
         // Save Item
         if (isset($_POST["itemSave"])) {
             // TODO validation
-            var_dump($_POST);
+
             $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
         }
 
         // Save State
         if (isset($_POST["stateSave"])) {
             // TODO validation
-            var_dump($_POST);
 
             // Changing isDone to an int
             if (!isset($_POST["stateIsDone"])) {
@@ -575,12 +574,12 @@ class Controller
 
         // Move Up
         if (isset($_POST["moveUp"])) {
-
+            $this->_db->updateStateOrder($_POST["stateId"], -1);
         }
 
         // Move Down
         if (isset($_POST["moveDown"])) {
-
+            $this->_db->updateStateOrder($_POST["stateId"], 1);
         }
 
         $this->_f3->set("item", $this->_db->getItem($itemId));
