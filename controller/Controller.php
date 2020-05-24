@@ -551,9 +551,6 @@ class Controller
      */
     function editPage($itemId)
     {
-
-        // TODO make forms sticky
-
         // Save Item
         if (isset($_POST["itemSave"])) {
             if ($this->_val->validateItem($_POST["itemName"])) {
@@ -565,19 +562,36 @@ class Controller
 
         // Save State
         if (isset($_POST["stateSave"])) {
-            if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"])) {
 
-                // Changing isDone to an int
-                if (!isset($_POST["stateIsDone"])) {
-                    $_POST["stateIsDone"] = 0;
-                } else {
-                    $_POST["stateIsDone"] = 1;
-                }
-
-                $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
+            // Changing isDone to an int
+            if (!isset($_POST["stateIsDone"])) {
+                $_POST["stateIsDone"] = 0;
             } else {
-                $this->_f3->set("errors", $this->_val->getErrors());
+                $_POST["stateIsDone"] = 1;
             }
+
+            // Update existing state
+            if ($_POST["stateId"] != 0) {
+                if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+                    $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
+                } else {
+                    $this->_f3->set("errors", $this->_val->getErrors());
+                }
+                // Add new state
+            } else {
+                if($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+                    echo "valid";
+                    $this->_db->addState($itemId, $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
+                } else {
+                    echo "invalid";
+                    $this->_f3->set("errors", $this->_val->getErrors());
+                    $this->_f3->set("stateNameNew", $_POST["stateName"]);
+                    $this->_f3->set("stateSetByNew", $_POST["stateSetBy"]);
+                    $this->_f3->set("stateTextNew", $_POST["stateText"]);
+                    $this->_f3->set("stateIsDoneNew", $_POST["stateIsDone"]);
+                }
+            }
+
         }
 
         // Move Up

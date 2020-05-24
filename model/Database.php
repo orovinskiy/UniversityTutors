@@ -695,6 +695,24 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC)["count"];
     }
 
+    /**
+     * Adds a new state
+     *
+     * @param int $itemId The item the state is associated with
+     * @param string $stateName The state's name
+     * @param string $stateSetBy Who the state is set by
+     * @param string $stateText The description text for the state
+     * @param string $stateIsDone If this state counts as done for the item
+     * @author Keller Flint
+     */
+    function addState($itemId, $stateName, $stateSetBy, $stateText, $stateIsDone)
+    {
+        $order = $this->getMaxState($itemId) + 1;
+        $sql = "INSERT INTO State VALUES(DEFAULT, ? , ?, ?, ?, $order , ?)";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $stateName, $stateSetBy, $stateText, $stateIsDone]);
+    }
+
 
 
 }

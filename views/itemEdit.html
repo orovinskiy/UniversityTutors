@@ -60,7 +60,8 @@ Page to create, edit and delete items in the table
         <check if="{{ isset(@defaultWarning) }}">
             <h2 class="text-danger">{{ @defaultWarning }}</h2>
         </check>
-        <!-- Creates form for each state associated with the item -->
+
+        <!-- Creates form for each state associated with the item to view and update-->
         <repeat group="{{ @stateData }}" value="{{ @state }}">
             <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">
                 <h4>{{ @state['state_name'] }}</h4>
@@ -152,6 +153,89 @@ Page to create, edit and delete items in the table
                 </button>
             </form>
         </repeat>
+
+
+
+        <!-- Add new state -->
+        <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">
+            <h4>Add New State</h4>
+            <input type="hidden" name="stateId" value="0">
+            <div class="row">
+
+                <!-- state name -->
+                <div class="form-group d-inline-block col-5">
+                    <label for="name-0">Name</label>
+                    <input type="text" class="form-control" id="name-0"
+                           value="{{ @stateNameNew }}"
+                           name="stateName">
+                    <check if="{{ isset(@errors['stateName0']) }}">
+                        <span class="text-danger">{{ @errors['stateName0'] }}</span>
+                    </check>
+                </div>
+                <div class="col-2"></div>
+
+                <!-- state set_by -->
+                <div class="form-group d-inline-block col-5">
+                    <label for="set-by-0">Set By</label>
+                    <select class="form-control" id="set-by-0" name="stateSetBy">
+                        <check if="{{ @stateSetByNew == 'default' }}">
+                            <true>
+                                <option value="default" selected>Default</option>
+                            </true>
+                            <false>
+                                <option value="default">Default</option>
+                            </false>
+                        </check>
+                        <check if="{{ @stateSetByNew == 'tutor' }}">
+                            <true>
+                                <option value="tutor" selected>Tutor</option>
+                            </true>
+                            <false>
+                                <option value="tutor">Tutor</option>
+                            </false>
+                        </check>
+                        <check if="{{ @stateSetByNew == 'admin' }}">
+                            <true>
+                                <option value="admin" selected>Admin</option>
+                            </true>
+                            <false>
+                                <option value="admin">Admin</option>
+                            </false>
+                        </check>
+                    </select>
+                </div>
+
+                <!-- state text -->
+                <div class="form-group col-12">
+                    <label for="description-0">Description</label>
+                    <textarea class="form-control" id="description-0" rows="3"
+                              name="stateText">{{ @stateTextNew }}</textarea>
+                    <check if="{{ isset(@errors['stateText0']) }}">
+                        <span class="text-danger">{{ @errors['stateText0'] }}</span>
+                    </check>
+                </div>
+            </div>
+
+            <!-- States counts as done checkbox -->
+            <div class="form-check text-left">
+                <check if="{{ @stateIsDoneNew == 1 }}">
+                    <true>
+                        <input type="checkbox" class="form-check-input" id="done-0"
+                               name="stateIsDone" checked>
+
+                    </true>
+                    <false>
+                        <input type="checkbox" class="form-check-input" id="done-0"
+                               name="stateIsDone">
+                    </false>
+                </check>
+                <label class="form-check-label mb" for="done-0">{{ @item['item_name'] }} is
+                    complete</label>
+            </div>
+
+            <button type="submit" class="btn btn-success float-right" name="stateSave" value="stateSave">Add
+            </button>
+        </form>
     </div>
 </div>
 
