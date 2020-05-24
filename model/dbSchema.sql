@@ -125,8 +125,8 @@ INSERT INTO Tutor VALUES ("1","Bob","Riely","(222) 222-4444","234-43-7853","imag
 /* Item Test Data */
 
 /* TutorYear */
-INSERT INTO `tutors`.`TutorYear` (`tutorYear_id`, `user_id`, `tutorYear_year`) VALUES ('1', '1', 2020);
-INSERT INTO `tutors`.`TutorYear` (`tutorYear_id`, `user_id`, `tutorYear_year`) VALUES ('2', '2', 2020);
+INSERT INTO `tutors`.`TutorYear` (`tutorYear_id`, `user_id`, `tutorYear_year`) VALUES ('1', '1', 2020),('2', '2', 2020),
+('3','3',2020),('4','4',2020),('5','5',2020),('7','7',2020),('8','1',2019);
 
 /* Background */
 INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('1', 'Backgroud Check', 'select', b'0');
@@ -156,3 +156,7 @@ INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VAL
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '2', '7');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '1', '8');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '2', '9');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '3', '8');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '4', '9');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '4', '8');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '3', '9');

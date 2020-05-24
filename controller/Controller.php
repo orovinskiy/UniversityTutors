@@ -131,7 +131,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        //$this->isLoggedIn();
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -141,41 +141,17 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
-        $checkBoxes = $checkBoxes[0];
+        var_dump($checkBoxes);
+        var_dump($this->_db->getNextState(2));
 
-        $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
-        empty($checkBoxes['tutor_image']) ? $checkBoxes['tutor_image'] = 'formEmpty' : $checkBoxes['tutor_image'] = 'formFull';
-        empty($checkBoxes['tutor_bio']) ? $checkBoxes['tutor_bio'] = 'formEmpty' : $checkBoxes['tutor_bio'] = 'formFull';
-        $checkBoxes['year_SPS'] == 'none' ? $checkBoxes['year_SPS'] = '0' : $checkBoxes['year_SPS'] = '1';
-
-        if ($checkBoxes['year_ADP'] == 'invited') {
-            $checkBoxes['year_ADP'] = '0';
-        }
-        if ($checkBoxes['year_ADP'] == 'registered') {
-            $checkBoxes['year_ADP'] = '1';
-        }
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
+        $this->_f3->set('checklist',$checkBoxes);
+        $this->_f3->set('db',$this->_db);
         $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
-        $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
-            "Column" => "year_ADP", "id" => "adp"),
-            "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'],
-                "Column" => "year_sexual_misconduct", "id" => "sex-miscond"),
-            "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'],
-                "Column" => "year_affirmation_disclosures", "id" => "affirm-disclose"),
-            "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'],
-                "Column" => "year_handbook_verification", "id" => "handbook-verify"),
-            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9", "id" => "i9"),
-            "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
-                "Column" => "year_offer_letter", "id" => "offer-letter"),
-            "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id" => "orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
-            "SPS" => array("Value" => $checkBoxes['year_SPS'], "Column" => "year_SPS", "id" => "sps"),
-            "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
-            "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
+
 
 
         $view = new Template();
