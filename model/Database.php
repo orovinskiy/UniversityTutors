@@ -103,6 +103,7 @@ class Database
 
     }
 
+    //TODO: Delete this function if no one uses it
     /**
      * Function to retrieve information for a specific tutor to be shown within the new hire screen
      * @param int $year parameter to know what year to grab information for
@@ -217,6 +218,7 @@ class Database
         return $id;
     }
 
+    //TODO: Delete this function if no one uses it
     /**
      * Function to test the database connection
      * @return array returns all rows from Tutor table
@@ -336,6 +338,11 @@ class Database
         return $results;
     }
 
+    /**This function gets the name of a tutor based on the id
+     * @param int $userID the id of a user
+     * @return string The full name of a user
+     * @author Oleg
+     */
     function getTutorName($userID){
         $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
 
@@ -348,6 +355,12 @@ class Database
         return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
     }
 
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the set by of a state
+     * @author Oleg
+     */
     function getNextState($stateID){
         $stateID+=1;
         $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
@@ -361,6 +374,12 @@ class Database
         return $results[0]['state_set_by'];
     }
 
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the text of a state
+     * @author Oleg
+     */
     function getNextStateText($stateID){
         $stateID+=1;
         $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
@@ -374,6 +393,12 @@ class Database
         return $results[0]['state_text'];
     }
 
+    /**Updates the state of a item for a tutor
+     * @param int $state the new state to set
+     * @param int $item the item that the state will be changed for
+     * @param int $user the user that's associated with the item
+     * @author Oleg
+     */
     function updateStateOfTutor($state,$item,$user){
         $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
 
