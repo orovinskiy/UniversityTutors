@@ -556,6 +556,13 @@ class Controller
             } else {
                 $this->_f3->set("errors", $this->_val->getErrors());
             }
+
+            if ($itemId == 0) {
+                if ($this->_val->validateItem($_POST["itemName"])) {
+                    $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
+                    $this->_f3->reroute("edit/$itemId");
+                }
+            }
         }
 
         // Save State

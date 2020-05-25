@@ -11,7 +11,8 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
-        <button id="enable-edit" class="btn btn-primary text-left">Edit Items</button>
+        <button id="enable-edit" class="btn btn-primary text-left">Edit Columns</button>
+        <a id="add-new-item" class="btn btn-primary" href="../edit/0">Add Column</a>
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year+1}}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
@@ -59,16 +60,19 @@ Page for admin viewing and management of tutor onboarding data.
             <th>Email</th>
             <th>Bio</th>
             <th>Picture</th>
-        <repeat group="{{ @items }}" value="{{ @item }}">
-            <th>{{ @item['item_name'] }}<br><button class="edit-item btn btn-info d-none">Edit</button></th>
-        </repeat>
+            <repeat group="{{ @items }}" value="{{ @item }}">
+                <th>{{ @item['item_name'] }}<br>
+                    <a class="edit-item btn btn-info d-none" href="../edit/{{ @item['item_id'] }}">Edit</a>
+                </th>
+            </repeat>
         </tr>
         </thead>
         <tbody>
         <repeat group="{{ @tutorsData }}" value=" {{ @tutor }}">
             <tr>
                 <!-- Name -->
-                <td class="name"><a href="../tutor/{{ @tutor['user_id'] }}">{{ @tutor['tutor_first'] }} {{ @tutor['tutor_last'] }}</a></td>
+                <td class="name"><a href="../tutor/{{ @tutor['user_id'] }}">{{ @tutor['tutor_first'] }} {{
+                    @tutor['tutor_last'] }}</a></td>
 
                 <!-- Email -->
                 <td class="email">
