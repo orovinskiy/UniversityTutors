@@ -24,7 +24,6 @@ $("body").on("click","input",function()
 
     }
     else{
-        wholeCheckBox.children('label').innerHTML = 'Complete';
         dataValue = parseInt($(this).data('state'))-1;
         $(".notCompletedBox").append(wholeCheckBox);
         wholeCheckBox.find('label').html('Complete');
@@ -35,7 +34,6 @@ $("body").on("click","input",function()
         {
             user: $(this).val(),
             value : dataValue,
-            item: $(this).attr('id'),
-            //year : $('.yearID').attr('data-id')
+            item: $(this).attr('id')
         });
 });
