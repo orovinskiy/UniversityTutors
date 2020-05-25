@@ -230,10 +230,10 @@ class Controller
             $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
-            $randomFileName = $this->nameForImage($_POST['firstName'],$param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+            $imageFileName = $this->nameForImage($_POST['firstName'],$param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
             if ($this->_val->validForm($_FILES['fileToUpload'],
-                $randomFileName, $param["id"], $_POST['bio'])) {
+                 $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn']) || substr($_POST['ssn'], 0, 3) == "XXX") {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
@@ -246,8 +246,8 @@ class Controller
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $imageFileName);
+                        $this->_db->uploadTutorImage($imageFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
@@ -552,6 +552,7 @@ class Controller
      * @param String $tutor_name the tutor name
      * @param int $user_id the tutor id
      * @return string name for upload image
+     * @author  laxmi
      */
     function nameForImage($tutor_name,$user_id)
     {
