@@ -230,7 +230,7 @@ class Controller
             $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
-            $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+            $randomFileName = $this->nameForImage($_POST['firstName'],$param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
             if ($this->_val->validForm($_FILES['fileToUpload'],
                 $randomFileName, $param["id"], $_POST['bio'])) {
@@ -414,7 +414,6 @@ class Controller
         $this->isLoggedIn(); //comment to remove the login requirement
 
 
-
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
             '', 'Admin Manager');
 
@@ -477,7 +476,7 @@ class Controller
         $subject = "Welcome New Tutor!";
         $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
-                "<p>$loginLink</p>";
+            "<p>$loginLink</p>";
         $success = smtpmailer($to, $from, $fromName, $subject, $body);
         return $success;
     }
@@ -548,4 +547,14 @@ class Controller
         echo $view->render('views/password.html');
     }
 
+    /**
+     * Generate the image file name to be tutor's name and tutor's id
+     * @param String $tutor_name the tutor name
+     * @param int $user_id the tutor id
+     * @return string name for upload image
+     */
+    function nameForImage($tutor_name,$user_id)
+    {
+        return $tutor_name . "-" . $user_id;
+    }
 }
