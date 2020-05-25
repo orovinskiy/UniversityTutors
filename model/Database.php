@@ -828,7 +828,7 @@ class Database
 
         // Create entry for each ItemTutorYear
         $tutorYears = $this->getTutorYears();
-        $sql = "INSERT INTO ItemTutorYear VALUES (?, ?, ?)";
+        $sql = "INSERT INTO ItemTutorYear VALUES (?, ?, ?, NULL)";
         $statement = $this->_dbh->prepare($sql);
 
         foreach ($tutorYears as $tutorYear) {

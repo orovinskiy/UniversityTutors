@@ -559,10 +559,8 @@ class Controller
                 // Add new state
             } else {
                 if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
-                    echo "valid";
                     $this->_db->addState($itemId, $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
                 } else {
-                    echo "invalid";
                     $this->_f3->set("errors", $this->_val->getErrors());
                     $this->_f3->set("stateNameNew", $_POST["stateName"]);
                     $this->_f3->set("stateSetByNew", $_POST["stateSetBy"]);

@@ -11,8 +11,6 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
-        <button id="enable-edit" class="btn btn-primary text-left">Edit Columns</button>
-        <a id="add-new-item" class="btn btn-primary" href="../edit/0">Add Column</a>
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year+1}}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
@@ -20,6 +18,9 @@ Page for admin viewing and management of tutor onboarding data.
         <check if="{{ @currentYear != @year }}">
             <button id="current-year" class="btn btn-info mt-3">Set Current Year</button>
         </check>
+        <br>
+        <button id="enable-edit" class="btn btn-outline-primary text-left">Edit Columns</button>
+        <a id="add-new-item" class="btn btn-outline-primary" href="../edit/0">Add Column</a>
         <br>
 
         <!-- Filter buttons -->
