@@ -631,6 +631,12 @@ class Controller
             }
         }
 
+        if (isset($_POST["itemDelete"])) {
+            $this->_db->deleteItem($itemId);
+            $currentYear = $this->_db->getCurrentYear();
+            $this->_f3->reroute("tutors/$currentYear&all");
+        }
+
 
         $this->_f3->set("item", $this->_db->getItem($itemId));
         $this->_f3->set("stateData", $this->_db->getStates($itemId));

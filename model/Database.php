@@ -836,5 +836,26 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Deletes the given item
+     *
+     * @param int $itemId The item id to be deleted
+     * @author Keller Flint
+     */
+    function deleteItem($itemId)
+    {
+        $sql = "DELETE FROM ItemTutorYear WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $sql = "DELETE FROM State WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $sql = "DELETE FROM Item WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+    }
+
 
 }
