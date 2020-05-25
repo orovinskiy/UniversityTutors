@@ -10,7 +10,7 @@
 $("body").on("click","input",function()
 {
     //predefined variables
-    let wholeCheckBox = $(this).parents(":eq(3)");
+    let wholeCheckBox = $(this).parents(":eq(5)");
     let dataValue;
 
     //remove whole checkbox
@@ -18,31 +18,22 @@ $("body").on("click","input",function()
 
     //check what data to put into the database
     if($(this).is(":checked")){
-        dataValue = 1;
+        dataValue = parseInt($(this).data('state'))+1;
         $(".completedBox").append(wholeCheckBox);
+        wholeCheckBox.find('label').html('Completed');
+
     }
     else{
-        dataValue = 0;
+        dataValue = parseInt($(this).data('state'))-1;
         $(".notCompletedBox").append(wholeCheckBox);
-    }
-
-    if($(this).attr("id") === "adp"){
-        $(this).is(":checked") ? dataValue = "registered" : dataValue = "invited";
-    }
-
-    if($(this).attr("id") === "i9"){
-        $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
-    }
-
-    if($(this).attr("id") === "sps"){
-        $(this).is(":checked") ? dataValue = "tutor" : dataValue = "none";
+        wholeCheckBox.find('label').html('Complete');
     }
 
     //Post to makeBox to save the data
     $.post("../makeBox",
         {
-            column : $(this).val(),
+            user: $(this).val(),
             value : dataValue,
-            year : $('.yearID').attr('data-id')
+            item: $(this).attr('id')
         });
 });

@@ -103,6 +103,7 @@ class Database
 
     }
 
+    //TODO: Delete this function if no one uses it
     /**
      * Function to retrieve information for a specific tutor to be shown within the new hire screen
      * @param int $year parameter to know what year to grab information for
@@ -217,6 +218,7 @@ class Database
         return $id;
     }
 
+    //TODO: Delete this function if no one uses it
     /**
      * Function to test the database connection
      * @return array returns all rows from Tutor table
@@ -320,10 +322,12 @@ class Database
      */
     function getTutorsChecklist($year, $userID)
     {
-        $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
-        year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation,
-         Tutor.user_id, tutor_image, tutor_bio, year_SPS FROM
-        Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
+        $sql = "SELECT State.state_is_done, State.state_id, State.state_text,State.state_set_by,
+                Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
+                inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
+                inner join Item on ItemTutorYear.item_id = Item.item_id 
+                inner join State on ItemTutorYear.state_id = State.state_id
+                where TutorYear.user_id = ? and TutorYear.tutorYear_year = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
@@ -332,6 +336,75 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results;
+    }
+
+    /**This function gets the name of a tutor based on the id
+     * @param int $userID the id of a user
+     * @return string The full name of a user
+     * @author Oleg
+     */
+    function getTutorName($userID){
+        $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$userID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
+    }
+
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the set by of a state
+     * @author Oleg
+     */
+    function getNextState($stateID){
+        $stateID+=1;
+        $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$stateID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['state_set_by'];
+    }
+
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the text of a state
+     * @author Oleg
+     */
+    function getNextStateText($stateID){
+        $stateID+=1;
+        $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$stateID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['state_text'];
+    }
+
+    /**Updates the state of a item for a tutor
+     * @param int $state the new state to set
+     * @param int $item the item that the state will be changed for
+     * @param int $user the user that's associated with the item
+     * @author Oleg
+     */
+    function updateStateOfTutor($state,$item,$user){
+        $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$state,$item,$user]);
     }
 
     /**Get email form the user table
