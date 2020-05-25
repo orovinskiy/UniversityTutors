@@ -103,39 +103,6 @@ class Database
 
     }
 
-    //TODO: Delete this function if no one uses it
-    /**
-     * Function to retrieve information for a specific tutor to be shown within the new hire screen
-     * @param int $year parameter to know what year to grab information for
-     * @param int $userID parameter to select the specific tutor
-     * @return array returns the row with the data for the specific tutor for the specific year
-     */
-    function getTutor($year, $userID)
-    {
-        //defining query
-        $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id
-                    where User.user_id = ?
-                    and Year.year_start = ?";
-
-        //Preparing statement
-        $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement and binding parameter
-        $statement->execute([$userID, $year]);
-
-        //Get Results
-        $results = $statement->fetch(PDO::FETCH_ASSOC);
-        //echo "$results";
-
-        return $results;
-
-    }
-
     /**
      * Updates data is the Year table given a column, value and yearId
      *
@@ -216,30 +183,6 @@ class Database
         $statement->execute([$year]);
 
         return $id;
-    }
-
-    //TODO: Delete this function if no one uses it
-    /**
-     * Function to test the database connection
-     * @return array returns all rows from Tutor table
-     * @author Dallas Sloan
-     */
-    function testDatabase()
-    {
-        $sql = "SELECT * from Tutor";
-
-        //Preparing statement
-        $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement and binding parameter
-        $statement->execute();
-
-        //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //echo var_dump($results);
-
-        return $results;
-
     }
 
     /**
