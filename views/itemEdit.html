@@ -5,7 +5,7 @@ Page to create, edit and delete items in the table
 
 <include href="views/navbar.html"/>
 
-<h1 class="text-center m-3">{{ @item['item_name'] }}</h1>
+<h1 class="text-center m-3" id="title">{{ @item['item_name'] }}</h1>
 
 <!-- Form to edit item data -->
 <form class="text-center" method="POST" action="#">
@@ -57,13 +57,20 @@ Page to create, edit and delete items in the table
 <div class="row">
     <div class="col-3"></div>
     <div class="col-6">
-        <check if="{{ isset(@defaultWarning) }}">
-            <h2 class="text-danger">{{ @defaultWarning }}</h2>
+        <check if="{{ isset(@defaultError) }}">
+            <true>
+                <h2 class="text-danger">{{ @defaultError }}</h2>
+            </true>
+            <false>
+                <check if="{{ isset(@defaultWarning) }}">
+                    <h2 class="text-warning">{{ @defaultWarning }}</h2>
+                </check>
+            </false>
         </check>
 
         <!-- Creates form for each state associated with the item to view and update-->
         <repeat group="{{ @stateData }}" value="{{ @state }}">
-            <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">
+            <form class="text-center w-100 border p-3 m-3 bg-light rounded edit-state" method="post" action="#">
                 <h4>{{ @state['state_name'] }}</h4>
                 <input type="hidden" name="stateId" value="{{ @state['state_id'] }}">
                 <div class="row">
@@ -139,6 +146,12 @@ Page to create, edit and delete items in the table
                         complete</label>
                 </div>
 
+                <button type="submit" class="btn btn-danger float-left mt-4 delete" name="stateDelete"
+                        value="stateDelete">Delete
+                </button>
+                <button type="submit" class="btn btn-success float-right mt-4" name="stateSave" value="stateSave">Save
+                </button>
+
                 <!-- Button to change state order -->
                 <check if="{{ @state['state_order'] != 1 }}">
                     <button type="submit" class="btn btn-secondary m-3 w-25" name="moveUp" value="moveUp">Move Up
@@ -149,15 +162,13 @@ Page to create, edit and delete items in the table
                         Down
                     </button>
                 </check>
-                <button type="submit" class="btn btn-success float-right" name="stateSave" value="stateSave">Save
-                </button>
+
             </form>
         </repeat>
 
-
-
+        <hr class="mt-5 mb-5">
         <!-- Add new state -->
-        <form class="text-center w-100 border p-3 m-3 bg-light rounded" method="post" action="#">
+        <form class="text-center w-100 border p-3 pb-5 m-3 bg-light rounded" method="post" action="#">
             <h4>Add New State</h4>
             <input type="hidden" name="stateId" value="0">
             <div class="row">
@@ -229,15 +240,27 @@ Page to create, edit and delete items in the table
                                name="stateIsDone">
                     </false>
                 </check>
-                <label class="form-check-label mb" for="done-0">{{ @item['item_name'] }} is
+                <label class="form-check-label mb-3" for="done-0">{{ @item['item_name'] }} is
                     complete</label>
             </div>
-
             <button type="submit" class="btn btn-success float-right" name="stateSave" value="stateSave">Add
             </button>
         </form>
     </div>
 </div>
 
+<!--JQuery and bootstrap dependencies-->
+<script
+        src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script src="../scripts/itemEditScript.js"></script>
 </body>
 </html>

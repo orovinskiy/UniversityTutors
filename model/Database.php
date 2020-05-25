@@ -713,6 +713,62 @@ class Database
         $statement->execute([$itemId, $stateName, $stateSetBy, $stateText, $stateIsDone]);
     }
 
+    function deleteState($stateId)
+    {
+        // get the item id
+        $itemId = $this->getItemByState($stateId);
+        // get item's default state (that is not this state(for the case of this one being deleted))
+        $defaultStateId = $this->getDefaultState($itemId, $stateId);
+        // where item id = id and state item-id = state-id in ItemTutorYear, set state_id = default_state_id
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$defaultStateId, $itemId, $stateId]);
+        // delete the state
+        $sql = "DELETE FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        // reorder the remaining states
+        $this->orderStates($itemId);
+    }
+
+    /**
+     * Private helper method for deleting states
+     *
+     * @param int $itemId The item to get the default state of
+     * @param int $stateId The state id to exclude
+     * @return int The state_id of the default state
+     * @author Keller Flint
+     */
+    private function getDefaultState($itemId, $stateId)
+    {
+        $sql = "SELECT state_id FROM State WHERE item_id = ? AND state_id != ? AND state_set_by = 'default'";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["state_id"];
+    }
+
+    /**
+     * Private helper method for reordering states when one state gets deleted
+     *
+     * @param int $itemId The id of the item being reordered
+     * @author Keller Flint
+     */
+    private function orderStates($itemId)
+    {
+        $sql = "SELECT state_id FROM State WHERE item_id = ? ORDER BY state_order ASC";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $x = 1;
+        foreach ($results as $result) {
+            $sql = "UPDATE State SET state_order = $x WHERE state_id = " . $result["state_id"];
+            $x = $x + 1;
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute();
+        }
+    }
 
 
 }

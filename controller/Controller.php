@@ -579,7 +579,7 @@ class Controller
                 }
                 // Add new state
             } else {
-                if($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+                if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
                     echo "valid";
                     $this->_db->addState($itemId, $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
                 } else {
@@ -604,10 +604,6 @@ class Controller
             $this->_db->updateStateOrder($_POST["stateId"], 1);
         }
 
-        $this->_f3->set("item", $this->_db->getItem($itemId));
-        $this->_f3->set("stateData", $this->_db->getStates($itemId));
-        $this->_f3->set("maxState", $this->_db->getMaxState($itemId));
-
         // Check for default state warnings
         $defaults = $this->_db->getStateCount($itemId, "default");
         if ($defaults > 1) {
@@ -615,6 +611,25 @@ class Controller
         } else if ($defaults < 1) {
             $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
         }
+
+        if (isset($_POST["stateDelete"])) {
+            if ($defaults < 1) {
+                $this->_f3->set("defaultError", "You must have a default state set before deleting this state!");
+            } else if ($defaults == 1 && $_POST["stateSetBy"] == "default") {
+                $this->_f3->set("defaultError", "You may not delete the only default state! Please add another default state before deleting this one.");
+            } else if ($defaults == 2 && $_POST["stateSetBy"] != "default") {
+                $this->_f3->set("defaultError", "You must have only one default state set before deleting this state!");
+            } else if ($defaults > 2) {
+                $this->_f3->set("defaultError", "You may not have more than 2 default states set before deleting a state!");
+            } else {
+                $this->_db->deleteState($_POST["stateId"]);
+            }
+        }
+
+
+        $this->_f3->set("item", $this->_db->getItem($itemId));
+        $this->_f3->set("stateData", $this->_db->getStates($itemId));
+        $this->_f3->set("maxState", $this->_db->getMaxState($itemId));
 
         $view = new Template();
         echo $view->render('views/itemEdit.html');
