@@ -119,7 +119,7 @@ class Controller
      */
     function checklistAjax()
     {
-        $this->_db->updateYearData($_POST['column'], $_POST['value'], $_POST['year']);
+        $this->_db->updateStateOfTutor($_POST['value'], $_POST['item'], $_POST['user']);
     }
 
     /**
@@ -141,8 +141,6 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
-        var_dump($checkBoxes);
-        var_dump($this->_db->getNextState(2));
 
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
@@ -150,7 +148,7 @@ class Controller
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist',$checkBoxes);
         $this->_f3->set('db',$this->_db);
-        $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
+        $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
 
 
 

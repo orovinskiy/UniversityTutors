@@ -146,13 +146,13 @@ INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by
 /* A & D */
 INSERT INTO `tutors`.`Item` (`item_id`, `item_name`, `item_type`, `item_is_upload`) VALUES ('3', 'A & D', 'checkbox', b'0');
 
-INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('8', '3', 'false', 'default', 'Read A& D and check the box.', '1', '0');
-INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_order`, `state_is_done`) VALUES ('9', '3', 'true', 'tutor', '2', '1');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`,  `state_order`, `state_is_done`) VALUES ('8', '3', 'false', 'default',  '1', '0');
+INSERT INTO `tutors`.`State` (`state_id`, `item_id`, `state_name`, `state_set_by`, `state_text`, `state_order`, `state_is_done`) VALUES ('9', '3', 'true', 'tutor', 'Read A& D and check the box.', '2', '1');
 
 /* ItemTutorYear */
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '1', '1');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('1', '2', '4');
-INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '1', '5');
+INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '1', '6');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('2', '2', '7');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '1', '8');
 INSERT INTO `tutors`.`ItemTutorYear` (`item_id`, `tutorYear_id`, `state_id`) VALUES ('3', '2', '9');

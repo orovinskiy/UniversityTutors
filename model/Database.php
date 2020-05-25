@@ -321,11 +321,11 @@ class Database
     function getTutorsChecklist($year, $userID)
     {
         $sql = "SELECT State.state_is_done, State.state_id, State.state_text,State.state_set_by,
-                Item.item_name FROM ItemTutorYear 
+                Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
                 inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
                 inner join Item on ItemTutorYear.item_id = Item.item_id 
                 inner join State on ItemTutorYear.state_id = State.state_id
-                where TutorYear.tutorYear_id = ? and TutorYear.tutorYear_year = ?";
+                where TutorYear.user_id = ? and TutorYear.tutorYear_year = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
@@ -334,6 +334,18 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results;
+    }
+
+    function getTutorName($userID){
+        $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$userID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
     }
 
     function getNextState($stateID){
@@ -347,6 +359,27 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results[0]['state_set_by'];
+    }
+
+    function getNextStateText($stateID){
+        $stateID+=1;
+        $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$stateID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['state_text'];
+    }
+
+    function updateStateOfTutor($state,$item,$user){
+        $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$state,$item,$user]);
     }
 
     /**Get email form the user table
