@@ -11,6 +11,7 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Title and year info/controls -->
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
+        <button id="enable-edit" class="btn btn-primary text-left">Edit Items</button>
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
         <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year+1}}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
@@ -54,21 +55,13 @@ Page for admin viewing and management of tutor onboarding data.
     <table id="tutors-table" class="compact stripe">
         <thead>
         <tr>
-            <th class="text-center">Name</th>
-            <th class="text-center">Email</th>
-            <th class="text-center">Onboarding Packet Sent</th>
-            <th class="text-center">Background Check</th>
-            <th class="text-center">Reference Check</th>
-            <th class="text-center">Offer Letter</th>
-            <th class="text-center">Affirmation & Disclosures</th>
-            <th class="text-center">Sexual Misconduct</th>
-            <th class="text-center">W4</th>
-            <th class="text-center">Handbook Verification</th>
-            <th class="text-center">SPS</th>
-            <th class="text-center">ADP Registration</th>
-            <th class="text-center test">I-9</th>
-            <th class="text-center">Orientation</th>
-            <th class="text-center">Placement</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Bio</th>
+            <th>Picture</th>
+        <repeat group="{{ @items }}" value="{{ @item }}">
+            <th>{{ @item['item_name'] }}<br><button class="edit-item btn btn-info d-none">Edit</button></th>
+        </repeat>
         </tr>
         </thead>
         <tbody>

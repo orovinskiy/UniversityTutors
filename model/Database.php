@@ -770,5 +770,19 @@ class Database
         }
     }
 
+    /**
+     * Gets all data for all items
+     *
+     * @return array The array of item data
+     * @author Keller Flint
+     */
+    function getItems()
+    {
+        $sql = "SELECT * FROM Item";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

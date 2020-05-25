@@ -187,3 +187,8 @@ $("#current-year").on("click", function () {
         window.location.href = ("../tutors/" + year + "&" + status);
     });
 });
+
+// show/hide edit item buttons
+$("#enable-edit").on("click", function () {
+    $(".edit-item").toggleClass("d-none");
+});

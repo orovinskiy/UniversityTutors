@@ -62,18 +62,16 @@ class Controller
         // Get tutor data for current year
         $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
 
-        // Set values for select dropdowns
-        $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
-        $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
-        $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
-        $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
-        $this->_f3->set("SPSOptions", array("none" => "Not Done", "tutor" => "Tutor Done", "admin" => "Admin Done"));
+        // Get headers
+        $items = $this->_db->getItems();
+
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
         $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
+        $this->_f3->set("items", $items);
 
         $view = new Template();
         echo $view->render("views/tutors.html");
