@@ -197,7 +197,6 @@ class Validate
 
     function validateFileUpload($file)
     {
-        global $dirName;
         global $f3;
 
         $isValid = true;
