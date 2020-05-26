@@ -28,79 +28,51 @@ class Database
     }
 
     /**
-     * function to retrieve all data within Year table to show all information from Year table, joining with the User,
-     * and Tutor table to show all information needed within admin datatable
+     * Returns tutors data for the given year
+     *
      * @param string $year the year you would like to see information for. Default parameter is 2020
-     * @param string $status how the tutor data is filtered
-     * @return array Returns array of all rows within Year table
-     * @author Dallas Sloan
+     * @return array Returns array of arrays of tutor item data for each tutor
+     * @author Keller Flint
      */
-    function getTutors($year = '2020', $status = "all")
+    function getTutors($year = '2020')
     {
-        //defining query
-
-        if ($status == "complete") {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id WHERE
-                    year_start = ? AND 
-                    year_packet_sent = 1 AND 
-                    (year_background = 'clear' OR year_background = 'flag') AND 
-                    (year_reference = 'clear' OR year_reference = 'flag') AND
-                    year_offer_letter = 1 AND
-                    year_affirmation_disclosures = 1 AND
-                    year_sexual_misconduct = 1 AND
-                    year_w4 = 1 AND
-                    year_handbook_verification = 1 AND
-                    year_ADP = 'registered' AND
-                    year_i9 = 'admin' AND
-                    year_SPS = 'admin' AND
-                    year_orientation = 1";
-        } else if ($status == "incomplete") {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id WHERE
-                    year_start = ? AND 
-                    (year_packet_sent = 0 OR 
-                    (year_background != 'clear' AND year_background != 'flag') OR 
-                    (year_reference != 'clear' AND year_reference != 'flag') OR
-                    year_offer_letter = 0 OR
-                    year_affirmation_disclosures = 0 OR
-                    year_sexual_misconduct = 0 OR
-                    year_w4 = 0 OR
-                    year_handbook_verification = 0 OR
-                    year_ADP != 'registered' OR
-                    year_i9 != 'admin' OR
-                    year_SPS != 'admin' OR
-                    year_orientation = 0)";
-        } else {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_SPS, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id
-                    where Year.year_start = ?";
-        }
-
-        //Preparing statement
+        // Get all tutors data for the given year
+        $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio, tutor_image FROM TutorYear 
+                INNER JOIN Tutor ON TutorYear.user_id = Tutor.user_id
+                INNER JOIN User ON TutorYear.user_id = User.user_id
+                WHERE tutorYear_year = ?";
         $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement
         $statement->execute([$year]);
 
-        //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //echo var_dump($results);
-        return $results;
+        $tutorYears = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+        $tutorsData = array();
 
+        // For each tutor in the year, get their data and add it to the return array
+        foreach ($tutorYears as $tutorYear) {
+
+            // Get item status for each tutor
+            $sql = "SELECT * FROM ItemTutorYear INNER JOIN State ON ItemTutorYear.state_id = State.state_id WHERE tutorYear_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$tutorYear["tutorYear_id"]]);
+
+            $tutors = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            // Setting tutor's profile data
+            $tutorsData[$tutorYear["tutorYear_id"]]["user_id"] = $tutorYear["user_id"];
+            $tutorsData[$tutorYear["tutorYear_id"]]["user_email"] = $tutorYear["user_email"];
+            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_first"] = $tutorYear["tutor_first"];
+            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_last"] = $tutorYear["tutor_last"];
+            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_bio"] = $tutorYear["tutor_bio"];
+            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_image"] = $tutorYear["tutor_image"];
+
+            // setting tutor's other data
+            foreach ($tutors as $key => $value) {
+                $tutorsData[$tutorYear["tutorYear_id"]][$key] = $value;
+            }
+        }
+
+        return $tutorsData;
     }
 
     /**
@@ -286,7 +258,8 @@ class Database
      * @return string The full name of a user
      * @author Oleg
      */
-    function getTutorName($userID){
+    function getTutorName($userID)
+    {
         $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -295,7 +268,7 @@ class Database
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
+        return $results[0]['tutor_first'] . ' ' . $results[0]['tutor_last'];
     }
 
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
@@ -304,8 +277,9 @@ class Database
      * @return string returns the set by of a state
      * @author Oleg
      */
-    function getNextState($stateID){
-        $stateID+=1;
+    function getNextState($stateID)
+    {
+        $stateID += 1;
         $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -323,8 +297,9 @@ class Database
      * @return string returns the text of a state
      * @author Oleg
      */
-    function getNextStateText($stateID){
-        $stateID+=1;
+    function getNextStateText($stateID)
+    {
+        $stateID += 1;
         $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -342,12 +317,13 @@ class Database
      * @param int $user the user that's associated with the item
      * @author Oleg
      */
-    function updateStateOfTutor($state,$item,$user){
+    function updateStateOfTutor($state, $item, $user)
+    {
         $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$state,$item,$user]);
+        $statement->execute([$state, $item, $user]);
     }
 
     /**Get email form the user table

@@ -60,14 +60,13 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         // Get tutor data for current year
-        $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
+        $tutorsData = $this->_db->getTutors($param["year"]);
 
         // Get headers
         $items = $this->_db->getItems();
 
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
-        $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
