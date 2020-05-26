@@ -523,6 +523,11 @@ class Controller
      */
     function editPage($itemId)
     {
+
+        // Nav builder
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
+
         // Save Item
         if (isset($_POST["itemSave"])) {
             if ($this->_val->validateItem($_POST["itemName"])) {
@@ -536,6 +541,8 @@ class Controller
                 if ($this->_val->validateItem($_POST["itemName"])) {
                     $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
                     $this->_f3->reroute("edit/$itemId");
+                } else {
+                    $this->_f3->set("errors", $this->_val->getErrors());
                 }
             }
         }
