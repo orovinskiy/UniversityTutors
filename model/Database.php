@@ -735,6 +735,12 @@ class Database
         return $this->_dbh->lastInsertId();
     }
 
+    /**
+     * Deletes a state and sets all of its associations to the item's default state
+     *
+     * @param int $stateId The id of the state to be deleted
+     * @author Keller Flint
+     */
     function deleteState($stateId)
     {
         // get the item id

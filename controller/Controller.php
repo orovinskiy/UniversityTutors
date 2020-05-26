@@ -531,6 +531,7 @@ class Controller
                 $this->_f3->set("errors", $this->_val->getErrors());
             }
 
+            // Creating a new item
             if ($itemId == 0) {
                 if ($this->_val->validateItem($_POST["itemName"])) {
                     $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
@@ -589,16 +590,22 @@ class Controller
             $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
         }
 
+        // Showing error messages for delete state
         if (isset($_POST["stateDelete"])) {
             if ($defaults < 1) {
+                // There must be at least one default state set
                 $this->_f3->set("defaultError", "You must have a default state set before deleting this state!");
             } else if ($defaults == 1 && $_POST["stateSetBy"] == "default") {
+                // Error for if the user is trying to delete the only default state
                 $this->_f3->set("defaultError", "You may not delete the only default state! Please add another default state before deleting this one.");
             } else if ($defaults == 2 && $_POST["stateSetBy"] != "default") {
+                // Error for if there are two default states set and it is ambiguous which one should be set as the new default
                 $this->_f3->set("defaultError", "You must have only one default state set before deleting this state!");
             } else if ($defaults > 2) {
+                // Error message for 3 or more default states which always makes it ambiguous which one should be set as the new default
                 $this->_f3->set("defaultError", "You may not have more than 2 default states set before deleting a state!");
             } else {
+                // Delete the state
                 $this->_db->deleteState($_POST["stateId"]);
             }
         }

@@ -276,7 +276,7 @@ class Validate
             $this->_errors["stateName" . $stateId] = "Name may not be greater than 255 characters";
         }
 
-        if (strlen($stateText) > 50) {
+        if (strlen($stateText) > 5000) {
             $isValid = false;
             $this->_errors["stateText" . $stateId] = "Description may not be greater than 5000 characters";
         }
