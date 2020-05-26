@@ -12,10 +12,7 @@ class Mail {
      */
     public function __construct()
     {
-        //pulling in the JSON file to be read and decoding info
-        $JSONFile = 'emailTemplate.json';
-        $this->_JSONData = file_get_contents($JSONFile);
-        $this->_JSONData = json_decode($this->_JSONData, true);
+        $this->pullFromJSON();
         $this->_subject = $this->_JSONData['subject'];
         $this->_body = $this->_JSONData['body'];
         $this->_defaultAttachments = $this->_JSONData['attachment'];
@@ -27,6 +24,7 @@ class Mail {
      */
     public function getSubject()
     {
+        $this->pullFromJSON();
         return $this->_subject;
     }
 
@@ -50,6 +48,7 @@ class Mail {
      */
     public function getBody()
     {
+        $this->pullFromJSON();
         return $this->_body;
     }
 
@@ -73,6 +72,7 @@ class Mail {
      */
     public function getDefaultAttachments()
     {
+        $this->pullFromJSON();
         return $this->_defaultAttachments;
     }
 
@@ -96,14 +96,14 @@ class Mail {
      * @param String $to recipient of email
      * @param String $from Sender of email
      * @param String $from_name Name of sender
-     * @param String $subject Subject line of email
-     * @param String $body Body of email, just be in HTML format
+     * @param String $loginBody login portion of welcome email
      * @return bool true if email was sent successfully, false otherwise
      * @throws phpmailerException
      * @author Dallas Sloan and GitHub
      */
     function smtpmailer($to, $from, $from_name, $loginBody)
     {
+        $this->pullFromJSON();
         //instantiating new mailer object
         $mail = new PHPMailer();
         $mail->IsSMTP();
@@ -142,6 +142,16 @@ class Mail {
             $success = true;
             return $success;
         }
+    }
+
+    /**
+     *Function to pull the most up to date information from JSON when accessing JSONData variable
+     */
+    private function pullFromJSON() {
+        //pulling in the JSON file to be read and decoding info
+        $JSONFile = 'emailTemplate.json';
+        $this->_JSONData = file_get_contents($JSONFile);
+        $this->_JSONData = json_decode($this->_JSONData, true);
     }
 
 
