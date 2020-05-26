@@ -439,15 +439,16 @@ class Controller
      */
     function sendEmail($to, $tempPassword)
     {
+        //instantiate new mail class
+        $mail = new Mail();
         $loginLink = "<a href='http://kold-tutors.greenriverdev.com/UniversityTutors/login'>Login Here</a>";
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
         $fromName = "University Tutors Admin";
-        $subject = "Welcome New Tutor!";
-        $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
+        $loginBody = "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
                 "<p>$loginLink</p>";
-        $success = smtpmailer($to, $from, $fromName, $subject, $body);
+        $success = $mail->smtpmailer($to, $from, $fromName, $loginBody);
         return $success;
     }
 

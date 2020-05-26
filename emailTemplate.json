@@ -1,0 +1,5 @@
+{
+  "subject": "This is the email subject",
+  "body": "This is the email body",
+  "attachment": "attachments/php"
+}
