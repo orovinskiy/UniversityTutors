@@ -3,6 +3,7 @@
 /**
  * Validating onboarding form
  * @author Laxmi kandel
+ * @author Keller Flint
  */
 class Validate
 {
@@ -21,7 +22,9 @@ class Validate
     }
 
     /**
-     * @return array
+     * Returns the errors associative array
+     *
+     * @return array The array of errors
      */
     public function getErrors()
     {
@@ -116,10 +119,10 @@ class Validate
         if (preg_match($regexSsn, $ssn)) {
             $ssnResult = true;
         }
-        if (!empty($f3->get("databaseSsn") AND preg_match($regexSsn, $ssn))) {
+        if (!empty($f3->get("databaseSsn") and preg_match($regexSsn, $ssn))) {
             $ssnResult = true;
         }
-        if (!empty($f3->get("databaseSsn")) AND empty($ssn)) {
+        if (!empty($f3->get("databaseSsn")) and empty($ssn)) {
             $ssnResult = true;
         }
         return $ssnResult;
@@ -177,7 +180,7 @@ class Validate
         //image file
         if (isset($file)) {
             if (!empty($file["name"])) {
-                if (!$this->validateFileUpload($file, $newName)) {
+                if (!$this->validateImageUpload($file, $newName)) {
                     $isValid = false;
                 }
             }
@@ -197,7 +200,7 @@ class Validate
      * @return bool true/false if file is valid/not valid
      */
 
-    function validateFileUpload($file, $newName)
+    function validateImageUpload($file, $newName)
     {
         global $dirName;
         global $f3;
@@ -227,6 +230,55 @@ class Validate
         } else {
             $f3->set("errors['wrongFileType']", "Sorry! Only supports .jpeg, .jpg, .gif and .png images");
             $isValid = false;
+        }
+        return $isValid;
+    }
+
+    /**
+     * Returns true if the item data is valid
+     *
+     * @param string $itemName The name of the item
+     * @return bool Returns true if the item data is valid
+     * @author Keller Flint
+     */
+    function validateItem($itemName)
+    {
+        $isValid = true;
+        if (empty(trim($itemName))) {
+            $isValid = false;
+            $this->_errors["itemName"] = "Item name may not be empty";
+        }
+        if (strlen($itemName) > 255) {
+            $isValid = false;
+            $this->_errors["itemName"] = "Item name may not be greater than 255 characters";
+        }
+        return $isValid;
+    }
+
+    /**
+     * Returns true if the state data is valid
+     *
+     * @param int $stateId The id of the state
+     * @param string $stateName The name of the state
+     * @param string $stateText The description of the state
+     * @return bool Returns true if the state data is valid
+     * @author Keller Flint
+     */
+    function validateState($stateId, $stateName, $stateText)
+    {
+        $isValid = true;
+        if (empty(trim($stateName))) {
+            $this->_errors["stateName" . $stateId] = "Name may not be empty";
+            $isValid = false;
+        }
+        if (strlen($stateName) > 255) {
+            $isValid = false;
+            $this->_errors["stateName" . $stateId] = "Name may not be greater than 255 characters";
+        }
+
+        if (strlen($stateText) > 5000) {
+            $isValid = false;
+            $this->_errors["stateText" . $stateId] = "Description may not be greater than 5000 characters";
         }
         return $isValid;
     }
