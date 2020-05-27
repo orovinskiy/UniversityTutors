@@ -27,7 +27,8 @@ class Database
         }
     }
 
-    function getTutors($year = "2020") {
+    function getTutors($year = "2020")
+    {
         // Get all tutors data for the given year
         $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio, tutor_image FROM TutorYear 
                 INNER JOIN Tutor ON TutorYear.user_id = Tutor.user_id
@@ -40,16 +41,21 @@ class Database
 
         $tableData = array();
 
-        foreach($tutors as $tutorInfo) {
+        foreach ($tutors as $tutorInfo) {
             $tutorKey = $tutorInfo["tutorYear_id"];
             $tableData[$tutorKey]["info"] = $tutorInfo;
 
             $itemData = $this->getItemTutorYear($tutorKey);
             $tableData[$tutorKey]["items"] = $itemData;
+
+//            foreach ($itemData as $item) {
+//                $itemKey = $item["item_id"];
+//                $tableData[$tutorKey]["items"]["states"][$itemKey] = $this->getStates($itemKey);
+//            }
         }
 
-        //echo "<pre>";
-        //var_dump($tableData);
+//        echo "<pre>";
+//        var_dump($tableData);
 
         return $tableData;
     }
@@ -58,9 +64,19 @@ class Database
     {
         $sql = "SELECT * FROM ItemTutorYear 
                 INNER JOIN State ON ItemTutorYear.state_id = State.state_id
+                INNER JOIN Item ON ItemTutorYear.item_id = Item.item_id
                 WHERE tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$tutorYearId]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function getAllStates()
+    {
+        $sql = "SELECT * FROM State";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -765,17 +781,25 @@ class Database
     }
 
     /**
-     * Gets all data for all items
-     *
-     * @return array The array of item data
-     * @author Keller Flint
+     * TODO much more complicated functionality now
      */
     function getItems()
     {
         $sql = "SELECT * FROM Item";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $items = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $itemData = array();
+
+        foreach ($items as $item) {
+            $itemKey = $item["item_id"];
+            $itemData[$itemKey] = $item;
+            $itemData[$itemKey]["states"] = $this->getStates($itemKey);
+        }
+
+        return $itemData;
     }
 
     /**

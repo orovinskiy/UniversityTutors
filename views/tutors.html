@@ -71,8 +71,10 @@ Page for admin viewing and management of tutor onboarding data.
         <tbody>
         <repeat group="{{ @tableData }}" value=" {{ @tutorData }}">
             <tr>
+
                 <!-- Name -->
-                <td class="name"><a href="../tutor/{{ @tutorData['info']['user_id'] }}">{{ @tutorData['info']['tutor_first'] }} {{
+                <td class="name"><a href="../tutor/{{ @tutorData['info']['user_id'] }}">{{
+                    @tutorData['info']['tutor_first'] }} {{
                     @tutorData['info']['tutor_last'] }}</a></td>
 
                 <!-- Email -->
@@ -81,10 +83,16 @@ Page for admin viewing and management of tutor onboarding data.
                     <i class="fa fa-caret-down float-right" style="font-size:18px"></i>
                     <br>
                     <check if="{{ @currentYear != @year }}">
-                        <button class="btn btn-info d-none import" data-userid="{{ @tutorData['info']['user_id'] }}">Import</button>
+                        <button class="btn btn-info d-none import" data-userid="{{ @tutorData['info']['user_id'] }}">
+                            Import
+                        </button>
                     </check>
-                    <button class="btn btn-danger d-none delete" data-userid="{{ @tutorData['info']['user_id'] }}">Delete</button>
+                    <button class="btn btn-danger d-none delete" data-userid="{{ @tutorData['info']['user_id'] }}">
+                        Delete
+                    </button>
                 </td>
+
+                <!-- Tutor Bio -->
                 <td>
                     <div class="form-check text-center">
                         <check if="{{ @tutorData['info']['tutor_bio'] != NULL }}">
@@ -97,6 +105,8 @@ Page for admin viewing and management of tutor onboarding data.
                         </check>
                     </div>
                 </td>
+
+                <!-- Tutor Image -->
                 <td>
                     <div class="form-check text-center">
                         <check if="{{ @tutorData['info']['tutor_image'] != NULL }}">
@@ -110,9 +120,43 @@ Page for admin viewing and management of tutor onboarding data.
                     </div>
                 </td>
 
+                <!-- Display dynamic columns -->
                 <repeat group="{{ @tutorData['items'] }}" value="{{ @column }}">
                     <td>
-                        {{ @column["state_name"] }}
+                        <check if="{{ @column['item_type'] == 'select' }}">
+
+                            <!-- Select -->
+                            <true>
+                                <select class="form-control tutor-select">
+
+                                    <!-- Repeats over all states in the item to populate dropdown -->
+                                    <repeat group="{{ @items[@column['item_id']]['states'] }}" value="{{ @value }}">
+                                        <check if="{{ @value['state_id'] == @column['state_id'] }}">
+                                            <true>
+                                                <option value="{{ @value['state_id'] }}" selected>{{ @value['state_name'] }}</option>
+                                            </true>
+                                            <false>
+                                                <option value="{{ @value['state_id'] }}">{{ @value['state_name'] }}</option>
+                                            </false>
+                                        </check>
+                                    </repeat>
+                                </select>
+                            </true>
+
+                            <!-- Checkbox -->
+                            <false>
+                                <div class="form-check text-center">
+                                    <check if="{{ @column['state_order'] !=  1 }}">
+                                        <true>
+                                            <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                        </true>
+                                        <false>
+                                            <input class="form-check-input checkbox-big" type="checkbox">
+                                        </false>
+                                    </check>
+                                </div>
+                            </false>
+                        </check>
                     </td>
                 </repeat>
             </tr>
