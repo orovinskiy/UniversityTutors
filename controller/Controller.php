@@ -13,6 +13,7 @@ class Controller
     private $_f3; //router
     private $_db;
     private $_val;
+    private $_mail;
 
     /**
      * This function gets the info to display a correct navbar
@@ -38,6 +39,9 @@ class Controller
         $this->_f3 = $f3;
         $this->_db = $db;
         $this->_val = new Validate($db);
+        //instantiate new mail class
+        $this->_mail = new Mail();
+
     }
 
     /**
@@ -72,6 +76,10 @@ class Controller
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
         $this->_f3->set("items", $items);
+
+        //Store Default email data into hive
+        $this->_f3->set("subject", $this->_mail->getSubject());
+        $this->_f3->set("body", $this->_mail->getBody());
 
         $view = new Template();
         echo $view->render("views/tutors.html");
@@ -437,8 +445,6 @@ class Controller
      */
     function sendEmail($to, $tempPassword)
     {
-        //instantiate new mail class
-        $mail = new Mail();
         $loginLink = "<a href='http://kold-tutors.greenriverdev.com/UniversityTutors/login'>Login Here</a>";
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
@@ -446,7 +452,7 @@ class Controller
         $loginBody = "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
                 "<p>$loginLink</p>";
-        $success = $mail->smtpmailer($to, $from, $fromName, $loginBody);
+        $success = $this->_mail->smtpmailer($to, $from, $fromName, $loginBody);
         return $success;
     }
 
