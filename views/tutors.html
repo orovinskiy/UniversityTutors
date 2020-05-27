@@ -310,11 +310,11 @@ Page for admin viewing and management of tutor onboarding data.
         <div class="col-4 px-1">
             <button data-year="{{ @year }}" id="add-tutor-button" class="btn btn-success">Add Tutor</button>
             <!-- Adding modal button and modal code -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#email-modal"
                     data-whatever="@mdo">Edit Default Email
             </button>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="email-modal" tabindex="-1" role="dialog"
                  aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -328,7 +328,7 @@ Page for admin viewing and management of tutor onboarding data.
                             <form>
                                 <div class="form-group">
                                     <label for="email-subject" class="col-form-label">Subject:</label>
-                                    <input type="text" class="form-control" id="email-subject" value=" {{ @subject }}">
+                                    <input type="text" class="form-control" id="email-subject" value="{{ @subject }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="email-body" class="col-form-label">Body:</label>
