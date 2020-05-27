@@ -104,38 +104,6 @@ class Database
     }
 
     /**
-     * Function to retrieve information for a specific tutor to be shown within the new hire screen
-     * @param int $year parameter to know what year to grab information for
-     * @param int $userID parameter to select the specific tutor
-     * @return array returns the row with the data for the specific tutor for the specific year
-     */
-    function getTutor($year, $userID)
-    {
-        //defining query
-        $sql = "SELECT Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id
-                    where User.user_id = ?
-                    and Year.year_start = ?";
-
-        //Preparing statement
-        $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement and binding parameter
-        $statement->execute([$userID, $year]);
-
-        //Get Results
-        $results = $statement->fetch(PDO::FETCH_ASSOC);
-        //echo "$results";
-
-        return $results;
-
-    }
-
-    /**
      * Updates data is the Year table given a column, value and yearId
      *
      * @param string $column The name of the column in the database being updated
@@ -218,29 +186,6 @@ class Database
     }
 
     /**
-     * Function to test the database connection
-     * @return array returns all rows from Tutor table
-     * @author Dallas Sloan
-     */
-    function testDatabase()
-    {
-        $sql = "SELECT * from Tutor";
-
-        //Preparing statement
-        $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement and binding parameter
-        $statement->execute();
-
-        //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //echo var_dump($results);
-
-        return $results;
-
-    }
-
-    /**
      * update tutor table in given user's id
      * @param int $user_id given user's id
      * @param string $firstName tutor's first name
@@ -320,10 +265,12 @@ class Database
      */
     function getTutorsChecklist($year, $userID)
     {
-        $sql = "SELECT tutor_first, tutor_last, year_offer_letter, year_affirmation_disclosures,
-        year_sexual_misconduct, year_id, year_w4, year_handbook_verification, year_ADP, year_i9, year_orientation,
-         Tutor.user_id, tutor_image, tutor_bio, year_SPS FROM
-        Year INNER JOIN Tutor ON Tutor.user_id = Year.user_id WHERE Tutor.user_id = ? AND year_start = ?";
+        $sql = "SELECT State.state_is_done, State.state_id, State.state_text,State.state_set_by,
+                Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
+                inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
+                inner join Item on ItemTutorYear.item_id = Item.item_id 
+                inner join State on ItemTutorYear.state_id = State.state_id
+                where TutorYear.user_id = ? and TutorYear.tutorYear_year = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
@@ -332,6 +279,75 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results;
+    }
+
+    /**This function gets the name of a tutor based on the id
+     * @param int $userID the id of a user
+     * @return string The full name of a user
+     * @author Oleg
+     */
+    function getTutorName($userID){
+        $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$userID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
+    }
+
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the set by of a state
+     * @author Oleg
+     */
+    function getNextState($stateID){
+        $stateID+=1;
+        $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$stateID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['state_set_by'];
+    }
+
+    /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
+     * of a different item)
+     * @param int $stateID
+     * @return string returns the text of a state
+     * @author Oleg
+     */
+    function getNextStateText($stateID){
+        $stateID+=1;
+        $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$stateID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]['state_text'];
+    }
+
+    /**Updates the state of a item for a tutor
+     * @param int $state the new state to set
+     * @param int $item the item that the state will be changed for
+     * @param int $user the user that's associated with the item
+     * @author Oleg
+     */
+    function updateStateOfTutor($state,$item,$user){
+        $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$state,$item,$user]);
     }
 
     /**Get email form the user table
@@ -524,10 +540,344 @@ class Database
      * @param string $userPassword The new password
      * @author Keller Flint
      */
-    function updatePassword($userId, $userPassword) {
+    function updatePassword($userId, $userPassword)
+    {
         $sql = "UPDATE User SET user_password = ? WHERE user_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$userPassword, $userId]);
     }
+
+    /* START OF EDIT FUNCTIONS */
+
+    /**
+     * Returns all data for the given item
+     *
+     * @param int $itemId The id of the item
+     * @return array data for the given item
+     * @author Keller Flint
+     */
+    function getItem($itemId)
+    {
+        $sql = "SELECT * FROM Item WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Returns all state data for the given item
+     *
+     * @param int $itemId The id of the item
+     * @return array All state data for the given item
+     * @author
+     */
+    function getStates($itemId)
+    {
+        $sql = "SELECT * FROM State WHERE item_id = ? ORDER BY state_order ASC";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Returns highest order of the states for an item
+     *
+     * @param int $itemId The id of the item
+     * @return int The highest order of the states for an item
+     * @author Keller Flint
+     */
+    function getMaxState($itemId)
+    {
+        $sql = "SELECT MAX(state_order) AS max FROM State WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC)['max'];
+        if (!$result) {
+            $result = 0;
+        }
+        return $result;
+    }
+
+    /**
+     * Updates data for the given item
+     *
+     * @param int $itemId Id of the item
+     * @param string $itemName The item's name
+     * @param string $itemType The item's type
+     * @author Keller Flint
+     */
+    function updateItem($itemId, $itemName, $itemType)
+    {
+        $sql = "UPDATE Item SET item_name = ?, item_type = ? WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemName, $itemType, $itemId]);
+    }
+
+    /**
+     * Updates data for the given state
+     *
+     * @param int $stateId Id of the state
+     * @param string $stateName The state's name
+     * @param string $stateSetBy Who the state is set by
+     * @param string $stateText The description text for the state
+     * @param string $stateIsDone If this state counts as done for the item
+     * @author Keller Flint
+     */
+    function updateState($stateId, $stateName, $stateSetBy, $stateText, $stateIsDone)
+    {
+        $sql = "UPDATE State SET state_name = ?, state_set_by= ?, state_text = ?, state_is_done = ? WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateName, $stateSetBy, $stateText, $stateIsDone, $stateId]);
+    }
+
+
+    /**
+     * Moves a state up or down relative to other states in the same item
+     *
+     * @param int $stateId The id of the state being moved
+     * @param int $direction The direction the state is being moved (-1 for up, 1 for down)
+     * @author Keller Flint
+     */
+    function updateStateOrder($stateId, $direction)
+    {
+        if ($direction != 1 && $direction != -1) {
+            throw new InvalidArgumentException("direction must be either 1 or -1");
+        }
+
+        $thisState = $this->getState($stateId);
+        $otherState = $this->getStateByOrder($thisState["item_id"], $thisState["state_order"] + $direction);
+
+        $sql = "UPDATE State SET state_order = ? WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$thisState["state_order"], $otherState["state_id"]]);
+        $statement->execute([$otherState["state_order"], $thisState["state_id"]]);
+    }
+
+    /**
+     * Get a state by it's order in an item
+     *
+     * @param int $itemId The id of the item the state is associated with
+     * @param int $order The order of the state in the item
+     * @return array The state's data
+     * @author Keller Flint
+     */
+    function getStateByOrder($itemId, $order)
+    {
+        $sql = "SELECT * FROM State WHERE item_id = ? AND state_order = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $order]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get a state by it's id
+     *
+     * @param int $stateId The id of the state
+     * @return array The state's data
+     * @author Keller Flint
+     */
+    function getState($stateId)
+    {
+        $sql = "SELECT * FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Returns the item id for a given state
+     *
+     * @param int $stateId The id of the state
+     * @return int The item's id
+     * @author Keller Flint
+     */
+    function getItemByState($stateId)
+    {
+        $sql = "SELECT item_id FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["item_id"];
+    }
+
+    /**
+     * Returns the number of states for an item
+     *
+     * @param int $itemId The item's id
+     * @param string $state The state to count
+     * @return int The number of default states for an item
+     * @author Keller Flint
+     */
+    function getStateCount($itemId, $state)
+    {
+        $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?;";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $state]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+    }
+
+    /**
+     * Adds a new state
+     *
+     * @param int $itemId The item the state is associated with
+     * @param string $stateName The state's name
+     * @param string $stateSetBy Who the state is set by
+     * @param string $stateText The description text for the state
+     * @param string $stateIsDone If this state counts as done for the item
+     * @return int New state id
+     * @author Keller Flint
+     */
+    function addState($itemId, $stateName, $stateSetBy, $stateText, $stateIsDone)
+    {
+        $order = $this->getMaxState($itemId) + 1;
+        $sql = "INSERT INTO State VALUES(DEFAULT, ? , ?, ?, ?, $order , ?)";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $stateName, $stateSetBy, $stateText, $stateIsDone]);
+        return $this->_dbh->lastInsertId();
+    }
+
+    /**
+     * Deletes a state and sets all of its associations to the item's default state
+     *
+     * @param int $stateId The id of the state to be deleted
+     * @author Keller Flint
+     */
+    function deleteState($stateId)
+    {
+        // get the item id
+        $itemId = $this->getItemByState($stateId);
+        // get item's default state (that is not this state(for the case of this one being deleted))
+        $defaultStateId = $this->getDefaultState($itemId, $stateId);
+        // where item id = id and state item-id = state-id in ItemTutorYear, set state_id = default_state_id
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$defaultStateId, $itemId, $stateId]);
+        // delete the state
+        $sql = "DELETE FROM State WHERE state_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId]);
+        // reorder the remaining states
+        $this->orderStates($itemId);
+    }
+
+    /**
+     * Private helper method for deleting states
+     *
+     * @param int $itemId The item to get the default state of
+     * @param int $stateId The state id to exclude
+     * @return int The state_id of the default state
+     * @author Keller Flint
+     */
+    private function getDefaultState($itemId, $stateId)
+    {
+        $sql = "SELECT state_id FROM State WHERE item_id = ? AND state_id != ? AND state_set_by = 'default'";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId, $stateId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)["state_id"];
+    }
+
+    /**
+     * Private helper method for reordering states when one state gets deleted
+     *
+     * @param int $itemId The id of the item being reordered
+     * @author Keller Flint
+     */
+    private function orderStates($itemId)
+    {
+        $sql = "SELECT state_id FROM State WHERE item_id = ? ORDER BY state_order ASC";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $x = 1;
+        foreach ($results as $result) {
+            $sql = "UPDATE State SET state_order = $x WHERE state_id = " . $result["state_id"];
+            $x = $x + 1;
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute();
+        }
+    }
+
+    /**
+     * Gets all data for all items
+     *
+     * @return array The array of item data
+     * @author Keller Flint
+     */
+    function getItems()
+    {
+        $sql = "SELECT * FROM Item";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Creates a new item in the database
+     *
+     * @param string $itemName The name of the item
+     * @param string $itemType The type of the item
+     * @return int The id of the new item
+     * @author Keller Flint
+     *
+     */
+    function addItem($itemName, $itemType)
+    {
+        // Create the new item
+        $sql = "INSERT INTO Item VALUES (DEFAULT, ?, ?, 0, NULL)";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemName, $itemType]);
+        $itemId = $this->_dbh->lastInsertId();
+
+        // Create the default state
+        $stateId = $this->addState($itemId, "default", "default", "Autogenerated default state", 0);
+
+        // Create entry for each ItemTutorYear
+        $tutorYears = $this->getTutorYears();
+        $sql = "INSERT INTO ItemTutorYear VALUES (?, ?, ?, NULL)";
+        $statement = $this->_dbh->prepare($sql);
+
+        foreach ($tutorYears as $tutorYear) {
+            $statement->execute([$itemId, $tutorYear["tutorYear_id"], $stateId]);
+        }
+
+        return $itemId;
+    }
+
+    /**
+     * Gets all tutor year ids
+     *
+     * @return array All tutor year ids
+     * @author Keller Flint
+     */
+    function getTutorYears()
+    {
+        $sql = "SELECT tutorYear_id FROM TutorYear";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Deletes the given item
+     *
+     * @param int $itemId The item id to be deleted
+     * @author Keller Flint
+     */
+    function deleteItem($itemId)
+    {
+        $sql = "DELETE FROM ItemTutorYear WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $sql = "DELETE FROM State WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+
+        $sql = "DELETE FROM Item WHERE item_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+    }
+
 
 }

@@ -31,6 +31,7 @@ class Controller
     /**
      * Controller constructor
      * @param $f3 Object The fat free instance
+     * @param $db Object The database object
      */
     function __construct($f3, $db)
     {
@@ -61,18 +62,16 @@ class Controller
         // Get tutor data for current year
         $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
 
-        // Set values for select dropdowns
-        $this->_f3->set("backgroundOptions", array("none" => "Not Done", "sent" => "Sent", "clear" => "Clear", "flag" => "Flag"));
-        $this->_f3->set("referenceOptions", array("none" => "Not Done", "incomplete" => "In Progress", "clear" => "Clear", "flag" => "Flag"));
-        $this->_f3->set("ADPOptions", array("none" => "Not Sent", "invited" => "Invited", "registered" => "Registered"));
-        $this->_f3->set("i9Options", array("none" => "Not Sent", "tutor" => "Tutor Done", "admin" => "Admin Done"));
-        $this->_f3->set("SPSOptions", array("none" => "Not Done", "tutor" => "Tutor Done", "admin" => "Admin Done"));
+        // Get headers
+        $items = $this->_db->getItems();
+
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
         $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
+        $this->_f3->set("items", $items);
 
         $view = new Template();
         echo $view->render("views/tutors.html");
@@ -124,7 +123,7 @@ class Controller
      */
     function checklistAjax()
     {
-        $this->_db->updateYearData($_POST['column'], $_POST['value'], $_POST['year']);
+        $this->_db->updateStateOfTutor($_POST['value'], $_POST['item'], $_POST['user']);
     }
 
     /**
@@ -136,7 +135,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        //$this->isLoggedIn();
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -146,41 +145,15 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
-        $checkBoxes = $checkBoxes[0];
 
-        $checkBoxes['year_i9'] == 'none' ? $checkBoxes['year_i9'] = '0' : $checkBoxes['year_i9'] = '1';
-        empty($checkBoxes['tutor_image']) ? $checkBoxes['tutor_image'] = 'formEmpty' : $checkBoxes['tutor_image'] = 'formFull';
-        empty($checkBoxes['tutor_bio']) ? $checkBoxes['tutor_bio'] = 'formEmpty' : $checkBoxes['tutor_bio'] = 'formFull';
-        $checkBoxes['year_SPS'] == 'none' ? $checkBoxes['year_SPS'] = '0' : $checkBoxes['year_SPS'] = '1';
-
-        if ($checkBoxes['year_ADP'] == 'invited') {
-            $checkBoxes['year_ADP'] = '0';
-        }
-        if ($checkBoxes['year_ADP'] == 'registered') {
-            $checkBoxes['year_ADP'] = '1';
-        }
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
-        $this->_f3->set('userName', $checkBoxes['tutor_first'] . " " . $checkBoxes['tutor_last']);
-        $this->_f3->set('checkboxes', array("ADP Registration" => array("Value" => $checkBoxes['year_ADP'],
-            "Column" => "year_ADP", "id" => "adp"),
-            "Adult Sexual Misconduct" => array("Value" => $checkBoxes['year_sexual_misconduct'],
-                "Column" => "year_sexual_misconduct", "id" => "sex-miscond"),
-            "Affirmations and Disclosures" => array("Value" => $checkBoxes['year_affirmation_disclosures'],
-                "Column" => "year_affirmation_disclosures", "id" => "affirm-disclose"),
-            "Handbook Verification" => array("Value" => $checkBoxes['year_handbook_verification'],
-                "Column" => "year_handbook_verification", "id" => "handbook-verify"),
-            "I-9" => array("Value" => $checkBoxes['year_i9'], "Column" => "year_i9", "id" => "i9"),
-            "Offer Letter" => array("Value" => $checkBoxes['year_offer_letter'],
-                "Column" => "year_offer_letter", "id" => "offer-letter"),
-            "Orientation RSVP" => array("Value" => $checkBoxes['year_orientation'],
-                "Column" => "year_orientation", "id" => "orientation"),
-            "W4" => array("Value" => $checkBoxes['year_w4'], "Column" => "year_w4", "id" => "w4"),
-            "SPS" => array("Value" => $checkBoxes['year_SPS'], "Column" => "year_SPS", "id" => "sps"),
-            "Bio" => array("Value" => $checkBoxes['tutor_bio'], "Column" => "tutor_bio"),
-            "Image" => array("Value" => $checkBoxes['tutor_image'], "Column" => "tutor_image")));
+        $this->_f3->set('checklist',$checkBoxes);
+        $this->_f3->set('db',$this->_db);
+        $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
+
 
 
         $view = new Template();
@@ -581,4 +554,121 @@ class Controller
     {
         return $tutor_name . "-" . $user_id;
     }
+
+     /** Page to edit table items
+     *
+     * @param int $itemId The id of the item being edited
+     * @author Keller Flint
+     */
+    function editPage($itemId)
+    {
+
+        // Nav builder
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
+
+        // Save Item
+        if (isset($_POST["itemSave"])) {
+            if ($this->_val->validateItem($_POST["itemName"])) {
+                $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
+            } else {
+                $this->_f3->set("errors", $this->_val->getErrors());
+            }
+
+            // Creating a new item
+            if ($itemId == 0) {
+                if ($this->_val->validateItem($_POST["itemName"])) {
+                    $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
+                    $this->_f3->reroute("edit/$itemId");
+                } else {
+                    $this->_f3->set("errors", $this->_val->getErrors());
+                }
+            }
+        }
+
+        // Save State
+        if (isset($_POST["stateSave"])) {
+
+            // Changing isDone to an int
+            if (!isset($_POST["stateIsDone"])) {
+                $_POST["stateIsDone"] = 0;
+            } else {
+                $_POST["stateIsDone"] = 1;
+            }
+
+            // Update existing state
+            if ($_POST["stateId"] != 0) {
+                if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+                    $this->_db->updateState($_POST["stateId"], $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
+                } else {
+                    $this->_f3->set("errors", $this->_val->getErrors());
+                }
+                // Add new state
+            } else {
+                if ($this->_val->validateState($_POST["stateId"], $_POST["stateName"], $_POST["stateText"])) {
+                    $this->_db->addState($itemId, $_POST["stateName"], $_POST["stateSetBy"], $_POST["stateText"], $_POST["stateIsDone"]);
+                } else {
+                    $this->_f3->set("errors", $this->_val->getErrors());
+                    $this->_f3->set("stateNameNew", $_POST["stateName"]);
+                    $this->_f3->set("stateSetByNew", $_POST["stateSetBy"]);
+                    $this->_f3->set("stateTextNew", $_POST["stateText"]);
+                    $this->_f3->set("stateIsDoneNew", $_POST["stateIsDone"]);
+                }
+            }
+
+        }
+
+        // Move Up
+        if (isset($_POST["moveUp"])) {
+            $this->_db->updateStateOrder($_POST["stateId"], -1);
+        }
+
+        // Move Down
+        if (isset($_POST["moveDown"])) {
+            $this->_db->updateStateOrder($_POST["stateId"], 1);
+        }
+
+        // Check for default state warnings
+        $defaults = $this->_db->getStateCount($itemId, "default");
+        if ($defaults > 1) {
+            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
+        } else if ($defaults < 1) {
+            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
+        }
+
+        // Showing error messages for delete state
+        if (isset($_POST["stateDelete"])) {
+            if ($defaults < 1) {
+                // There must be at least one default state set
+                $this->_f3->set("defaultError", "You must have a default state set before deleting this state!");
+            } else if ($defaults == 1 && $_POST["stateSetBy"] == "default") {
+                // Error for if the user is trying to delete the only default state
+                $this->_f3->set("defaultError", "You may not delete the only default state! Please add another default state before deleting this one.");
+            } else if ($defaults == 2 && $_POST["stateSetBy"] != "default") {
+                // Error for if there are two default states set and it is ambiguous which one should be set as the new default
+                $this->_f3->set("defaultError", "You must have only one default state set before deleting this state!");
+            } else if ($defaults > 2) {
+                // Error message for 3 or more default states which always makes it ambiguous which one should be set as the new default
+                $this->_f3->set("defaultError", "You may not have more than 2 default states set before deleting a state!");
+            } else {
+                // Delete the state
+                $this->_db->deleteState($_POST["stateId"]);
+            }
+        }
+
+        if (isset($_POST["itemDelete"])) {
+            $this->_db->deleteItem($itemId);
+            $currentYear = $this->_db->getCurrentYear();
+            $this->_f3->reroute("tutors/$currentYear&all");
+        }
+
+
+        $this->_f3->set("item", $this->_db->getItem($itemId));
+        $this->_f3->set("stateData", $this->_db->getStates($itemId));
+        $this->_f3->set("maxState", $this->_db->getMaxState($itemId));
+
+        $view = new Template();
+        echo $view->render('views/itemEdit.html');
+    }
+
 }
