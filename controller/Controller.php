@@ -455,6 +455,29 @@ class Controller
 
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
 
+        //let admin download the tutor's image
+        if (isset($_GET['download'])) {
+            $tutorImage = $this->_db->getTutorById($param["id"])["tutor_image"];//gets the image name from db
+//            echo $tutorImage;
+            $filePath = 'uploads/' . $tutorImage;
+//            echo $filePath; //gets the file path
+            if (file_exists($filePath)) {
+                //description of file/content
+                header('Content-Description: File Transfer');
+
+                //pull all types of file
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($filePath));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filePath));
+                readfile($filePath);
+                exit;
+            }
+
+        }
+
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
     }

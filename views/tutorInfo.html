@@ -13,6 +13,10 @@ Page to display additional information about a tutor that does not appear on the
             <p class="mt-3"><span class="font-weight-bold mr-1">Phone:</span> {{ @tutor["tutor_phone"] }}</p>
             <p class="mt-3"><span class="font-weight-bold mr-1">SSN:</span> {{ @ssn }}</p>
             <p class="mt-3"><span class="font-weight-bold mr-1">Bio:</span> {{ @tutor["tutor_bio"] }}</p>
+            <form action="#" method="get" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-info download" name="download" value="{{ @tutor['user_id'] }}">Downloads
+                </button>
+            </form>
         </div>
         <div class="col">
             <img src="../uploads/{{ @tutor['tutor_image'] }}" class = "img-fluid img-thumbnail">
