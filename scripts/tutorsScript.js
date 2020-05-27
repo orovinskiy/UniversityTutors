@@ -192,3 +192,18 @@ $("#current-year").on("click", function () {
 $("#enable-edit").on("click", function () {
     $(".edit-item").toggleClass("d-none");
 });
+
+//event listener to save default email information
+$("#save-default").on('click', function() {
+   console.log("Did this work?");
+   let newSubject = $("#email-subject").val();
+   let newBody = $("#email-body").val();
+   //making ajax call to updated email json
+    $.post("../tutorsAjax", {
+        subject: newSubject,
+        body: newBody
+    }, function () {
+       alert("Changes have been saved");
+       $("#email-modal").modal('hide');
+    });
+});

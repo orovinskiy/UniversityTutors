@@ -18,6 +18,11 @@ Styles for the admin tutors table
     -webkit-transform: translateY(8px);;
 }
 
+.small {
+    font-size: x-small;
+}
+
 th {
     font-size: .7em;
 }
+

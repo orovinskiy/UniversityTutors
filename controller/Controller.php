@@ -13,6 +13,7 @@ class Controller
     private $_f3; //router
     private $_db;
     private $_val;
+    private $_mail;
 
     /**
      * This function gets the info to display a correct navbar
@@ -38,6 +39,9 @@ class Controller
         $this->_f3 = $f3;
         $this->_db = $db;
         $this->_val = new Validate($db);
+        //instantiate new mail class
+        $this->_mail = new Mail();
+
     }
 
     /**
@@ -72,6 +76,10 @@ class Controller
         // Store tutor data is hive
         $this->_f3->set("tutorsData", $tutorsData);
         $this->_f3->set("items", $items);
+
+        //Store Default email data into hive
+        $this->_f3->set("subject", $this->_mail->getSubject());
+        $this->_f3->set("body", $this->_mail->getBody());
 
         $view = new Template();
         echo $view->render("views/tutors.html");
@@ -108,6 +116,9 @@ class Controller
             $this->_db->setCurrentYear($_POST["current_year"]);
         } else if (isset($_POST["user_id"])) {
             $this->_db->importUser($_POST["user_id"]);
+        } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
+            $this->_mail->setSubject($_POST['subject']) ;
+            $this->_mail->setBody($_POST['body'])   ;
         }
 
     }
@@ -441,11 +452,10 @@ class Controller
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
         $fromName = "University Tutors Admin";
-        $subject = "Welcome New Tutor!";
-        $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
+        $loginBody = "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
-            "<p>$loginLink</p>";
-        $success = smtpmailer($to, $from, $fromName, $subject, $body);
+                "<p>$loginLink</p>";
+        $success = $this->_mail->smtpmailer($to, $from, $fromName, $loginBody);
         return $success;
     }
 
