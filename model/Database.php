@@ -27,15 +27,7 @@ class Database
         }
     }
 
-    /**
-     * Returns tutors data for the given year
-     *
-     * @param string $year the year you would like to see information for. Default parameter is 2020
-     * @return array Returns array of arrays of tutor item data for each tutor
-     * @author Keller Flint
-     */
-    function getTutors($year = '2020')
-    {
+    function getTutors($year = "2020") {
         // Get all tutors data for the given year
         $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio, tutor_image FROM TutorYear 
                 INNER JOIN Tutor ON TutorYear.user_id = Tutor.user_id
@@ -44,35 +36,33 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$year]);
 
-        $tutorYears = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $tutors = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $tutorsData = array();
+        $tableData = array();
 
-        // For each tutor in the year, get their data and add it to the return array
-        foreach ($tutorYears as $tutorYear) {
+        foreach($tutors as $tutorInfo) {
+            $tutorKey = $tutorInfo["tutorYear_id"];
+            $tableData[$tutorKey]["info"] = $tutorInfo;
 
-            // Get item status for each tutor
-            $sql = "SELECT * FROM ItemTutorYear INNER JOIN State ON ItemTutorYear.state_id = State.state_id WHERE tutorYear_id = ?";
-            $statement = $this->_dbh->prepare($sql);
-            $statement->execute([$tutorYear["tutorYear_id"]]);
-
-            $tutors = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            // Setting tutor's profile data
-            $tutorsData[$tutorYear["tutorYear_id"]]["user_id"] = $tutorYear["user_id"];
-            $tutorsData[$tutorYear["tutorYear_id"]]["user_email"] = $tutorYear["user_email"];
-            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_first"] = $tutorYear["tutor_first"];
-            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_last"] = $tutorYear["tutor_last"];
-            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_bio"] = $tutorYear["tutor_bio"];
-            $tutorsData[$tutorYear["tutorYear_id"]]["tutor_image"] = $tutorYear["tutor_image"];
-
-            // setting tutor's other data
-            foreach ($tutors as $key => $value) {
-                $tutorsData[$tutorYear["tutorYear_id"]][$key] = $value;
-            }
+            $itemData = $this->getItemTutorYear($tutorKey);
+            $tableData[$tutorKey]["items"] = $itemData;
         }
 
-        return $tutorsData;
+        //echo "<pre>";
+        //var_dump($tableData);
+
+        return $tableData;
+    }
+
+    function getItemTutorYear($tutorYearId)
+    {
+        $sql = "SELECT * FROM ItemTutorYear 
+                INNER JOIN State ON ItemTutorYear.state_id = State.state_id
+                WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
