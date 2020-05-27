@@ -1,5 +1,1 @@
-{
-  "subject": "This is the email subject",
-  "body": "This is the email body",
-  "attachment": "attachments/php"
-}
+{"subject":"I hope this works!","body":"Dallas is this you?","attachment":"attachments\/php"}

@@ -198,10 +198,12 @@ $("#save-default").on('click', function() {
    console.log("Did this work?");
    let newSubject = $("#email-subject").val();
    let newBody = $("#email-body").val();
-   //grabbing info from JSON file
-    let JSONFile = 'emailTemplate.json';
-    //let JSONData = read(JSONFile);
-    console.log(JSONData);
-
-   console.log(newSubject);
+   //making ajax call to updated email json
+    $.post("../tutorsAjax", {
+        subject: newSubject,
+        body: newBody
+    }, function () {
+       alert("Changes have been saved");
+       $("#email-modal").modal('hide');
+    });
 });
