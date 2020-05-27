@@ -141,4 +141,13 @@ $f3->route('GET|POST /reset/@id', function ($f3, $param) {
     $controller->passwordPage($param["id"]);
 });
 
+/**
+ * Route for editing items
+ * @author Keller Flint
+ */
+$f3->route('GET|POST /edit/@itemId', function($f3, $param) {
+    global $controller;
+    $controller->editPage($param["itemId"]);
+});
+
 $f3->run();

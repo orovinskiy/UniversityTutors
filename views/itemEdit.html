@@ -1,0 +1,267 @@
+<!--
+Page to create, edit and delete items in the table
+@author Keller Flint
+-->
+
+<include href="views/navbar.html"/>
+
+<h1 class="text-center m-3" id="title">{{ @item['item_name'] }}</h1>
+
+<!-- Form to edit item data -->
+<form id="edit-item" class="text-center" method="POST" action="#">
+    <input type="hidden" name="itemId" value="{{ @item['item_id'] }}">
+
+    <!-- Item name -->
+    <div class="form-group w-25 d-inline-block">
+        <label for="item-name">Item Name</label>
+        <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
+        <span class="text-danger">{{ @errors["itemName"] }}</span>
+    </div>
+
+    <!-- Item type -->
+    <div class="form-group w-25 d-inline-block">
+        <label for="item-type">Item Type</label>
+        <select class="form-control" id="item-type" name="itemType">
+            <check if="{{ @item['item_type'] == 'checkbox' }}">
+                <true>
+                    <option value="checkbox" selected>Checkbox</option>
+                </true>
+                <false>
+                    <option value="checkbox">Checkbox</option>
+                </false>
+            </check>
+            <check if="{{ @item['item_type'] == 'select' }}">
+                <true>
+                    <option value="select" selected>Dropdown</option>
+                </true>
+                <false>
+                    <option value="select">Dropdown</option>
+                </false>
+            </check>
+        </select>
+    </div>
+    <!--
+    <div class="d-inline-block">
+        <input type="file" class="form-control-file" name="fileToUpload"
+               id="img">
+    </div>
+    <div class="form-check d-inline-block">
+        <input type="checkbox" class="form-check-input" id="upload-required">
+        <label class="form-check-label" for="upload-required">Tutor Upload Required</label>
+    </div>
+    -->
+    <br>
+    <button type="submit" id="delete" class="btn btn-danger" name="itemDelete" value="itemDelete">Delete Item</button>
+    <button type="submit" class="btn btn-success" name="itemSave" value="itemSave">Save Item</button>
+</form>
+
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <check if="{{ isset(@defaultError) }}">
+            <true>
+                <h2 class="text-danger">{{ @defaultError }}</h2>
+            </true>
+            <false>
+                <check if="{{ isset(@defaultWarning) }}">
+                    <h2 class="text-warning">{{ @defaultWarning }}</h2>
+                </check>
+            </false>
+        </check>
+
+        <!-- Creates form for each state associated with the item to view and update-->
+        <repeat group="{{ @stateData }}" value="{{ @state }}">
+            <form class="text-center w-100 border p-3 m-3 bg-light rounded edit-state" method="post" action="#">
+                <h4>{{ @state['state_name'] }}</h4>
+                <input type="hidden" name="stateId" value="{{ @state['state_id'] }}">
+                <div class="row">
+
+                    <!-- state name -->
+                    <div class="form-group d-inline-block col-5">
+                        <label for="name-{{ @state['state_id'] }}">Name</label>
+                        <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
+                               value="{{ @state['state_name'] }}"
+                               name="stateName">
+                        <check if="{{ isset(@errors['stateName' . @state['state_id']]) }}">
+                            <span class="text-danger">{{ @errors['stateName' . @state['state_id']] }}</span>
+                        </check>
+                    </div>
+                    <div class="col-2"></div>
+
+                    <!-- state set_by -->
+                    <div class="form-group d-inline-block col-5">
+                        <label for="set-by-{{ @state['state_id'] }}">Set By</label>
+                        <select class="form-control" id="set-by-{{ @state['state_id'] }}" name="stateSetBy">
+                            <check if="@state['state_set_by'] == 'default'">
+                                <true>
+                                    <option value="default" selected>Default</option>
+                                </true>
+                                <false>
+                                    <option value="default">Default</option>
+                                </false>
+                            </check>
+                            <check if="@state['state_set_by'] == 'tutor'">
+                                <true>
+                                    <option value="tutor" selected>Tutor</option>
+                                </true>
+                                <false>
+                                    <option value="tutor">Tutor</option>
+                                </false>
+                            </check>
+                            <check if="@state['state_set_by'] == 'admin'">
+                                <true>
+                                    <option value="admin" selected>Admin</option>
+                                </true>
+                                <false>
+                                    <option value="admin">Admin</option>
+                                </false>
+                            </check>
+                        </select>
+                    </div>
+
+                    <!-- state text -->
+                    <div class="form-group col-12">
+                        <label for="description-{{ @state['state_id'] }}">Description</label>
+                        <textarea class="form-control" id="description-{{ @state['state_id'] }}" rows="3"
+                                  name="stateText">{{ @state['state_text'] }}</textarea>
+                        <check if="{{ isset(@errors['stateText' . @state['state_id']]) }}">
+                            <span class="text-danger">{{ @errors['stateText' . @state['state_id']] }}</span>
+                        </check>
+                    </div>
+                </div>
+
+                <!-- States counts as done checkbox -->
+                <div class="form-check text-left">
+                    <check if="{{ @state['state_is_done'] == 1 }}">
+                        <true>
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}"
+                                   name="stateIsDone" checked>
+
+                        </true>
+                        <false>
+                            <input type="checkbox" class="form-check-input" id="done-{{ @state['state_id'] }}"
+                                   name="stateIsDone">
+                        </false>
+                    </check>
+                    <label class="form-check-label" for="done-{{ @state['state_id'] }}">{{ @item['item_name'] }} is
+                        complete</label>
+                </div>
+
+                <button type="submit" class="btn btn-danger float-left mt-4 delete" name="stateDelete"
+                        value="stateDelete">Delete
+                </button>
+                <button type="submit" class="btn btn-success float-right mt-4" name="stateSave" value="stateSave">Save
+                </button>
+
+                <!-- Button to change state order -->
+                <check if="{{ @state['state_order'] != 1 }}">
+                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveUp" value="moveUp">Move Up
+                    </button>
+                </check>
+                <check if="{{ @state['state_order'] != @maxState }}">
+                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveDown" value="moveDown">Move
+                        Down
+                    </button>
+                </check>
+
+            </form>
+        </repeat>
+
+        <hr class="mt-5 mb-5">
+        <!-- Add new state -->
+        <form class="text-center w-100 border p-3 pb-5 m-3 bg-light rounded" method="post" action="#">
+            <h4>Add New State</h4>
+            <input type="hidden" name="stateId" value="0">
+            <div class="row">
+
+                <!-- state name -->
+                <div class="form-group d-inline-block col-5">
+                    <label for="name-0">Name</label>
+                    <input type="text" class="form-control" id="name-0"
+                           value="{{ @stateNameNew }}"
+                           name="stateName">
+                    <check if="{{ isset(@errors['stateName0']) }}">
+                        <span class="text-danger">{{ @errors['stateName0'] }}</span>
+                    </check>
+                </div>
+                <div class="col-2"></div>
+
+                <!-- state set_by -->
+                <div class="form-group d-inline-block col-5">
+                    <label for="set-by-0">Set By</label>
+                    <select class="form-control" id="set-by-0" name="stateSetBy">
+                        <check if="{{ @stateSetByNew == 'default' }}">
+                            <true>
+                                <option value="default" selected>Default</option>
+                            </true>
+                            <false>
+                                <option value="default">Default</option>
+                            </false>
+                        </check>
+                        <check if="{{ @stateSetByNew == 'tutor' }}">
+                            <true>
+                                <option value="tutor" selected>Tutor</option>
+                            </true>
+                            <false>
+                                <option value="tutor">Tutor</option>
+                            </false>
+                        </check>
+                        <check if="{{ @stateSetByNew == 'admin' }}">
+                            <true>
+                                <option value="admin" selected>Admin</option>
+                            </true>
+                            <false>
+                                <option value="admin">Admin</option>
+                            </false>
+                        </check>
+                    </select>
+                </div>
+
+                <!-- state text -->
+                <div class="form-group col-12">
+                    <label for="description-0">Description</label>
+                    <textarea class="form-control" id="description-0" rows="3"
+                              name="stateText">{{ @stateTextNew }}</textarea>
+                    <check if="{{ isset(@errors['stateText0']) }}">
+                        <span class="text-danger">{{ @errors['stateText0'] }}</span>
+                    </check>
+                </div>
+            </div>
+
+            <!-- States counts as done checkbox -->
+            <div class="form-check text-left">
+                <check if="{{ @stateIsDoneNew == 1 }}">
+                    <true>
+                        <input type="checkbox" class="form-check-input" id="done-0"
+                               name="stateIsDone" checked>
+
+                    </true>
+                    <false>
+                        <input type="checkbox" class="form-check-input" id="done-0"
+                               name="stateIsDone">
+                    </false>
+                </check>
+                <label class="form-check-label mb-3" for="done-0">{{ @item['item_name'] }} is
+                    complete</label>
+            </div>
+            <button type="submit" class="btn btn-success float-right" name="stateSave" value="stateSave">Add
+            </button>
+        </form>
+    </div>
+</div>
+
+<!--JQuery and bootstrap dependencies-->
+<script
+        src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script src="../scripts/itemEditScript.js"></script>
+</body>
+</html>
