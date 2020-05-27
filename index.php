@@ -28,6 +28,7 @@ $controller = new Controller($f3, $db);
 
 //default place to upload image files
 $dirName = 'uploads/';
+$directoryName = 'attachments/';
 
 // Define a default route
 $f3->route('GET /', function () {

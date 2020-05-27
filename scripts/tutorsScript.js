@@ -84,7 +84,7 @@ $("#add-tutor-button").on("click", function () {
     let email = $("#add-tutor-input").val();
     let year = $(this).data("year");
 
-    let emailStatus = setInterval(function() {
+    let emailStatus = setInterval(function () {
         $("#email-status").html("Sending email...");
     });
 
@@ -174,7 +174,7 @@ $(".import").on("click", function () {
         });
         //hide Import button after displaying success message
         let results = confirm("Tutor imported successfully ");
-        if(results){
+        if (results) {
             $(".import").hide();
         }
     }
@@ -196,4 +196,24 @@ $("#current-year").on("click", function () {
 // show/hide edit item buttons
 $("#enable-edit").on("click", function () {
     $(".edit-item").toggleClass("d-none");
+});
+
+//event listener to save default email information
+$("#save-default").on('click', function () {
+    console.log("Did this work?");
+    let newSubject = $("#email-subject").val();
+    let newBody = $("#email-body").val();
+    let att = $("#attachments").val();
+    console.log(att);
+    //making ajax call to updated email json
+    $.post("../tutorsAjax", {
+        subject: newSubject,
+        body: newBody,
+        attachment:att
+    }, function () {
+
+        alert("Changes have been saved");
+
+        $("#email-modal").modal('hide');
+    });
 });

@@ -13,6 +13,7 @@ class Controller
     private $_f3; //router
     private $_db;
     private $_val;
+    private $_mail;
 
     /**
      * This function gets the info to display a correct navbar
@@ -38,6 +39,9 @@ class Controller
         $this->_f3 = $f3;
         $this->_db = $db;
         $this->_val = new Validate($db);
+        //instantiate new mail class
+        $this->_mail = new Mail();
+
     }
 
     /**
@@ -73,6 +77,10 @@ class Controller
         $this->_f3->set("tutorsData", $tutorsData);
         $this->_f3->set("items", $items);
 
+        //Store Default email data into hive
+        $this->_f3->set("subject", $this->_mail->getSubject());
+        $this->_f3->set("body", $this->_mail->getBody());
+        $this->_f3->set("attachment", $this->_mail->getDefaultAttachments());
         $view = new Template();
         echo $view->render("views/tutors.html");
     }
@@ -83,6 +91,7 @@ class Controller
      */
     function tutorsAjax()
     {
+        global $directoryName;
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
         } else if (isset($_POST["email"])) {
@@ -113,7 +122,33 @@ class Controller
             $this->_db->setCurrentYear($_POST["current_year"]);
         } else if (isset($_POST["user_id"])) {
             $this->_db->importUser($_POST["user_id"]);
+        } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
+            $this->_mail->setSubject($_POST['subject']);
+            $this->_mail->setBody($_POST['body']);
+            $fileName = $_POST['attachment'];
+            //finding the last occurrence of the needle (\)
+            $position = strripos($fileName, "\\");
+
+            //get the parts of the string
+            $fileName = substr($fileName, $position);
+            $fileName = substr_replace($fileName, "", 0, 1);
+
+//            echo $_FILES['attachmentsToUpload']['temp_name'];
+
+            //for attachment
+            if ($_POST['attachment']) {
+                echo $fileName;
+                echo "<br>";
+                $path = $directoryName . $fileName;
+
+                echo $path;
+                move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
+                $this->_mail->setDefaultAttachments($path);
+            }
+
         }
+        //checking to if is set file
+
 
     }
 
@@ -150,10 +185,9 @@ class Controller
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
-        $this->_f3->set('checklist',$checkBoxes);
-        $this->_f3->set('db',$this->_db);
+        $this->_f3->set('checklist', $checkBoxes);
+        $this->_f3->set('db', $this->_db);
         $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
-
 
 
         $view = new Template();
@@ -203,10 +237,10 @@ class Controller
             $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
-            $imageFileName = $this->nameForImage($_POST['firstName'],$param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+            $imageFileName = $this->nameForImage($_POST['firstName'], $param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
             if ($this->_val->validForm($_FILES['fileToUpload'],
-                 $param["id"], $_POST['bio'])) {
+                $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn']) || substr($_POST['ssn'], 0, 3) == "XXX") {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
@@ -469,11 +503,10 @@ class Controller
         //creating variables for input params for email
         $from = 'universitytutors@kold-tutors.greenriverdev.com';
         $fromName = "University Tutors Admin";
-        $subject = "Welcome New Tutor!";
-        $body = "<p>We will need to get with Liz to know exactly what she wants to send in the email</p>" . "<p>Login
+        $loginBody = "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
             "<p>$loginLink</p>";
-        $success = smtpmailer($to, $from, $fromName, $subject, $body);
+        $success = $this->_mail->smtpmailer($to, $from, $fromName, $loginBody);
         return $success;
     }
 
@@ -550,12 +583,12 @@ class Controller
      * @return string name for upload image
      * @author  laxmi
      */
-    function nameForImage($tutor_name,$user_id)
+    function nameForImage($tutor_name, $user_id)
     {
         return $tutor_name . "-" . $user_id;
     }
 
-     /** Page to edit table items
+    /** Page to edit table items
      *
      * @param int $itemId The id of the item being edited
      * @author Keller Flint
