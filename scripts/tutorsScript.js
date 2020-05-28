@@ -204,16 +204,42 @@ $("#save-default").on('click', function () {
     let newSubject = $("#email-subject").val();
     let newBody = $("#email-body").val();
     let att = $("#attachments").val();
-    console.log(att);
-    //making ajax call to updated email json
+
     $.post("../tutorsAjax", {
         subject: newSubject,
         body: newBody,
-        attachment:att
     }, function () {
 
         alert("Changes have been saved");
 
         $("#email-modal").modal('hide');
     });
+
+    //ajax call for file upload
+    let fd = new FormData();
+    let files = $('#file')[0].files[0];
+    //console.log(files);
+    fd.append('file', files);
+    //making ajax call to updated email json
+    $.ajax({
+        url: '../tutorsAjax',
+        type: 'post',
+        subject: newSubject,
+        body: newBody,
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response != 0) {
+                alert("Upload saved");
+                console.log(response);
+                // Show image preview
+                //$('#preview').append("<img src='" + response + "' width='100' height='100' style='display: inline-block;'>");
+            } else {
+                alert('file not uploaded');
+            }
+        }
+    });
+
 });
+

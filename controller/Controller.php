@@ -91,6 +91,7 @@ class Controller
      */
     function tutorsAjax()
     {
+        var_dump($_FILES);
         global $directoryName;
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
@@ -125,26 +126,39 @@ class Controller
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
-            $fileName = $_POST['attachment'];
+            if (isset($_FILES['file'])) {
+                // file name
+                $filename = $_FILES['file']['name'];
+                // Location
+                $location = 'upload/'.$filename;
+
+                    // Upload file
+                move_uploaded_file($_FILES['file']['tmp_name'],$location);
+
+            }
+
+
+            //if (isset($_FILES['fileToUpload']))
+            //$fileName = $_POST['attachment'];
             //finding the last occurrence of the needle (\)
-            $position = strripos($fileName, "\\");
+            //$position = strripos($fileName, "\\");
 
             //get the parts of the string
-            $fileName = substr($fileName, $position);
-            $fileName = substr_replace($fileName, "", 0, 1);
+            //$fileName = substr($fileName, $position);
+            //$fileName = substr_replace($fileName, "", 0, 1);
 
 //            echo $_FILES['attachmentsToUpload']['temp_name'];
 
             //for attachment
-            if ($_POST['attachment']) {
-                echo $fileName;
-                echo "<br>";
-                $path = $directoryName . $fileName;
+            //if ($_POST['attachment']) {
+                //echo $fileName;
+                //echo "<br>";
+                //$path = $directoryName . $fileName;
 
-                echo $path;
-                move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
-                $this->_mail->setDefaultAttachments($path);
-            }
+                //echo $path;
+                //move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
+                //$this->_mail->setDefaultAttachments($path);
+           // }
 
         }
         //checking to if is set file
