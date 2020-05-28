@@ -126,16 +126,16 @@ class Controller
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
-            if (isset($_FILES['file'])) {
-                // file name
-                $filename = $_FILES['file']['name'];
-                // Location
-                $location = 'upload/'.$filename;
 
-                    // Upload file
-                move_uploaded_file($_FILES['file']['tmp_name'],$location);
+        } else if (isset($_FILES['file'])) {
+            // file name
+            $filename = $_FILES['file']['name'];
+            // Location
+            $location = 'upload/'.$filename;
 
-            }
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'],$location);
+
 
 
             //if (isset($_FILES['fileToUpload']))
