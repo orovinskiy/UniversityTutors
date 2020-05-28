@@ -201,45 +201,50 @@ $("#enable-edit").on("click", function () {
 //event listener to save default email information
 $("#save-default").on('click', function () {
     console.log("Did this work?");
+
+    //getting th email and file values
     let newSubject = $("#email-subject").val();
     let newBody = $("#email-body").val();
-    let att = $("#attachments").val();
-
-    $.post("../tutorsAjax", {
-        subject: newSubject,
-        body: newBody,
-    }, function () {
-
-        alert("Changes have been saved");
-
-        $("#email-modal").modal('hide');
-    });
-
-    //ajax call for file upload
-    let fd = new FormData();
-    let files = $('#file')[0].files[0];
-    //console.log(files);
-    fd.append('file', files);
-    //making ajax call to updated email json
-    $.ajax({
-        url: '../tutorsAjax',
-        type: 'post',
-        subject: newSubject,
-        body: newBody,
-        data: fd,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            if (response != 0) {
-                alert("Upload saved");
-                console.log(response);
-                // Show image preview
-                //$('#preview').append("<img src='" + response + "' width='100' height='100' style='display: inline-block;'>");
-            } else {
-                alert('file not uploaded');
+    let fileChosen = $("#file").val();
+    //file is been chosen
+    if (fileChosen) {
+        //ajax call for file upload
+        let fd = new FormData(); //creating FormData object
+        let files = $('#file')[0].files[0];
+        //console.log(files);
+        fd.append('file', files);
+        //making ajax call to updated email json
+        $.ajax({
+            url: '../tutorsAjax',
+            type: 'post',
+            // subject: newSubject,
+            // body: newBody,
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response != 0) {
+                    // alert("Upload saved");
+                    alert("File been upload");
+                    $("#email-modal").modal('hide');
+                    console.log(response);
+                    // Show image preview
+                    //$('#preview').append("<img src='" + response + "' width='100' height='100' style='display: inline-block;'>");
+                } else {
+                    alert('Changes not saved');
+                }
             }
-        }
-    });
+        });
+    }
+        $.post("../tutorsAjax", {
+            subject: newSubject,
+            body: newBody,
+        }, function () {
+
+            alert("Changes have been saved");
+            $("#email-modal").modal('hide');
+        });
 
 });
+
 

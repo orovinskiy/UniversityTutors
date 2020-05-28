@@ -131,39 +131,12 @@ class Controller
             // file name
             $filename = $_FILES['file']['name'];
             // Location
-            $location = 'upload/'.$filename;
+            $location = 'upload/' . $filename;
 
             // Upload file
-            move_uploaded_file($_FILES['file']['tmp_name'],$location);
-
-
-
-            //if (isset($_FILES['fileToUpload']))
-            //$fileName = $_POST['attachment'];
-            //finding the last occurrence of the needle (\)
-            //$position = strripos($fileName, "\\");
-
-            //get the parts of the string
-            //$fileName = substr($fileName, $position);
-            //$fileName = substr_replace($fileName, "", 0, 1);
-
-//            echo $_FILES['attachmentsToUpload']['temp_name'];
-
-            //for attachment
-            //if ($_POST['attachment']) {
-                //echo $fileName;
-                //echo "<br>";
-                //$path = $directoryName . $fileName;
-
-                //echo $path;
-                //move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
-                //$this->_mail->setDefaultAttachments($path);
-           // }
-
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $this->_mail->setDefaultAttachments($location);
         }
-        //checking to if is set file
-
-
     }
 
     /**
