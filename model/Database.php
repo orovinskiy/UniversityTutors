@@ -278,7 +278,25 @@ class Database
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $results;
+        $finalRes = array();
+        foreach ($results as $array){
+            $allStates = $this->getStates($array['item_id']);
+            $keepItem = false;
+
+            //go through each state of a item to see if it has a tutor setby
+            //if it does keep the item
+            foreach ($allStates as $stateArray){
+                if($stateArray['state_set_by'] === 'tutor'){
+                    $keepItem = true;
+                    break;
+                }
+            }
+
+            if($keepItem){
+                array_push($finalRes, $array);
+            }
+        }
+        return $finalRes;
     }
 
     /**This function gets the name of a tutor based on the id
