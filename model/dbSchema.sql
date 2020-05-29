@@ -86,4 +86,8 @@ CREATE TABLE ItemTutorYear (
 
 
 
-INSERT INTO Info Value (1, 2020);
+INSERT INTO Info VALUES (1, 2020);
+
+
+
+INSERT INTO User VALUES (default, "admin@mail.com", "81dc9bdb52d04dc20036dbd8313ed055", 1);

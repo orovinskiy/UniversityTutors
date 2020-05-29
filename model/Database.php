@@ -390,8 +390,23 @@ class Database
      */
     function deleteUser($user_id)
     {
-        // delete user data from year
-        $sql = "DELETE FROM Year WHERE user_id = ?";
+        // TODO delete associated files
+
+        // get all associated tutorYears
+        $sql = "SELECT tutorYear_id FROM TutorYear WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        $tutorYears = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // delete user's data from each itemTutorYear
+        foreach($tutorYears as $tutorYear) {
+            $sql = "DELETE FROM ItemTutorYear WHERE tutorYear_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$tutorYear["tutorYear_id"]]);
+        }
+
+        // delete user data from tutorYear
+        $sql = "DELETE FROM TutorYear WHERE user_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$user_id]);
 
