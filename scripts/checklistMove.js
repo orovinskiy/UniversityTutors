@@ -19,14 +19,16 @@ $("body").on("click","input",function()
     //check what data to put into the database
     if($(this).is(":checked")){
         dataValue = parseInt($(this).data('state'))+1;
-        $(".completedBox").append(wholeCheckBox);
+        wholeCheckBox.find('input').attr('data-state',dataValue);
         wholeCheckBox.find('label').html('Completed');
+        $(".completedBox").append(wholeCheckBox);
 
     }
     else{
         dataValue = parseInt($(this).data('state'))-1;
-        $(".notCompletedBox").append(wholeCheckBox);
+        wholeCheckBox.find('input').attr('data-state',dataValue);
         wholeCheckBox.find('label').html('Complete');
+        $(".notCompletedBox").append(wholeCheckBox);
     }
 
     //Post to makeBox to save the data
