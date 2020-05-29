@@ -86,6 +86,7 @@ class Controller
 
     /**
      * Ajax logic for tutors page
+     * @throws phpmailerException
      * @author Keller Flint
      */
     function tutorsAjax()
@@ -95,7 +96,6 @@ class Controller
         } else if (isset($_POST["stateOrder"])) {
             $this->_db->updateItemTutorYearCheck($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateOrder"]);
         } else if (isset($_POST["email"])) {
-            // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //creating temp password and add new tutor
                 $tempPassword = $this->generateRandomString();

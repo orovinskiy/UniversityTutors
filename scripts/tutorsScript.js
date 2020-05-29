@@ -135,7 +135,7 @@ $(".email").on("click", function (event) {
     event.stopPropagation();
 });
 
-// TODO: Check with refactor event listener for delete button clicked
+// Event listener for delete button clicked
 $(".delete").on("click", function () {
     let result = confirm("Are you sure you want to delete this user and all data associated with them?");
     if (result) {
