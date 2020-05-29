@@ -136,6 +136,9 @@ class Controller
             // Upload file
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $this->_mail->setDefaultAttachments($location);
+        } else if (isset($_POST['fileToDelete'])) {
+            $test = $this->_mail->deleteDefaultAttachment($_POST['fileToDelete']);
+            echo var_dump($test);
         }
     }
 
