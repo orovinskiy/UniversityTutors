@@ -342,7 +342,11 @@ Page for admin viewing and management of tutor onboarding data.
                                       <input type="file" class="hidden" name="file" id="files" multiple/>
                                       </span>
                                     <br/>
-                                    <ul class="fileList"></ul>
+                                    <ul class="fileList">
+                                        <repeat group=" {{ @attachment }}" key="{{ @key }}" value="{{ @value }}">
+                                            <li class="list-file" value="{{ @value }}">{{ @value }}<a class="removeFile" href="#">&nbsp; &nbsp; Remove</a></li>
+                                        </repeat>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="modal-footer">
