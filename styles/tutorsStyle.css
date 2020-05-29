@@ -13,6 +13,9 @@ Styles for the admin tutors table
     width: 10%;
 }
 
+.hidden{
+    display: none;
+}
 .placement {
     transform: translateY(8px);
     -webkit-transform: translateY(8px);;
@@ -26,3 +29,6 @@ th {
     font-size: .7em;
 }
 
+.btn-file input[type=file] {
+    outline:none;
+}

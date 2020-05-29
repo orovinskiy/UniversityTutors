@@ -205,12 +205,13 @@ $("#save-default").on('click', function () {
     //getting th email and file values
     let newSubject = $("#email-subject").val();
     let newBody = $("#email-body").val();
-    let fileChosen = $("#file").val();
+    let fileChosen = $("#files").val();
+
     //file is been chosen
     if (fileChosen) {
         //ajax call for file upload
         let fd = new FormData(); //creating FormData object
-        let files = $('#file')[0].files[0];
+        let files = $('#files')[0].files[0];
         //console.log(files);
         fd.append('file', files);
         //making ajax call to updated email json
@@ -236,15 +237,62 @@ $("#save-default").on('click', function () {
             }
         });
     }
-        $.post("../tutorsAjax", {
-            subject: newSubject,
-            body: newBody,
-        }, function () {
-
-            alert("Changes have been saved");
-            $("#email-modal").modal('hide');
-        });
+    $.post("../tutorsAjax", {
+        subject: newSubject,
+        body: newBody,
+    }, function () {
+        alert("Changes have been saved");
+        $("#email-modal").modal('hide');
+    });
 
 });
+
+
+//event listener uploading multiple files
+$.fn.fileUploader = function (filesToUpload) {
+    this.closest(".files").change(function (evt) { //  div class on change run function
+        for (var i = 0; i < evt.target.files.length; i++) {
+            filesToUpload.push(evt.target.files[i]);
+            console.log(filesToUpload);
+        }
+        ;
+
+        var output = [];
+        for (var i = 0, f; f = evt.target.files[i]; i++) {
+            var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + i + "\">Remove</a>";
+
+            output.push("<li><strong>", escape(f.name), "</strong> - ",
+                f.size, " bytes. &nbsp; &nbsp; ", removeLink, "</li> ");
+        }
+        //append the remove link in each li
+        $(this).children(".fileList")
+            .append(output.join(""));
+    });
+};
+
+var filesToUpload = [];
+
+//remove files for the list
+$(document).on("click", ".removeFile", function (e) {
+    e.preventDefault();
+    var fileName = $(this).parent().children("strong").text();
+    // loop through the files array and check if the name of that file matches FileName
+    // and get the index of the match
+    for (i = 0; i < filesToUpload.length; ++i) {
+        if (filesToUpload[i].name == fileName) {
+            //console.log("match at: " + i);
+            // remove the one element at the index where we get a match
+            filesToUpload.splice(i, 1);
+        }
+    }
+    //console.log(filesToUpload);
+    // remove the <li> element of the removed file from the page DOM
+    $(this).parent().remove();
+});
+
+
+//stores all the files selected in ul list
+$(".fileList").fileUploader(filesToUpload);
+
 
 

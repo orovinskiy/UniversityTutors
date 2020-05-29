@@ -336,10 +336,13 @@ Page for admin viewing and management of tutor onboarding data.
                                         body**</p>
                                     <textarea class="form-control" id="email-body">{{ @body }}</textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-form-label" for="file">Choose attachments</label>
-                                    <input type="file" class="form-control-file" name="file"
-                                           id="file">
+                                <div class="form-group files" id="file">
+                                    <label for="files" class="form-group mb-2 btn btn-success"> Upload files </label>
+                                    <span class="btn btn-default btn-file">
+                                      <input type="file" class="hidden" name="file" id="files" multiple/>
+                                      </span>
+                                    <br/>
+                                    <ul class="fileList"></ul>
                                 </div>
                             </div>
                             <div class="modal-footer">
