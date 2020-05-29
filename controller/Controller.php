@@ -90,8 +90,8 @@ class Controller
      */
     function tutorsAjax()
     {
-        if (isset($_POST["yearId"])) {
-            $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
+        if (isset($_POST["itemId"])) {
+            $this->_db->updateItemTutorYear($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
         } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {

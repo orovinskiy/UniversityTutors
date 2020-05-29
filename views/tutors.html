@@ -107,7 +107,8 @@ Page for admin viewing and management of tutor onboarding data.
 
                             <!-- Select -->
                             <true>
-                                <select class="form-control tutor-select">
+                                <select class="form-control tutor-select" data-item-id="{{ @column['item_id'] }}"
+                                        data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}">
 
                                     <!-- Repeats over all states in the item to populate dropdown -->
                                     <repeat group="{{ @items[@column['item_id']]['states'] }}" value="{{ @value }}">

@@ -93,48 +93,11 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Updates data is the Year table given a column, value and yearId
-     *
-     * @param string $column The name of the column in the database being updated
-     * @param mixed $value The value to set the column to
-     * @param int $yearId The year_id for the year data being updated
-     * @author Keller Flint
-     */
-    function updateYearData($column, $value, $yearId)
+    function updateItemTutorYear($itemId, $tutorYearId, $stateId)
     {
-
-        // Valid columns
-        $validColumns = array("year_ADP",
-            "year_affirmation_disclosures",
-            "year_background",
-            "year_handbook_verification",
-            "year_i9",
-            "year_offer_letter",
-            "year_orientation",
-            "year_packet_sent",
-            "year_placement",
-            "year_reference",
-            "year_sexual_misconduct",
-            "year_SPS",
-            "year_w4"
-        );
-
-        // Check that column name is valid to prevent SQL injection
-        if (!in_array($column, $validColumns)) {
-            return;
-        }
-
-        if ($value == '0' || $value == '1') {
-            $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
-        } else {
-            $sql = "UPDATE Year SET $column = ? WHERE year_id = ?";
-        }
-
-
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
-
-        $statement->execute([$value, $yearId]);
+        $statement->execute([$stateId, $itemId, $tutorYearId]);
     }
 
     /**
