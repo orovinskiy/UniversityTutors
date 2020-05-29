@@ -344,7 +344,7 @@ class Controller
         if ($_SESSION['user']->getUserIsAdmin() == 1) {
             //get current year
             $year = $this->_db->getCurrentYear();
-            $this->_f3->reroute("/tutors/$year&all");
+            $this->_f3->reroute("/tutors/$year");
 
 
         } else {
@@ -381,7 +381,7 @@ class Controller
         $this->isLoggedIn(); //comment to remove the login requirement
 
 
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager');
 
         // add user
@@ -412,7 +412,7 @@ class Controller
         $this->isLoggedIn();
 
         //This is the navbar generating
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
 
         $tutor = $this->_db->getTutorById($param["id"]);
@@ -524,7 +524,7 @@ class Controller
     {
 
         // Nav builder
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
 
         // Save Item
@@ -619,7 +619,7 @@ class Controller
         if (isset($_POST["itemDelete"])) {
             $this->_db->deleteItem($itemId);
             $currentYear = $this->_db->getCurrentYear();
-            $this->_f3->reroute("tutors/$currentYear&all");
+            $this->_f3->reroute("tutors/$currentYear");
         }
 
 

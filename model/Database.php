@@ -27,6 +27,13 @@ class Database
         }
     }
 
+    /**
+     * Returns all tutor data for the given year
+     *
+     * @param string $year The year to get tutor data for
+     * @return array All tutor data used to build the tutor table
+     * @author Keller Flint
+     */
     function getTutors($year = "2020")
     {
         // Get all tutors data for the given year
@@ -41,25 +48,24 @@ class Database
 
         $tableData = array();
 
+        // Build associate arrays with additional item and data information for each tutor
         foreach ($tutors as $tutorInfo) {
             $tutorKey = $tutorInfo["tutorYear_id"];
             $tableData[$tutorKey]["info"] = $tutorInfo;
 
             $itemData = $this->getItemTutorYear($tutorKey);
             $tableData[$tutorKey]["items"] = $itemData;
-
-//            foreach ($itemData as $item) {
-//                $itemKey = $item["item_id"];
-//                $tableData[$tutorKey]["items"]["states"][$itemKey] = $this->getStates($itemKey);
-//            }
         }
-
-//        echo "<pre>";
-//        var_dump($tableData);
-
         return $tableData;
     }
 
+    /**
+     * Returns item and state data for the given tutorYear_id
+     *
+     * @param int $tutorYearId The tutorYear_id
+     * @return array Item and state data
+     * @author Keller Flint
+     */
     function getItemTutorYear($tutorYearId)
     {
         $sql = "SELECT * FROM ItemTutorYear 
@@ -72,6 +78,12 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Returns state information for all states
+     *
+     * @return array State information for all states
+     * @author Keller Flint
+     */
     function getAllStates()
     {
         $sql = "SELECT * FROM State";
@@ -781,7 +793,10 @@ class Database
     }
 
     /**
-     * TODO much more complicated functionality now
+     * Returns all items and all state data for each item in an associative array
+     *
+     * @return array all item and item state data
+     * @author Keller Flint
      */
     function getItems()
     {
