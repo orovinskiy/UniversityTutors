@@ -294,5 +294,17 @@ $(document).on("click", ".removeFile", function (e) {
 //stores all the files selected in ul list
 $(".fileList").fileUploader(filesToUpload);
 
+//delete file from ajax document
+$(".removeFile").on("click", function () {
+   let $fileToDelete = $(this).parent().attr("value");
+   console.log($fileToDelete); //used for testing
+    $.post("../tutorsAjax", {
+       fileToDelete: $fileToDelete,
+    }, function (response) {
+        alert("File Deleted");
+        console.log(response);
+    });
+});
+
 
 
