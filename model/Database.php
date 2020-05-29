@@ -132,7 +132,7 @@ class Database
      *
      * @param string $year The new user's starting year of employment.
      * @param string $email The new user's email
-     * @return int The new user's id
+     * @param string $password The user's new password
      * @author Keller Flint
      */
     function addNewTutor($year, $email, $password)
@@ -140,29 +140,45 @@ class Database
         //hash the password parameter
         $password = md5($password);
         // add new user
-        $sql = "insert into User values(default, ?, ?, b'0')";
+        $sql = "INSERT INTO User VALUES(default, ?, ?, 0)";
 
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$email, $password]);
 
-        $id = $this->_dbh->lastInsertId();
+        $userId = $this->_dbh->lastInsertId();
 
         // add new tutor
-        $sql = "insert into Tutor (user_id) values($id)";
+        $sql = "INSERT INTO Tutor (user_id) VALUES($userId)";
 
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute();
 
-        // add new year data
-        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none','none', 'none', b'0', NULL)";
+        // add new tutorYear data
+        $sql = "INSERT INTO TutorYear VALUES(default, ?, ?)";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$year]);
+        $statement->execute([$userId, $year]);
 
-        return $id;
+        $tutorYearId = $this->_dbh->lastInsertId();
+
+        // get default state for each item
+        $sql = "SELECT state_id, state_set_by, item_id FROM State WHERE state_set_by = 'default'";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute();
+
+        $defaults = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // set default state to each item for the ItemTutorYear
+        $sql = "INSERT INTO ItemTutorYear VALUES (?, ?, ?, NULL)";
+        $statement = $this->_dbh->prepare($sql);
+        foreach ($defaults as $state) {
+            $statement->execute([$state["item_id"], $tutorYearId, $state["state_id"]]);
+        }
     }
 
     /**
@@ -259,20 +275,20 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $finalRes = array();
-        foreach ($results as $array){
+        foreach ($results as $array) {
             $allStates = $this->getStates($array['item_id']);
             $keepItem = false;
 
             //go through each state of a item to see if it has a tutor setby
             //if it does keep the item
-            foreach ($allStates as $stateArray){
-                if($stateArray['state_set_by'] === 'tutor'){
+            foreach ($allStates as $stateArray) {
+                if ($stateArray['state_set_by'] === 'tutor') {
                     $keepItem = true;
                     break;
                 }
             }
 
-            if($keepItem){
+            if ($keepItem) {
                 array_push($finalRes, $array);
             }
         }

@@ -68,7 +68,7 @@ function updateCheckbox(itemId, tutorYearId, stateOrder) {
     });
 }
 
-// TODO: Check with refactor Event listener for adding new tutors on click
+// Event listener for adding new tutors on click
 $("#add-tutor-button").on("click", function () {
 
     // Get data for update
