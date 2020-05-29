@@ -93,8 +93,35 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function updateItemTutorYear($itemId, $tutorYearId, $stateId)
+    /**
+     * Updates the state of ItemYearData for selects
+     *
+     * @param int $itemId The id of the item to be updated
+     * @param int $tutorYearId The id of the tutorYear to be updated
+     * @param int $stateId The id of the state the item is being updated to
+     * @author Keller Flint
+     */
+    function updateItemTutorYearSelect($itemId, $tutorYearId, $stateId)
     {
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId, $itemId, $tutorYearId]);
+    }
+
+    /**
+     * Updates the state of ItemYearData for checkboxes
+     *
+     * @param int $itemId The id of the item to be updated
+     * @param int $tutorYearId The id of the tutorYear to be updated
+     * @param int $stateOrder The order of the state the item is being updated to
+     * @author Keller Flint
+     */
+    function updateItemTutorYearCheck($itemId, $tutorYearId, $stateOrder)
+    {
+        // Get the state id by the passed order
+        $stateId = $this->getStateByOrder($itemId, $stateOrder)["state_id"];
+
+        // Update the state
         $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$stateId, $itemId, $tutorYearId]);

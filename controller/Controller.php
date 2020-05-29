@@ -90,8 +90,10 @@ class Controller
      */
     function tutorsAjax()
     {
-        if (isset($_POST["itemId"])) {
-            $this->_db->updateItemTutorYear($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
+        if (isset($_POST["stateId"])) {
+            $this->_db->updateItemTutorYearSelect($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
+        } else if (isset($_POST["stateOrder"])) {
+            $this->_db->updateItemTutorYearCheck($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateOrder"]);
         } else if (isset($_POST["email"])) {
             // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
@@ -116,8 +118,8 @@ class Controller
         } else if (isset($_POST["user_id"])) {
             $this->_db->importUser($_POST["user_id"]);
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
-            $this->_mail->setSubject($_POST['subject']) ;
-            $this->_mail->setBody($_POST['body'])   ;
+            $this->_mail->setSubject($_POST['subject']);
+            $this->_mail->setBody($_POST['body']);
         }
 
     }
@@ -155,10 +157,9 @@ class Controller
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
         $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
-        $this->_f3->set('checklist',$checkBoxes);
-        $this->_f3->set('db',$this->_db);
+        $this->_f3->set('checklist', $checkBoxes);
+        $this->_f3->set('db', $this->_db);
         $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
-
 
 
         $view = new Template();
@@ -453,7 +454,7 @@ class Controller
         $fromName = "University Tutors Admin";
         $loginBody = "<p>Login
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
-                "<p>$loginLink</p>";
+            "<p>$loginLink</p>";
         $success = $this->_mail->smtpmailer($to, $from, $fromName, $loginBody);
         return $success;
     }

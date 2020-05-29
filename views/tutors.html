@@ -132,10 +132,16 @@ Page for admin viewing and management of tutor onboarding data.
                                 <div class="form-check text-center">
                                     <check if="{{ @column['state_order'] !=  1 }}">
                                         <true>
-                                            <input class="form-check-input checkbox-big" type="checkbox" checked>
+                                            <input class="form-check-input checkbox-big" type="checkbox"
+                                                   data-item-id="{{ @column['item_id'] }}"
+                                                   data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}"
+                                                   checked>
                                         </true>
                                         <false>
-                                            <input class="form-check-input checkbox-big" type="checkbox">
+                                            <input class="form-check-input checkbox-big"
+                                                   data-item-id="{{ @column['item_id'] }}"
+                                                   data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}"
+                                                   type="checkbox">
                                         </false>
                                     </check>
                                 </div>

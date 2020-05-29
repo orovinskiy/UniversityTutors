@@ -10,17 +10,20 @@ $(document).ready(function () {
     });
 });
 
-// TODO: Refactor Event listener for updating checkboxes
+// Event listener for updating checkboxes
 $(".checkbox-big").on("click", function () {
 
     // Get data for update
-
+    let itemId = $(this).data("item-id");
+    let tutorYearId = $(this).data("tutor-year-id");
+    let stateOrder = $(this).is(":checked") ? 2 : 1;
 
     // Update database
+    updateCheckbox(itemId, tutorYearId, stateOrder);
 
 });
 
-// TODO Refactor Event listener for updating selects
+// Event listener for updating selects
 $(".tutor-select").on("change", function () {
 
     // Get data for update
@@ -29,21 +32,39 @@ $(".tutor-select").on("change", function () {
     let stateId = $(this).val();
 
     // Update database
-    updateData(itemId, tutorYearId, stateId);
+    updateSelect(itemId, tutorYearId, stateId);
 
 });
 
 /**
- * TODO write this
- * @param itemId
- * @param tutorYearId
- * @param stateId
+ * Updates selects via ajax
+ *
+ * @param itemId The id of the item being updated
+ * @param tutorYearId The id of the tutor year being updated
+ * @param stateId The id of the state the item is being updated to
+ * @author Keller Flint
  */
-function updateData(itemId, tutorYearId, stateId) {
+function updateSelect(itemId, tutorYearId, stateId) {
     $.post("../tutorsAjax", {
         itemId: itemId,
         tutorYearId: tutorYearId,
         stateId: stateId
+    });
+}
+
+/**
+ * Updates checkboxes via ajax
+ *
+ * @param itemId The id of the item being updated
+ * @param tutorYearId The id of the tutor year being updated
+ * @param stateOrder The order of the state the item is being updated to
+ * @author Keller Flint
+ */
+function updateCheckbox(itemId, tutorYearId, stateOrder) {
+    $.post("../tutorsAjax", {
+        itemId: itemId,
+        tutorYearId: tutorYearId,
+        stateOrder: stateOrder
     });
 }
 
