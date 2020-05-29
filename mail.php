@@ -82,13 +82,39 @@ class Mail {
      */
     public function setDefaultAttachments($defaultAttachments)
     {
-        $this->_defaultAttachments = $defaultAttachments;
+        //add attachment to array
+        array_push($this->_defaultAttachments, $defaultAttachments);
+        //$this->_defaultAttachments = $defaultAttachments;
         //saving new subject to JSONData variable and re-writing to json
-        $this->_JSONData['attachment'] = $defaultAttachments;
+        $this->_JSONData['attachment'] = $this->_defaultAttachments;
         //encoding
         $updatedJSON = json_encode($this->_JSONData);
         file_put_contents('emailTemplate.json', $updatedJSON);
 
+
+    }
+
+    public function deleteDefaultAttachment($attachment) {
+        $attachmentArray = $this->_JSONData['attachment'];
+        $deleted = '';
+        for ($i = 0; $i < count($attachmentArray); $i++) {
+            if ($attachmentArray[$i] == $attachment) {
+                unset($attachmentArray[$i]);
+                $deleted = true;
+            }
+            else{
+                $deleted = false;
+            }
+        }
+        //normalize integer values
+        array_values($attachmentArray);
+        //saving updates to JSON file
+        $this->_JSONData['attachment'] = $attachmentArray;
+        //encode
+        $updatedJSON = json_encode($this->_JSONData);
+        file_put_contents('emailTemplate.json', $updatedJSON);
+        //return $deleted;
+        return $attachmentArray;
     }
 
     /**
