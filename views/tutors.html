@@ -12,7 +12,7 @@ Page for admin viewing and management of tutor onboarding data.
     <div class="text-center">
         <h1>Tutor Onboarding</h1>
         <button class="btn btn-secondary year-change" id="year-last">Last Year</button>
-        <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year+1}}</h3>
+        <h3 class="d-inline" id="year-current" data-year='{{ @year }}'>{{ @year }} - {{@year + 1}}</h3>
         <button class="btn btn-secondary year-change" id="year-next">Next Year</button>
         <br>
         <check if="{{ @currentYear != @year }}">
@@ -25,11 +25,11 @@ Page for admin viewing and management of tutor onboarding data.
 
         <!-- Filter buttons -->
         <div class="mt-3">
-            <button class="btn btn-secondary filter">Incomplete</button>
+            <button id="filter-incomplete" class="btn btn-secondary filter">Incomplete</button>
 
-            <button class="btn btn-secondary filter">All</button>
+            <button id="filter-all" class="btn btn-primary filter">All</button>
 
-            <button class="btn btn-secondary filter">Complete</button>
+            <button id="filter-complete" class="btn btn-secondary filter">Complete</button>
         </div>
     </div>
 
@@ -50,8 +50,7 @@ Page for admin viewing and management of tutor onboarding data.
         </thead>
         <tbody>
         <repeat group="{{ @tableData }}" value=" {{ @tutorData }}">
-            <tr>
-
+            <tr id="{{ @tutorData['info']['user_id'] }}" class="user">
                 <!-- Name -->
                 <td class="name"><a href="../tutor/{{ @tutorData['info']['user_id'] }}">{{
                     @tutorData['info']['tutor_first'] }} {{
@@ -107,8 +106,10 @@ Page for admin viewing and management of tutor onboarding data.
 
                             <!-- Select -->
                             <true>
-                                <select class="form-control tutor-select" data-item-id="{{ @column['item_id'] }}"
-                                        data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}">
+                                <select class="form-control tutor-select item-input"
+                                        data-item-id="{{ @column['item_id'] }}"
+                                        data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}"
+                                        data-is-done="{{ @column['state_is_done'] }}">
 
                                     <!-- Repeats over all states in the item to populate dropdown -->
                                     <repeat group="{{ @items[@column['item_id']]['states'] }}" value="{{ @value }}">
@@ -132,15 +133,17 @@ Page for admin viewing and management of tutor onboarding data.
                                 <div class="form-check text-center">
                                     <check if="{{ @column['state_order'] !=  1 }}">
                                         <true>
-                                            <input class="form-check-input checkbox-big" type="checkbox"
+                                            <input class="form-check-input checkbox-big item-input" type="checkbox"
                                                    data-item-id="{{ @column['item_id'] }}"
                                                    data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}"
+                                                   data-is-done="{{ @column['state_is_done'] }}"
                                                    checked>
                                         </true>
                                         <false>
-                                            <input class="form-check-input checkbox-big"
+                                            <input class="form-check-input checkbox-big item-input"
                                                    data-item-id="{{ @column['item_id'] }}"
                                                    data-tutor-year-id="{{ @tutorData['info']['tutorYear_id'] }}"
+                                                   data-is-done="{{ @column['state_is_done'] }}"
                                                    type="checkbox">
                                         </false>
                                     </check>

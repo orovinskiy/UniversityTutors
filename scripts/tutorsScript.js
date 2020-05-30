@@ -153,7 +153,7 @@ $(".delete").on("click", function () {
     }
 });
 
-// TODO: Check with refactor event listener to import the user to the current year on click
+// Event listener to import the user to the current year on click
 $(".import").on("click", function () {
     let result = confirm("Are you sure you want import this user to the current year?");
     if (result) {
@@ -196,5 +196,68 @@ $("#save-default").on('click', function () {
     }, function () {
         alert("Changes have been saved");
         $("#email-modal").modal('hide');
+    });
+});
+
+// Filtering
+
+/**
+ * Sets all filter buttons to btn-secondary
+ * @author Keller Flint
+ */
+function resetFilterButtons() {
+    $("#filter-all").removeClass("btn-primary");
+    $("#filter-all").addClass("btn-secondary");
+
+    $("#filter-incomplete").removeClass("btn-primary");
+    $("#filter-incomplete").addClass("btn-secondary");
+
+    $("#filter-complete").removeClass("btn-primary");
+    $("#filter-complete").addClass("btn-secondary");
+}
+
+// show incomplete rows on click of incomplete filter button
+$("#filter-incomplete").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
+        let id = $(this).attr("id");
+        let doneArray = [];
+        $("#" + id + " .item-input").each(function () {
+            doneArray.push($(this).data("is-done"));
+        });
+        if (!doneArray.includes(0)) {
+            $(this).hide();
+        }
+    });
+});
+
+// show complete rows on click of complete filter button
+$("#filter-complete").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
+        let id = $(this).attr("id");
+        let doneArray = [];
+        $("#" + id + " .item-input").each(function () {
+            doneArray.push($(this).data("is-done"));
+        });
+        if (!doneArray.includes(1)) {
+            $(this).hide();
+        }
+    });
+});
+
+// show all rows on click of all filter buttons
+$("#filter-all").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
     });
 });
