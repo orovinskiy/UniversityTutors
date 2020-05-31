@@ -199,44 +199,14 @@ $("#enable-edit").on("click", function () {
 });
 
 //event listener to save default email information
+//@author Dallas Sloan
 $("#save-default").on('click', function () {
-    console.log("Did this work?");
+    //console.log("Did this work?");
 
     //getting th email and file values
     let newSubject = $("#email-subject").val();
     let newBody = $("#email-body").val();
-    let fileChosen = $("#files").val();
-
-    //file is been chosen
-    if (fileChosen) {
-        //ajax call for file upload
-        let fd = new FormData(); //creating FormData object
-        let files = $('#files')[0].files[0];
-        //console.log(files);
-        fd.append('file', files);
-        //making ajax call to updated email json
-        $.ajax({
-            url: '../tutorsAjax',
-            type: 'post',
-            // subject: newSubject,
-            // body: newBody,
-            data: fd,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                if (response != 0) {
-                    // alert("Upload saved");
-                    alert("File been upload");
-                    $("#email-modal").modal('hide');
-                    console.log(response);
-                    // Show image preview
-                    //$('#preview').append("<img src='" + response + "' width='100' height='100' style='display: inline-block;'>");
-                } else {
-                    alert('Changes not saved');
-                }
-            }
-        });
-    }
+    //ajax call to update subjec and body of email
     $.post("../tutorsAjax", {
         subject: newSubject,
         body: newBody,
@@ -249,13 +219,38 @@ $("#save-default").on('click', function () {
 
 
 //event listener uploading multiple files
+//@author Laxmi & Dallas
 $.fn.fileUploader = function (filesToUpload) {
     this.closest(".files").change(function (evt) { //  div class on change run function
         for (var i = 0; i < evt.target.files.length; i++) {
             filesToUpload.push(evt.target.files[i]);
-            console.log(filesToUpload);
+
+            //ajax call for file upload will upload each file individually
+            let fd = new FormData(); //creating FormData object
+            let files = $('#files')[0].files[i];
+            fd.append('file', files);
+            //making ajax call to updated email json
+            $.ajax({
+                url: '../tutorsAjax',
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    //console.log(response);
+                    if (response == 1) {
+                        //alert("File uploaded");
+                        console.log(response);
+                    } else if (response == 0) {
+                        alert('Changes not saved');
+                    } else if (response ==2) {
+                        alert("File Already Exists")
+                    }
+                }
+            });
         }
-        ;
+        //console.log(filesToUpload);
+
 
         var output = [];
         for (var i = 0, f; f = evt.target.files[i]; i++) {
@@ -292,12 +287,14 @@ $(document).on("click", ".removeFile", function (e) {
 
 
 //stores all the files selected in ul list
+//@author Dallas Sloan
 $(".fileList").fileUploader(filesToUpload);
 
-//delete file from ajax document
+//event listener to delete file from ajax document
+//@author Dallas Sloan
 $(".removeFile").on("click", function () {
    let $fileToDelete = $(this).parent().attr("value");
-   console.log($fileToDelete); //used for testing
+   //console.log($fileToDelete); //used for testing
     $.post("../tutorsAjax", {
        fileToDelete: $fileToDelete,
     }, function (response) {
