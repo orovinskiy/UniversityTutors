@@ -91,7 +91,6 @@ class Controller
      */
     function tutorsAjax()
     {
-        var_dump($_FILES);
         global $directoryName;
         if (isset($_POST["yearId"])) {
             $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
@@ -135,7 +134,8 @@ class Controller
 
             // Upload file
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
-            $this->_mail->setDefaultAttachments($location);
+            $response = $this->_mail->setDefaultAttachments($location);
+            echo $response;
         } else if (isset($_POST['fileToDelete'])) {
             $test = $this->_mail->deleteDefaultAttachment($_POST['fileToDelete']);
             echo var_dump($test);
