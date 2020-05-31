@@ -10,72 +10,63 @@ $(document).ready(function () {
     });
 });
 
-// Stores current filter so when page is reloaded, it is reloaded with the appropriate filter
-let status = $("#status").val();
-
 // Event listener for updating checkboxes
 $(".checkbox-big").on("click", function () {
 
     // Get data for update
-    let column = $(this).data("column");
-    let value = $(this).is(":checked") ? 1 : 0;
-    let yearId = $(this).data("yearid");
+    let itemId = $(this).data("item-id");
+    let tutorYearId = $(this).data("tutor-year-id");
+    let stateOrder = $(this).is(":checked") ? 2 : 1;
 
-    // Update database via ajax
-    $.post("../tutorsAjax", {
-        column: column,
-        value: value,
-        yearId: yearId
-    });
+    // Update database
+    updateCheckbox(itemId, tutorYearId, stateOrder);
+
 });
 
 // Event listener for updating selects
 $(".tutor-select").on("change", function () {
 
     // Get data for update
-    let column = $(this).data("column");
-    let value = $(this).val();
-    let yearId = $(this).data("yearid");
+    let itemId = $(this).data("item-id");
+    let tutorYearId = $(this).data("tutor-year-id");
+    let stateId = $(this).val();
 
-    // Update database via ajax
+    // Update database
+    updateSelect(itemId, tutorYearId, stateId);
+
+});
+
+/**
+ * Updates selects via ajax
+ *
+ * @param itemId The id of the item being updated
+ * @param tutorYearId The id of the tutor year being updated
+ * @param stateId The id of the state the item is being updated to
+ * @author Keller Flint
+ */
+function updateSelect(itemId, tutorYearId, stateId) {
     $.post("../tutorsAjax", {
-        column: column,
-        value: value,
-        yearId: yearId
+        itemId: itemId,
+        tutorYearId: tutorYearId,
+        stateId: stateId
     });
-});
+}
 
-// Event listener to show/hide the save button when the placement text is changed.
-$(".placement").on("keyup", function () {
-    let button = $(this).parent().find(".placement-button");
-
-    if ($(this).attr("data-original") === $(this).val()) {
-        button.addClass("d-none");
-    } else {
-        button.removeClass("d-none");
-    }
-});
-
-
-// Event listener for updating inputs
-$(".placement-button").on("click", function () {
-    let input = $(this).parent().find(".placement");
-    let button = $(this);
-    // Get data for update
-    let column = input.data("column");
-    let value = input.val();
-    let yearId = input.data("yearid");
-
-    // Update database via ajax
+/**
+ * Updates checkboxes via ajax
+ *
+ * @param itemId The id of the item being updated
+ * @param tutorYearId The id of the tutor year being updated
+ * @param stateOrder The order of the state the item is being updated to
+ * @author Keller Flint
+ */
+function updateCheckbox(itemId, tutorYearId, stateOrder) {
     $.post("../tutorsAjax", {
-        column: column,
-        value: value,
-        yearId: yearId
-    }, function (result) {
-        input.attr("data-original", value);
-        button.addClass("d-none");
+        itemId: itemId,
+        tutorYearId: tutorYearId,
+        stateOrder: stateOrder
     });
-});
+}
 
 // Event listener for adding new tutors on click
 $("#add-tutor-button").on("click", function () {
@@ -97,7 +88,7 @@ $("#add-tutor-button").on("click", function () {
         alert(result);
         //refresh page to load new user into table
         let year = $("#year-current").data("year");
-        window.location.href = ("../tutors/" + year + "&" + status);
+        window.location.href = ("../tutors/" + year);
     });
 });
 
@@ -120,7 +111,7 @@ $(".year-change").on("click", function () {
     //alert("This is the current year: "+ year + "Did we get the right button? : " +change);
 
     //refresh page with new year
-    window.location.href = ("../tutors/" + year + "&all");
+    window.location.href = ("../tutors/" + year);
 });
 
 // hide delete and import buttons on window click
@@ -144,7 +135,7 @@ $(".email").on("click", function (event) {
     event.stopPropagation();
 });
 
-// event listener for delete button clicked
+// Event listener for delete button clicked
 $(".delete").on("click", function () {
     let result = confirm("Are you sure you want to delete this user and all data associated with them?");
     if (result) {
@@ -158,11 +149,11 @@ $(".delete").on("click", function () {
         });
 
         let year = $("#year-current").data("year");
-        window.location.href = ("../tutors/" + year + "&" + status);
+        window.location.href = ("../tutors/" + year);
     }
 });
 
-// event listener to import the user to the current year on click
+// Event listener to import the user to the current year on click
 $(".import").on("click", function () {
     let result = confirm("Are you sure you want import this user to the current year?");
     if (result) {
@@ -189,7 +180,7 @@ $("#current-year").on("click", function () {
         current_year: year
     }, function () {
         // refresh data
-        window.location.href = ("../tutors/" + year + "&" + status);
+        window.location.href = ("../tutors/" + year);
     });
 });
 
@@ -303,5 +294,65 @@ $(".removeFile").on("click", function () {
     });
 });
 
+// Filtering
 
+/**
+ * Sets all filter buttons to btn-secondary
+ * @author Keller Flint
+ */
+function resetFilterButtons() {
+    $("#filter-all").removeClass("btn-primary");
+    $("#filter-all").addClass("btn-secondary");
 
+    $("#filter-incomplete").removeClass("btn-primary");
+    $("#filter-incomplete").addClass("btn-secondary");
+
+    $("#filter-complete").removeClass("btn-primary");
+    $("#filter-complete").addClass("btn-secondary");
+}
+
+// show incomplete rows on click of incomplete filter button
+$("#filter-incomplete").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
+        let id = $(this).attr("id");
+        let doneArray = [];
+        $("#" + id + " .item-input").each(function () {
+            doneArray.push($(this).data("is-done"));
+        });
+        if (!doneArray.includes(0)) {
+            $(this).hide();
+        }
+    });
+});
+
+// show complete rows on click of complete filter button
+$("#filter-complete").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
+        let id = $(this).attr("id");
+        let doneArray = [];
+        $("#" + id + " .item-input").each(function () {
+            doneArray.push($(this).data("is-done"));
+        });
+        if (!doneArray.includes(1)) {
+            $(this).hide();
+        }
+    });
+});
+
+// show all rows on click of all filter buttons
+$("#filter-all").on("click", function () {
+    resetFilterButtons();
+    $(this).removeClass("btn-secondary");
+    $(this).addClass("btn-primary");
+    $(".user").each(function () {
+        $(this).show();
+    });
+});
