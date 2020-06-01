@@ -4,6 +4,10 @@ Styles for the admin tutors table
 @author Keller Flint
 */
 
+.btn-file input[type=file] {
+    outline:none;
+}
+
 .checkbox-big {
     transform: scale(2) translateY(-5.5px);
     -webkit-transform: scale(2) translateY(-5.5px);;
@@ -29,6 +33,3 @@ th {
     font-size: .7em;
 }
 
-.btn-file input[type=file] {
-    outline:none;
-}
