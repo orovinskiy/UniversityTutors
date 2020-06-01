@@ -129,7 +129,7 @@ class Controller
             // file name
             $filename = $_FILES['file']['name'];
             // Location
-            $location = 'upload/' . $filename;
+            $location = 'uploads/' . $filename;
             // Upload file
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $response = $this->_mail->setDefaultAttachments($location);
