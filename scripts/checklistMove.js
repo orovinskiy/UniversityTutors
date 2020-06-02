@@ -18,15 +18,15 @@ $("body").on("click","input",function()
 
     //check what data to put into the database
     if($(this).is(":checked")){
-        dataValue = parseInt($(this).data('state'))+1;
-        wholeCheckBox.find('input').attr('data-state',dataValue);
+        dataValue = parseInt($(this).data('order'))+1;
+        wholeCheckBox.find('input').attr('data-order',dataValue);
         wholeCheckBox.find('label').html('Completed');
         $(".completedBox").append(wholeCheckBox);
 
     }
     else{
-        dataValue = parseInt($(this).data('state'))-1;
-        wholeCheckBox.find('input').attr('data-state',dataValue);
+        dataValue = parseInt($(this).data('order'))-1;
+        wholeCheckBox.find('input').attr('data-order',dataValue);
         wholeCheckBox.find('label').html('Complete');
         $(".notCompletedBox").append(wholeCheckBox);
     }
