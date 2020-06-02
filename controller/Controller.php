@@ -52,8 +52,11 @@ class Controller
     function tutorsPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
-
+        $this->isLoggedIn($_SESSION['user_id']);
+        //if non admin tires to access tutorsPage it redirects them to their log in page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
+            $this->redirects();
+        }
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
@@ -147,7 +150,7 @@ class Controller
     function checklistAjax()
     {
         var_dump($_POST);
-        $stateID = $this->_db->getNextStateID($_POST['item'],$_POST['value'],$_POST['prev']);
+        $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
@@ -160,7 +163,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn($param['userId']);
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -192,8 +195,10 @@ class Controller
 
     function formPage($param)
     {
+//        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
+//        echo($_SESSION['user_id']);
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($param['id']);
 
 
         //this is for building up a navbar
@@ -331,21 +336,26 @@ class Controller
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
             if (!empty($userLogin)) {
-                //instantiate new user object
-                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
-                //saving object to session
-                $_SESSION['user'] = $user;
-                //setting session login to true
-                //$_SESSION['user'] = true;
+                //check if user in the currently running year or if it is admin
+                if ($this->_db->getCurrentYear() == $this->_db->getTutorYear($userLogin['user_id'])['tutorYear_year']
+                    || $this->_db->checkAdmin($userLogin['user_id'])['user_is_admin'] == 1) {
+                    //instantiate new user object
+                    $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                    //saving object to session
+                    $_SESSION['user'] = $user;
+                    //setting session login to true
+                    //$_SESSION['user'] = true;
 
-                //call redirects method to redirect to correct page
-                $this->redirects();
-
+                    //call redirects method to redirect to correct page
+                    $this->redirects();
+                } else {
+                    //User is not in current year list
+                    $this->_f3->set('loginError', "Please Contact admin you are not enrolled as tutor for current year");
+                }
             } else {
                 //login info was not valid set error message
                 $this->_f3->set('loginError', "Invalid Username and/or Password");
             }
-
         }
         $view = new Template();
         echo $view->render("views/login.html");
@@ -391,11 +401,17 @@ class Controller
     /**
      * A function to check whether or not a user object has been set for the current session. If it is set the user
      * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @param int $param
      * @author Dallas Sloan
      */
-    private function isLoggedIn()
+    private function isLoggedIn($param)
     {
+        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
         if (!isset($_SESSION['user'])) {
+            $this->_f3->reroute('/login');
+        }
+
+        if ($_SESSION['user_id'] != $param) {
             $this->_f3->reroute('/login');
         }
     }
@@ -408,9 +424,11 @@ class Controller
     {
         // TODO check if logged in user is admin DONE
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn(); //comment to remove the login requirement
-
-
+        $this->isLoggedIn($_SESSION['user_id']); //comment to remove the login requirement
+        //if non admin tries to excess admin page info it will redirects them to their login page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
+            $this->redirects();
+        }
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager');
 
@@ -437,9 +455,9 @@ class Controller
      */
     function tutorInfoPage($param)
     {
-
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($_SESSION['user_id']);
+
 
         //This is the navbar generating
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
@@ -543,7 +561,7 @@ class Controller
     function passwordPage($id)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($id);
 
         if ($_SESSION['user']->getUserID() != $id) {
             $this->_f3->reroute("/login");

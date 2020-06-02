@@ -284,10 +284,10 @@ $(".fileList").fileUploader(filesToUpload);
 //event listener to delete file from ajax document
 //@author Dallas Sloan
 $(".removeFile").on("click", function () {
-   let $fileToDelete = $(this).parent().attr("value");
-   //console.log($fileToDelete); //used for testing
+    let $fileToDelete = $(this).parent().attr("value");
+    //console.log($fileToDelete); //used for testing
     $.post("../tutorsAjax", {
-       fileToDelete: $fileToDelete,
+        fileToDelete: $fileToDelete,
     }, function (response) {
         alert("File Deleted");
         console.log(response);

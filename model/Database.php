@@ -332,7 +332,7 @@ class Database
      * @return string returns the set by of a state
      * @author Oleg
      */
-    function getNextState($itemID,$order)
+    function getNextState($itemID, $order)
     {
 
         $order++;
@@ -341,7 +341,7 @@ class Database
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$itemID,$order]);
+        $statement->execute([$itemID, $order]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -353,13 +353,14 @@ class Database
      * @param int $order what order
      * @return string state id
      */
-    function getNextStateID($itemID,$order){
+    function getNextStateID($itemID, $order)
+    {
 
         $sql = "SELECT State.state_id FROM State WHERE State.item_id = ? AND State.state_order=?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$itemID,$order]);
+        $statement->execute([$itemID, $order]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -372,14 +373,14 @@ class Database
      * @return string returns the text of a state
      * @author Oleg
      */
-    function getNextStateText($stateID,$order)
+    function getNextStateText($stateID, $order)
     {
         $stateID += 1;
         $sql = "SELECT State.state_text FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$stateID,$order]);
+        $statement->execute([$stateID, $order]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -960,6 +961,35 @@ class Database
         $sql = "DELETE FROM Item WHERE item_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
+    }
+
+    /**
+     * Gets the year of tutor by user id
+     * @param int $user_id user's id
+     * @return array of tutor year of current year if exist
+     * @author  laxmi kandel
+     */
+    function getTutorYear($user_id)
+    {
+        $currentYear = $this->getCurrentYear();
+        $sql = "SELECT tutorYear_year from TutorYear where user_id = ? and tutorYear_year = $currentYear";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Check if the given user_id is admin
+     * @param int $user_id user's id
+     * @return array of user_is_admin if exist
+     * @author laxmi kandel
+     */
+    function checkAdmin($user_id)
+    {
+        $sql = "SELECT user_is_admin from User where user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
 
