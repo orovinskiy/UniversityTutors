@@ -29,16 +29,16 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checklist}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_id'] !='tutor' }}">
+                        <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_set_by'] !='tutor' }}">
                             <div class="mb-3">
                                 <section class="card">
                                     <h2 class="card-title text-center">{{@isChecked['item_name']}}</h2>
                                     <div class="card-subtitle">
                                         <div class="row">
                                             <div class="col-8">
-                                                <check if="@db->getNextState(@isChecked['state_id']) =='tutor'">
+                                                <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) =='tutor'">
                                                     <true>
-                                                        <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@db->getNextStateText(@isChecked['state_id'])}}</p>
+                                                        <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@db->getNextStateText(@isChecked['item_id'],@isChecked['state_order'])}}</p>
                                                     </true>
                                                     <false>
                                                         <p class="text-center mt-3 mb-3 mr-1 ml-1">Please Wait for admin to activate this for you.</p>
@@ -48,9 +48,9 @@ what forms they have already completed
                                             <div class="col-4">
                                                 <div class="form-check mt-3 mb-5 mr-5 text-center">
                                                     <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox"
-                                                           data-state="{{@isChecked['state_id']}}" value="{{@isChecked['tutorYear_id']}}"
+                                                           data-order="{{@isChecked['state_order']}}" value="{{@isChecked['tutorYear_id']}}"
                                                            id="{{@isChecked['item_id']}}" name="doorInter[]"
-                                                    <check if="@db->getNextState(@isChecked['state_id']) !='tutor'">
+                                                    <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) !='tutor'">
                                                         disabled
                                                     </check>
                                                     >
@@ -90,7 +90,7 @@ what forms they have already completed
                                                 <div class="form-check mt-3 mb-5 mr-5 text-center">
 
                                                     <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox"
-                                                           value="{{@isChecked['tutorYear_id']}}" data-state="{{@isChecked['state_id']}}"
+                                                           value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
                                                            id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
                                                     <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['item_id']}}">
                                                         Completed
