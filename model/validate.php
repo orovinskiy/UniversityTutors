@@ -210,8 +210,8 @@ class Validate
         if ($_SERVER['CONTENT_LENGTH'] > 3000000) {
             $f3->set("errors['largeImg", "Sorry! file size too large Maximum file size is 3 MB ");
             $isValid = false;
-        } //check the file type
-        elseif (in_array($file['type'], $validateType)) {
+            //check the file type
+        } elseif (in_array($file['type'], $validateType)) {
             if ($file['error'] > 0) {
                 $f3->set("errors['returnCode']", "Sorry! file could not be uploaded Try again");
                 $isValid = false;
@@ -224,7 +224,7 @@ class Validate
 //                $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
 //                $isValid = false;
 //            }
-        else {
+            else {
                 $f3->set("success['uploadSuccessfully']", "Updated successfully");
             }
         } else {

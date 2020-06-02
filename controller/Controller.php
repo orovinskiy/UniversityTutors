@@ -91,7 +91,6 @@ class Controller
      */
     function tutorsAjax()
     {
-        global $directoryName;
         if (isset($_POST["stateId"])) {
             $this->_db->updateItemTutorYearSelect($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
         } else if (isset($_POST["stateOrder"])) {
@@ -126,30 +125,19 @@ class Controller
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
-            $fileName = $_POST['attachment'];
-            //finding the last occurrence of the needle (\)
-            $position = strripos($fileName, "\\");
-
-            //get the parts of the string
-            $fileName = substr($fileName, $position);
-            $fileName = substr_replace($fileName, "", 0, 1);
-
-//            echo $_FILES['attachmentsToUpload']['temp_name'];
-
-            //for attachment
-            if ($_POST['attachment']) {
-                echo $fileName;
-                echo "<br>";
-                $path = $directoryName . $fileName;
-
-                echo $path;
-                move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
-                $this->_mail->setDefaultAttachments($path);
-            }
+        } else if (isset($_FILES['file'])) {
+            // file name
+            $filename = $_FILES['file']['name'];
+            // Location
+            $location = 'uploads/' . $filename;
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $response = $this->_mail->setDefaultAttachments($location);
+            echo $response;
+        } else if (isset($_POST['fileToDelete'])) {
+            $test = $this->_mail->deleteDefaultAttachment($_POST['fileToDelete']);
+            //echo var_dump($test);
         }
-        //checking to if is set file
-
-
     }
 
     /**
