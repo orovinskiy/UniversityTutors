@@ -969,7 +969,6 @@ class Database
      * @return array of tutor year of current year if exist
      * @author  laxmi kandel
      */
-
     function getTutorYear($user_id)
     {
         $currentYear = $this->getCurrentYear();
@@ -985,7 +984,6 @@ class Database
      * @return array of user_is_admin if exist
      * @author laxmi kandel
      */
-
     function checkAdmin($user_id)
     {
         $sql = "SELECT user_is_admin from User where user_id = ?";
