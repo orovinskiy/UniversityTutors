@@ -304,7 +304,6 @@ class Database
                 array_push($finalRes, $array);
             }
         }
-        var_dump($finalRes);
         return $finalRes;
     }
 
@@ -349,6 +348,11 @@ class Database
         return $results[0]['state_set_by'];
     }
 
+    /**gets the state id
+     * @param int $itemID
+     * @param int $order what order
+     * @return string state id
+     */
     function getNextStateID($itemID,$order){
 
         $sql = "SELECT State.state_id FROM State WHERE State.item_id = ? AND State.state_order=?";
@@ -359,7 +363,6 @@ class Database
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        var_dump($results);
         return $results[0]['state_id'];
     }
 
@@ -396,7 +399,6 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$state, $item, $user]);
-        var_dump("hi");
     }
 
     /**Get email form the user table
