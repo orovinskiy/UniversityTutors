@@ -147,7 +147,7 @@ class Controller
     function checklistAjax()
     {
         var_dump($_POST);
-        $stateID = $this->_db->getNextStateID($_POST['item'],$_POST['value'],$_POST['prev']);
+        $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
@@ -160,7 +160,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn();
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -331,21 +331,26 @@ class Controller
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
             if (!empty($userLogin)) {
-                //instantiate new user object
-                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
-                //saving object to session
-                $_SESSION['user'] = $user;
-                //setting session login to true
-                //$_SESSION['user'] = true;
+                //check if user in the currently running year or if it is admin
+                if ($this->_db->getCurrentYear() == $this->_db->getTutorYear($userLogin['user_id'])['tutorYear_year']
+                    || $this->_db->checkAdmin($userLogin['user_id'])['user_is_admin'] == 1) {
+                    //instantiate new user object
+                    $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                    //saving object to session
+                    $_SESSION['user'] = $user;
+                    //setting session login to true
+                    //$_SESSION['user'] = true;
 
-                //call redirects method to redirect to correct page
-                $this->redirects();
-
+                    //call redirects method to redirect to correct page
+                    $this->redirects();
+                } else {
+                    //User is not in current year list
+                    $this->_f3->set('loginError', "Please Contact admin you are not enrolled as tutor for current year");
+                }
             } else {
                 //login info was not valid set error message
                 $this->_f3->set('loginError', "Invalid Username and/or Password");
             }
-
         }
         $view = new Template();
         echo $view->render("views/login.html");
@@ -395,6 +400,7 @@ class Controller
      */
     private function isLoggedIn()
     {
+
         if (!isset($_SESSION['user'])) {
             $this->_f3->reroute('/login');
         }
