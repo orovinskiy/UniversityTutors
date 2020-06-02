@@ -130,13 +130,12 @@ class Validate
 
     /**Validating all the required fields name, phone, email, ssn, image
      * @param string $file user's selected file for image
-     * @param string $newName name for file
      * @param int $param user id
      * @param string $bio user's bio
      * @return bool true/false if all the required fields are valid/not valid
      * @author  Laxmi
      */
-    function validForm($file, $newName, $param, $bio)
+    function validForm($file, $param, $bio)
     {
         global $f3;
         global $db;
@@ -180,7 +179,7 @@ class Validate
         //image file
         if (isset($file)) {
             if (!empty($file["name"])) {
-                if (!$this->validateImageUpload($file, $newName)) {
+                if (!$this->validateFileUpload($file)) {
                     $isValid = false;
                 }
             }
@@ -196,13 +195,11 @@ class Validate
     /**
      * Validate image
      * @param string $file image file
-     * @param string $newName image name
      * @return bool true/false if file is valid/not valid
      */
 
-    function validateImageUpload($file, $newName)
+    function validateFileUpload($file)
     {
-        global $dirName;
         global $f3;
 
         $isValid = true;
@@ -213,18 +210,21 @@ class Validate
         if ($_SERVER['CONTENT_LENGTH'] > 3000000) {
             $f3->set("errors['largeImg", "Sorry! file size too large Maximum file size is 3 MB ");
             $isValid = false;
-        } //check the file type
-        elseif (in_array($file['type'], $validateType)) {
+            //check the file type
+        } elseif (in_array($file['type'], $validateType)) {
             if ($file['error'] > 0) {
                 $f3->set("errors['returnCode']", "Sorry! file could not be uploaded Try again");
                 $isValid = false;
             }
 
-            //checking for duplicate
-            if (file_exists($dirName . $newName)) {
-                $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
-                $isValid = false;
-            } else {
+            //since we have the used the tutor's id and name as image file name to store in our db
+            // we know file name is going to be unique so no need check for duplicates
+//            if (file_exists($dirName . $newName)) {
+//                echo $dirName.$newName;
+//                $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
+//                $isValid = false;
+//            }
+            else {
                 $f3->set("success['uploadSuccessfully']", "Updated successfully");
             }
         } else {

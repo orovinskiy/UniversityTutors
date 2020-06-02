@@ -173,18 +173,18 @@ Page for admin viewing and management of tutor onboarding data.
                     data-whatever="@mdo">Edit Default Email
             </button>
 
-            <div class="modal fade" id="email-modal" tabindex="-1" role="dialog"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-title">Edit Default Email</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal fade" id="email-modal" tabindex="-1" role="dialog"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-title">Edit Default Email</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
                                 <div class="form-group">
                                     <label for="email-subject" class="col-form-label">Subject:</label>
                                     <input type="text" class="form-control" id="email-subject" value="{{ @subject }}">
@@ -195,15 +195,29 @@ Page for admin viewing and management of tutor onboarding data.
                                         body**</p>
                                     <textarea class="form-control" id="email-body">{{ @body }}</textarea>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="save-default">Save Changes</button>
+                                <div class="form-group files" id="file">
+                                    <label for="files" class="form-group mb-2 btn btn-success"> Upload files </label>
+                                    <span class="btn btn-default btn-file">
+                                      <input type="file" class="hidden" name="file" id="files" multiple/>
+                                      </span>
+                                    <br/>
+                                    <ul class="fileList">
+                                        <repeat group=" {{ @attachment }}" key="{{ @key }}" value="{{ @value }}">
+                                            <li class="list-file" value="{{ @value }}">{{ @value }}&nbsp; &nbsp;<a class="removeFile" href="#">Remove</a></li>
+                                        </repeat>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" name="saveChanges" id="save-default">Save
+                                    Changes
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="col-4"></div>
 

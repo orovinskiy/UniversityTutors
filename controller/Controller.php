@@ -79,7 +79,7 @@ class Controller
         //Store Default email data into hive
         $this->_f3->set("subject", $this->_mail->getSubject());
         $this->_f3->set("body", $this->_mail->getBody());
-
+        $this->_f3->set("attachment", $this->_mail->getDefaultAttachments());
         $view = new Template();
         echo $view->render("views/tutors.html");
     }
@@ -109,7 +109,12 @@ class Controller
                     echo "Email successfully sent to " . $_POST["email"];
                 }
             } else {
-                echo "Invalid email address";
+                //checking for duplicate email
+                if (!$this->_val->uniqueEmail($_POST["email"])) {
+                    echo "Duplicate email address";
+                } else {
+                    echo "Invalid email address";
+                }
             }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
@@ -120,8 +125,19 @@ class Controller
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
+        } else if (isset($_FILES['file'])) {
+            // file name
+            $filename = $_FILES['file']['name'];
+            // Location
+            $location = 'uploads/' . $filename;
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $response = $this->_mail->setDefaultAttachments($location);
+            echo $response;
+        } else if (isset($_POST['fileToDelete'])) {
+            $test = $this->_mail->deleteDefaultAttachment($_POST['fileToDelete']);
+            //echo var_dump($test);
         }
-
     }
 
     /**
@@ -209,10 +225,10 @@ class Controller
             $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
-            $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+            $imageFileName = $this->nameForImage($_POST['firstName'], $param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
             if ($this->_val->validForm($_FILES['fileToUpload'],
-                $randomFileName, $param["id"], $_POST['bio'])) {
+                $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn']) || substr($_POST['ssn'], 0, 3) == "XXX") {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
@@ -225,8 +241,8 @@ class Controller
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $imageFileName);
+                        $this->_db->uploadTutorImage($imageFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
@@ -434,6 +450,29 @@ class Controller
 
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
 
+        //let admin download the tutor's image
+        if (isset($_GET['download'])) {
+            $tutorImage = $this->_db->getTutorById($param["id"])["tutor_image"];//gets the image name from db
+//            echo $tutorImage;
+            $filePath = 'uploads/' . $tutorImage;
+//            echo $filePath; //gets the file path
+            if (file_exists($filePath)) {
+                //description of file/content
+                header('Content-Description: File Transfer');
+
+                //pull all types of file
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($filePath));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filePath));
+                readfile($filePath);
+                exit;
+            }
+
+        }
+
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
     }
@@ -526,7 +565,18 @@ class Controller
     }
 
     /**
-     * Page to edit table items
+     * Generate the image file name to be tutor's name and tutor's id
+     * @param String $tutor_name the tutor name
+     * @param int $user_id the tutor id
+     * @return string name for upload image
+     * @author  laxmi
+     */
+    function nameForImage($tutor_name, $user_id)
+    {
+        return $tutor_name . "-" . $user_id;
+    }
+
+    /** Page to edit table items
      *
      * @param int $itemId The id of the item being edited
      * @author Keller Flint

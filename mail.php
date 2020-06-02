@@ -79,16 +79,58 @@ class Mail {
     /**
      * setter of default attachments for email. Will re-write JSON file accordingly
      * @param String $defaultAttachments path for file attachment
+     * @return int returns whether the file is saved (1), the file is not saved (0) or if the file is not saved due
+     * to the file alraedy existing (2)
      */
     public function setDefaultAttachments($defaultAttachments)
     {
-        $this->_defaultAttachments = $defaultAttachments;
+        //add attachment to array
+        //first check to see if attachment already exists
+        $attachmentArray = $this->_JSONData['attachment'];
+        for ($i = 0; $i < count($attachmentArray); $i++) {
+            if ($attachmentArray[$i] == $defaultAttachments) {
+                return 2; //2 indicates that file already exists
+            }
+        }
+
+        array_push($this->_defaultAttachments, $defaultAttachments);
+        //$this->_defaultAttachments = $defaultAttachments;
         //saving new subject to JSONData variable and re-writing to json
-        $this->_JSONData['attachment'] = $defaultAttachments;
+        $this->_JSONData['attachment'] = $this->_defaultAttachments;
         //encoding
         $updatedJSON = json_encode($this->_JSONData);
-        file_put_contents('emailTemplate.json', $updatedJSON);
+        if (file_put_contents('emailTemplate.json', $updatedJSON)) {
+            return 1;
+        } else return 0;
 
+
+
+    }
+
+    public function deleteDefaultAttachment($attachment) {
+        $attachmentArray = $this->_JSONData['attachment'];
+        $deleted = '';
+        for ($i = 0; $i < count($attachmentArray); $i++) {
+            if ($attachmentArray[$i] == $attachment) {
+                unset($attachmentArray[$i]);
+                if (unlink($attachment)) {
+                    $deleted = true;
+                } else {
+                    $deleted = "File not deleted from directoy";
+                }
+            } else{
+                $deleted = false;
+            }
+        }
+        //normalize integer values
+        $attachmentArray = array_values($attachmentArray);
+        //saving updates to JSON file
+        $this->_JSONData['attachment'] = $attachmentArray;
+        //encode
+        $updatedJSON = json_encode($this->_JSONData);
+        file_put_contents('emailTemplate.json', $updatedJSON);
+        return $deleted;
+        //return $attachmentArray;
     }
 
     /**
@@ -114,6 +156,15 @@ class Mail {
         $mail->Port = 465;
         $mail->Username = 'universitytutors@kold-tutors.greenriverdev.com';
         $mail->Password = 'Monday!99';
+
+        //check to see if there are any attachments to be added if there are, add attachment to email
+        if (!empty($this->_defaultAttachments))
+        {
+            for ($i = 0; $i < count($this->_defaultAttachments); $i++)
+            {
+                $mail->addAttachment($this->_defaultAttachments[$i]);
+            }
+        }
 
         //adding attachments to email
         //$path = 'attachments/IT355.zip';
@@ -150,6 +201,7 @@ class Mail {
     private function pullFromJSON() {
         //pulling in the JSON file to be read and decoding info
         $JSONFile = 'emailTemplate.json';
+        //get the json file data store them as string
         $this->_JSONData = file_get_contents($JSONFile);
         $this->_JSONData = json_decode($this->_JSONData, true);
     }
