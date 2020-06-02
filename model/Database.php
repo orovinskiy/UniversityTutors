@@ -273,7 +273,7 @@ class Database
      */
     function getTutorsChecklist($year, $userID)
     {
-        $sql = "SELECT State.state_is_done, State.state_id, State.state_text,State.state_set_by,
+        $sql = "SELECT State.state_is_done, State.state_order, State.state_id, State.state_text,State.state_set_by,
                 Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
                 inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
                 inner join Item on ItemTutorYear.item_id = Item.item_id 
@@ -304,6 +304,7 @@ class Database
                 array_push($finalRes, $array);
             }
         }
+        var_dump($finalRes);
         return $finalRes;
     }
 
@@ -327,22 +328,39 @@ class Database
 
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
      * of a different item)
-     * @param int $stateID
+     * @param int $itemID
+     * @param int $order
      * @return string returns the set by of a state
      * @author Oleg
      */
-    function getNextState($stateID)
+    function getNextState($itemID,$order)
     {
-        $stateID += 1;
-        $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
+
+        $order++;
+
+        $sql = "SELECT State.state_set_by FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$stateID]);
+        $statement->execute([$itemID,$order]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results[0]['state_set_by'];
+    }
+
+    function getNextStateID($itemID,$order){
+
+        $sql = "SELECT State.state_id FROM State WHERE State.item_id = ? AND State.state_order=?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$itemID,$order]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        var_dump($results);
+        return $results[0]['state_id'];
     }
 
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
@@ -351,14 +369,14 @@ class Database
      * @return string returns the text of a state
      * @author Oleg
      */
-    function getNextStateText($stateID)
+    function getNextStateText($stateID,$order)
     {
         $stateID += 1;
-        $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
+        $sql = "SELECT State.state_text FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$stateID]);
+        $statement->execute([$stateID,$order]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -378,6 +396,7 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$state, $item, $user]);
+        var_dump("hi");
     }
 
     /**Get email form the user table

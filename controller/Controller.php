@@ -130,7 +130,9 @@ class Controller
      */
     function checklistAjax()
     {
-        $this->_db->updateStateOfTutor($_POST['value'], $_POST['item'], $_POST['user']);
+        var_dump($_POST);
+        $stateID = $this->_db->getNextStateID($_POST['item'],$_POST['value'],$_POST['prev']);
+        $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
     /**
