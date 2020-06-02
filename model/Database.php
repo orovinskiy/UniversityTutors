@@ -28,123 +28,103 @@ class Database
     }
 
     /**
-     * function to retrieve all data within Year table to show all information from Year table, joining with the User,
-     * and Tutor table to show all information needed within admin datatable
-     * @param string $year the year you would like to see information for. Default parameter is 2020
-     * @param string $status how the tutor data is filtered
-     * @return array Returns array of all rows within Year table
-     * @author Dallas Sloan
+     * Returns all tutor data for the given year
+     *
+     * @param string $year The year to get tutor data for
+     * @return array All tutor data used to build the tutor table
+     * @author Keller Flint
      */
-    function getTutors($year = '2020', $status = "all")
+    function getTutors($year = "2020")
     {
-        //defining query
-
-        if ($status == "complete") {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id WHERE
-                    year_start = ? AND 
-                    year_packet_sent = 1 AND 
-                    (year_background = 'clear' OR year_background = 'flag') AND 
-                    (year_reference = 'clear' OR year_reference = 'flag') AND
-                    year_offer_letter = 1 AND
-                    year_affirmation_disclosures = 1 AND
-                    year_sexual_misconduct = 1 AND
-                    year_w4 = 1 AND
-                    year_handbook_verification = 1 AND
-                    year_ADP = 'registered' AND
-                    year_i9 = 'admin' AND
-                    year_SPS = 'admin' AND
-                    year_orientation = 1";
-        } else if ($status == "incomplete") {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id WHERE
-                    year_start = ? AND 
-                    (year_packet_sent = 0 OR 
-                    (year_background != 'clear' AND year_background != 'flag') OR 
-                    (year_reference != 'clear' AND year_reference != 'flag') OR
-                    year_offer_letter = 0 OR
-                    year_affirmation_disclosures = 0 OR
-                    year_sexual_misconduct = 0 OR
-                    year_w4 = 0 OR
-                    year_handbook_verification = 0 OR
-                    year_ADP != 'registered' OR
-                    year_i9 != 'admin' OR
-                    year_SPS != 'admin' OR
-                    year_orientation = 0)";
-        } else {
-            $sql = "SELECT Year.year_id, Tutor.user_id,Tutor.tutor_first, Tutor.tutor_last, User.user_email, Year.year_packet_sent, Year.year_background,
-                    Year.year_reference, Year.year_offer_letter, Year.year_affirmation_disclosures, Year.year_sexual_misconduct,
-                    Year.year_w4, Year.year_handbook_verification, Year.year_SPS, Year.year_ADP, Year.year_i9, Year.year_orientation,
-                    Year.year_placement, Year.year_SPS from Year
-                    JOIN Tutor on Year.user_id = Tutor.user_id
-                    JOIN User on Year.user_id = User.user_id
-                    where Year.year_start = ?";
-        }
-
-        //Preparing statement
+        // Get all tutors data for the given year
+        $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio, tutor_image FROM TutorYear 
+                INNER JOIN Tutor ON TutorYear.user_id = Tutor.user_id
+                INNER JOIN User ON TutorYear.user_id = User.user_id
+                WHERE tutorYear_year = ?";
         $statement = $this->_dbh->prepare($sql);
-
-        //Execute Statement
         $statement->execute([$year]);
 
-        //Get Results
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //echo var_dump($results);
-        return $results;
+        $tutors = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+        $tableData = array();
 
+        // Build associate arrays with additional item and data information for each tutor
+        foreach ($tutors as $tutorInfo) {
+            $tutorKey = $tutorInfo["tutorYear_id"];
+            $tableData[$tutorKey]["info"] = $tutorInfo;
+
+            $itemData = $this->getItemTutorYear($tutorKey);
+            $tableData[$tutorKey]["items"] = $itemData;
+        }
+        return $tableData;
     }
 
     /**
-     * Updates data is the Year table given a column, value and yearId
+     * Returns item and state data for the given tutorYear_id
      *
-     * @param string $column The name of the column in the database being updated
-     * @param mixed $value The value to set the column to
-     * @param int $yearId The year_id for the year data being updated
+     * @param int $tutorYearId The tutorYear_id
+     * @return array Item and state data
      * @author Keller Flint
      */
-    function updateYearData($column, $value, $yearId)
+    function getItemTutorYear($tutorYearId)
     {
-
-        // Valid columns
-        $validColumns = array("year_ADP",
-            "year_affirmation_disclosures",
-            "year_background",
-            "year_handbook_verification",
-            "year_i9",
-            "year_offer_letter",
-            "year_orientation",
-            "year_packet_sent",
-            "year_placement",
-            "year_reference",
-            "year_sexual_misconduct",
-            "year_SPS",
-            "year_w4"
-        );
-
-        // Check that column name is valid to prevent SQL injection
-        if (!in_array($column, $validColumns)) {
-            return;
-        }
-
-        if ($value == '0' || $value == '1') {
-            $sql = "UPDATE Year SET $column = b? WHERE year_id = ?";
-        } else {
-            $sql = "UPDATE Year SET $column = ? WHERE year_id = ?";
-        }
-
-
+        $sql = "SELECT * FROM ItemTutorYear 
+                INNER JOIN State ON ItemTutorYear.state_id = State.state_id
+                INNER JOIN Item ON ItemTutorYear.item_id = Item.item_id
+                WHERE tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
 
-        $statement->execute([$value, $yearId]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Returns state information for all states
+     *
+     * @return array State information for all states
+     * @author Keller Flint
+     */
+    function getAllStates()
+    {
+        $sql = "SELECT * FROM State";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Updates the state of ItemYearData for selects
+     *
+     * @param int $itemId The id of the item to be updated
+     * @param int $tutorYearId The id of the tutorYear to be updated
+     * @param int $stateId The id of the state the item is being updated to
+     * @author Keller Flint
+     */
+    function updateItemTutorYearSelect($itemId, $tutorYearId, $stateId)
+    {
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId, $itemId, $tutorYearId]);
+    }
+
+    /**
+     * Updates the state of ItemYearData for checkboxes
+     *
+     * @param int $itemId The id of the item to be updated
+     * @param int $tutorYearId The id of the tutorYear to be updated
+     * @param int $stateOrder The order of the state the item is being updated to
+     * @author Keller Flint
+     */
+    function updateItemTutorYearCheck($itemId, $tutorYearId, $stateOrder)
+    {
+        // Get the state id by the passed order
+        $stateId = $this->getStateByOrder($itemId, $stateOrder)["state_id"];
+
+        // Update the state
+        $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$stateId, $itemId, $tutorYearId]);
     }
 
     /**
@@ -152,7 +132,7 @@ class Database
      *
      * @param string $year The new user's starting year of employment.
      * @param string $email The new user's email
-     * @return int The new user's id
+     * @param string $password The user's new password
      * @author Keller Flint
      */
     function addNewTutor($year, $email, $password)
@@ -160,29 +140,57 @@ class Database
         //hash the password parameter
         $password = md5($password);
         // add new user
-        $sql = "insert into User values(default, ?, ?, b'0')";
+        $sql = "INSERT INTO User VALUES(default, ?, ?, 0)";
 
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$email, $password]);
 
-        $id = $this->_dbh->lastInsertId();
+        $userId = $this->_dbh->lastInsertId();
 
         // add new tutor
-        $sql = "insert into Tutor (user_id) values($id)";
+        $sql = "INSERT INTO Tutor (user_id) VALUES($userId)";
 
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute();
 
-        // add new year data
-        $sql = "insert into Year values(default, $id, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none','none', 'none', b'0', NULL)";
+        // add new tutorYear data
+        $sql = "INSERT INTO TutorYear VALUES(default, ?, ?)";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$year]);
+        $statement->execute([$userId, $year]);
 
-        return $id;
+        $tutorYearId = $this->_dbh->lastInsertId();
+
+        $this->populateDefaultData($tutorYearId);
+    }
+
+    /**
+     * Adds default data to ItemTutorYear
+     *
+     * @param int $tutorYearId
+     * @author Keller Flint
+     */
+    private function populateDefaultData($tutorYearId)
+    {
+        // get default state for each item
+        $sql = "SELECT state_id, state_set_by, item_id FROM State WHERE state_set_by = 'default'";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute();
+
+        $defaults = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // set default state to each item for the ItemTutorYear
+        $sql = "INSERT INTO ItemTutorYear VALUES (?, ?, ?, NULL)";
+        $statement = $this->_dbh->prepare($sql);
+        foreach ($defaults as $state) {
+            $statement->execute([$state["item_id"], $tutorYearId, $state["state_id"]]);
+        }
+
     }
 
     /**
@@ -279,20 +287,20 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $finalRes = array();
-        foreach ($results as $array){
+        foreach ($results as $array) {
             $allStates = $this->getStates($array['item_id']);
             $keepItem = false;
 
             //go through each state of a item to see if it has a tutor setby
             //if it does keep the item
-            foreach ($allStates as $stateArray){
-                if($stateArray['state_set_by'] === 'tutor'){
+            foreach ($allStates as $stateArray) {
+                if ($stateArray['state_set_by'] === 'tutor') {
                     $keepItem = true;
                     break;
                 }
             }
 
-            if($keepItem){
+            if ($keepItem) {
                 array_push($finalRes, $array);
             }
         }
@@ -304,7 +312,8 @@ class Database
      * @return string The full name of a user
      * @author Oleg
      */
-    function getTutorName($userID){
+    function getTutorName($userID)
+    {
         $sql = "SELECT tutor_first, tutor_last FROM Tutor WHERE user_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -313,7 +322,7 @@ class Database
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $results[0]['tutor_first'].' '.$results[0]['tutor_last'];
+        return $results[0]['tutor_first'] . ' ' . $results[0]['tutor_last'];
     }
 
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
@@ -322,8 +331,9 @@ class Database
      * @return string returns the set by of a state
      * @author Oleg
      */
-    function getNextState($stateID){
-        $stateID+=1;
+    function getNextState($stateID)
+    {
+        $stateID += 1;
         $sql = "SELECT State.state_set_by FROM State WHERE State.state_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -341,8 +351,9 @@ class Database
      * @return string returns the text of a state
      * @author Oleg
      */
-    function getNextStateText($stateID){
-        $stateID+=1;
+    function getNextStateText($stateID)
+    {
+        $stateID += 1;
         $sql = "SELECT State.state_text FROM State WHERE State.state_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -360,12 +371,13 @@ class Database
      * @param int $user the user that's associated with the item
      * @author Oleg
      */
-    function updateStateOfTutor($state,$item,$user){
+    function updateStateOfTutor($state, $item, $user)
+    {
         $sql = "UPDATE ItemTutorYear SET state_id = ? where item_id = ? and tutorYear_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$state,$item,$user]);
+        $statement->execute([$state, $item, $user]);
     }
 
     /**Get email form the user table
@@ -390,8 +402,23 @@ class Database
      */
     function deleteUser($user_id)
     {
-        // delete user data from year
-        $sql = "DELETE FROM Year WHERE user_id = ?";
+        // TODO delete associated files
+
+        // get all associated tutorYears
+        $sql = "SELECT tutorYear_id FROM TutorYear WHERE user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$user_id]);
+        $tutorYears = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // delete user's data from each itemTutorYear
+        foreach ($tutorYears as $tutorYear) {
+            $sql = "DELETE FROM ItemTutorYear WHERE tutorYear_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$tutorYear["tutorYear_id"]]);
+        }
+
+        // delete user data from tutorYear
+        $sql = "DELETE FROM TutorYear WHERE user_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$user_id]);
 
@@ -448,11 +475,15 @@ class Database
             return;
         }
 
-        $sql = "insert into Year values(default, ?, ?,b'0','none','none',b'0', b'0',b'0',b'0',b'0','none','none', 'none', b'0', NULL)";
+        $sql = "insert into TutorYear values(default, ?, ?)";
 
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$user_id, $year]);
+
+        $tutorYearId = $this->_dbh->lastInsertId();
+
+        $this->populateDefaultData($tutorYearId);
     }
 
     /**
@@ -785,7 +816,8 @@ class Database
      * @return int The state_id of the default state
      * @author Keller Flint
      */
-    private function getDefaultState($itemId, $stateId)
+    private
+    function getDefaultState($itemId, $stateId)
     {
         $sql = "SELECT state_id FROM State WHERE item_id = ? AND state_id != ? AND state_set_by = 'default'";
         $statement = $this->_dbh->prepare($sql);
@@ -799,7 +831,8 @@ class Database
      * @param int $itemId The id of the item being reordered
      * @author Keller Flint
      */
-    private function orderStates($itemId)
+    private
+    function orderStates($itemId)
     {
         $sql = "SELECT state_id FROM State WHERE item_id = ? ORDER BY state_order ASC";
         $statement = $this->_dbh->prepare($sql);
@@ -817,9 +850,9 @@ class Database
     }
 
     /**
-     * Gets all data for all items
+     * Returns all items and all state data for each item in an associative array
      *
-     * @return array The array of item data
+     * @return array all item and item state data
      * @author Keller Flint
      */
     function getItems()
@@ -827,7 +860,18 @@ class Database
         $sql = "SELECT * FROM Item";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $items = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $itemData = array();
+
+        foreach ($items as $item) {
+            $itemKey = $item["item_id"];
+            $itemData[$itemKey] = $item;
+            $itemData[$itemKey]["states"] = $this->getStates($itemKey);
+        }
+
+        return $itemData;
     }
 
     /**

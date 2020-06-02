@@ -64,17 +64,16 @@ class Controller
         $currentYear = $this->_db->getCurrentYear();
 
         // Get tutor data for current year
-        $tutorsData = $this->_db->getTutors($param["year"], $param["status"]);
+        $tableData = $this->_db->getTutors($param["year"]);
 
         // Get headers
         $items = $this->_db->getItems();
 
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
-        $this->_f3->set("status", $param["status"]);
 
         // Store tutor data is hive
-        $this->_f3->set("tutorsData", $tutorsData);
+        $this->_f3->set("tableData", $tableData);
         $this->_f3->set("items", $items);
 
         //Store Default email data into hive
@@ -87,15 +86,17 @@ class Controller
 
     /**
      * Ajax logic for tutors page
+     * @throws phpmailerException
      * @author Keller Flint
      */
     function tutorsAjax()
     {
         global $directoryName;
-        if (isset($_POST["yearId"])) {
-            $this->_db->updateYearData($_POST["column"], $_POST["value"], $_POST["yearId"]);
+        if (isset($_POST["stateId"])) {
+            $this->_db->updateItemTutorYearSelect($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
+        } else if (isset($_POST["stateOrder"])) {
+            $this->_db->updateItemTutorYearCheck($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateOrder"]);
         } else if (isset($_POST["email"])) {
-            // TODO create function to generate and send email to tutor DONE!!
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //creating temp password and add new tutor
                 $tempPassword = $this->generateRandomString();
@@ -145,7 +146,6 @@ class Controller
                 move_uploaded_file($fileName, $directoryName . $fileName);//need a temp_name to upload
                 $this->_mail->setDefaultAttachments($path);
             }
-
         }
         //checking to if is set file
 
@@ -384,7 +384,7 @@ class Controller
         if ($_SESSION['user']->getUserIsAdmin() == 1) {
             //get current year
             $year = $this->_db->getCurrentYear();
-            $this->_f3->reroute("/tutors/$year&all");
+            $this->_f3->reroute("/tutors/$year");
 
 
         } else {
@@ -421,7 +421,7 @@ class Controller
         $this->isLoggedIn(); //comment to remove the login requirement
 
 
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all', 'Logout' => 'logout'),
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager');
 
         // add user
@@ -452,7 +452,7 @@ class Controller
         $this->isLoggedIn();
 
         //This is the navbar generating
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
 
         $tutor = $this->_db->getTutorById($param["id"]);
@@ -597,7 +597,7 @@ class Controller
     {
 
         // Nav builder
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear() . '&all',
+        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
 
         // Save Item
@@ -692,7 +692,7 @@ class Controller
         if (isset($_POST["itemDelete"])) {
             $this->_db->deleteItem($itemId);
             $currentYear = $this->_db->getCurrentYear();
-            $this->_f3->reroute("tutors/$currentYear&all");
+            $this->_f3->reroute("tutors/$currentYear");
         }
 
 
