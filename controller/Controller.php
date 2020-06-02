@@ -53,6 +53,9 @@ class Controller
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($_SESSION['user_id']);
+        //if non admin tires to access tutorsPage it redirects them to their log in page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0)
+            $this->redirects();
 
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
@@ -408,7 +411,7 @@ class Controller
             $this->_f3->reroute('/login');
         }
 
-        if($_SESSION['user_id']!=$param){
+        if ($_SESSION['user_id'] != $param) {
             $this->_f3->reroute('/login');
         }
     }
@@ -422,7 +425,9 @@ class Controller
         // TODO check if logged in user is admin DONE
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($_SESSION['user_id']); //comment to remove the login requirement
-
+        //if non admin tries to excess admin page info it will redirects them to their login page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0)
+            $this->redirects();
 
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager');
