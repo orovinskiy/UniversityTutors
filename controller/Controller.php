@@ -406,10 +406,10 @@ class Controller
      */
     private function isLoggedIn($param)
     {
-        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
         if (!isset($_SESSION['user'])) {
             $this->_f3->reroute('/login');
         }
+        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
 
         if ($_SESSION['user_id'] != $param) {
             $this->_f3->reroute('/login');
