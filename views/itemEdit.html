@@ -8,7 +8,7 @@ Page to create, edit and delete items in the table
 <h1 class="text-center m-3" id="title">{{ @item['item_name'] }}</h1>
 
 <!-- Form to edit item data -->
-<form id="edit-item" class="text-center" method="POST" action="#">
+<form id="edit-item" class="text-center" method="POST" action="#" enctype="multipart/form-data">
     <input type="hidden" name="itemId" value="{{ @item['item_id'] }}">
 
     <!-- Item name -->
@@ -40,16 +40,31 @@ Page to create, edit and delete items in the table
             </check>
         </select>
     </div>
-    <!--
-    <div class="d-inline-block">
-        <input type="file" class="form-control-file" name="fileToUpload"
+    <!--    <div class="form-check d-inline-block">-->
+    <!--        <input type="checkbox" class="form-check-input" id="upload-document">-->
+    <!--        <label class="form-check-label" for="upload-document"> Upload Document</label>-->
+    <!--    </div>-->
+    <div class="form-group w-25 d-inline-block">
+        <input type="file" class="form-control file-items" name="fileToUpload"
                id="img">
     </div>
-    <div class="form-check d-inline-block">
-        <input type="checkbox" class="form-check-input" id="upload-required">
-        <label class="form-check-label" for="upload-required">Tutor Upload Required</label>
+    <div>
+        <check if="{{isset(@item['item_file'])}}">
+            <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
+            <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
+        </check>
     </div>
-    -->
+    <div class="form-check d-inline-block">
+        <check if="{{ @item['item_is_upload'] == 0 }}">
+            <true>
+                <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired">
+            </true>
+            <false>
+                <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired" checked>
+            </false>
+        </check>
+        <label class="form-check-label" for="upload-required"> Tutor upload required</label>
+    </div>
     <br>
     <button type="submit" id="delete" class="btn btn-danger" name="itemDelete" value="itemDelete">Delete Item</button>
     <button type="submit" class="btn btn-success" name="itemSave" value="itemSave">Save Item</button>

@@ -607,25 +607,48 @@ class Controller
         // Nav builder
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
+        global $dirName;
 
-        // Save Item
-        if (isset($_POST["itemSave"])) {
-            if ($this->_val->validateItem($_POST["itemName"])) {
-                $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
-            } else {
-                $this->_f3->set("errors", $this->_val->getErrors());
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            if(isset($_POST['remove'])){
+                //remove the file
+                $this->_db->removeFile($itemId);
             }
+            // Save Item
+            if (isset($_POST["itemSave"])) {
+                $uploadRequired = 0;
+                if (isset($_POST['uploadRequired'])) {
+                    $uploadRequired = 1;
+                }
+                $this->_db->updateItemIsUpload($uploadRequired,$itemId);
 
-            // Creating a new item
-            if ($itemId == 0) {
+                // var_dump($_FILES);
+                if (isset($_FILES['fileToUpload'])) {
+                    if (!empty($_FILES['fileToUpload']['name'])) {
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $_FILES['fileToUpload']['name']);
+                        $this->_db->updateAttachments($_FILES['fileToUpload']['name'], $itemId);
+//                        $this->_db->updateItemIsUpload($itemId);
+
+                    }
+                }
                 if ($this->_val->validateItem($_POST["itemName"])) {
-                    $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
-                    $this->_f3->reroute("edit/$itemId");
+                    $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
                 } else {
                     $this->_f3->set("errors", $this->_val->getErrors());
                 }
+
+                // Creating a new item
+                if ($itemId == 0) {
+                    if ($this->_val->validateItem($_POST["itemName"])) {
+                        $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
+                        $this->_f3->reroute("edit/$itemId");
+                    } else {
+                        $this->_f3->set("errors", $this->_val->getErrors());
+                    }
+                }
             }
         }
+
 
         // Save State
         if (isset($_POST["stateSave"])) {
