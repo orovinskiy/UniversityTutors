@@ -52,8 +52,11 @@ class Controller
     function tutorsPage($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
-
+        $this->isLoggedIn($_SESSION['user_id']);
+        //if non admin tires to access tutorsPage it redirects them to their log in page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
+            $this->redirects();
+        }
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
@@ -79,7 +82,7 @@ class Controller
         //Store Default email data into hive
         $this->_f3->set("subject", $this->_mail->getSubject());
         $this->_f3->set("body", $this->_mail->getBody());
-
+        $this->_f3->set("attachment", $this->_mail->getDefaultAttachments());
         $view = new Template();
         echo $view->render("views/tutors.html");
     }
@@ -109,7 +112,12 @@ class Controller
                     echo "Email successfully sent to " . $_POST["email"];
                 }
             } else {
-                echo "Invalid email address";
+                //checking for duplicate email
+                if (!$this->_val->uniqueEmail($_POST["email"])) {
+                    echo "Duplicate email address";
+                } else {
+                    echo "Invalid email address";
+                }
             }
         } else if (isset($_POST["delete"])) {
             $this->_db->deleteUser($_POST["user_id"]);
@@ -120,8 +128,19 @@ class Controller
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
+        } else if (isset($_FILES['file'])) {
+            // file name
+            $filename = $_FILES['file']['name'];
+            // Location
+            $location = 'uploads/' . $filename;
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $response = $this->_mail->setDefaultAttachments($location);
+            echo $response;
+        } else if (isset($_POST['fileToDelete'])) {
+            $test = $this->_mail->deleteDefaultAttachment($_POST['fileToDelete']);
+            //echo var_dump($test);
         }
-
     }
 
     /**
@@ -131,7 +150,7 @@ class Controller
     function checklistAjax()
     {
         var_dump($_POST);
-        $stateID = $this->_db->getNextStateID($_POST['item'],$_POST['value'],$_POST['prev']);
+        $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
@@ -144,7 +163,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        //$this->isLoggedIn();
+        $this->isLoggedIn($param['userId']);
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -176,8 +195,10 @@ class Controller
 
     function formPage($param)
     {
+//        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
+//        echo($_SESSION['user_id']);
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($param['id']);
 
 
         //this is for building up a navbar
@@ -211,10 +232,10 @@ class Controller
             $this->_f3->set('bioText', $_POST['bio']);
 
             //store randomly generated string for user input image
-            $randomFileName = $this->generateRandomString() . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+            $imageFileName = $this->nameForImage($_POST['firstName'], $param["id"]) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
             //if the user input in form is valid
             if ($this->_val->validForm($_FILES['fileToUpload'],
-                $randomFileName, $param["id"], $_POST['bio'])) {
+                $param["id"], $_POST['bio'])) {
                 //check if user input ssn for update if not pass the database value
                 if (empty($_POST['ssn']) || substr($_POST['ssn'], 0, 3) == "XXX") {
                     $_POST['ssn'] = $this->decryption($this->_f3->get("databaseSsn"));
@@ -227,8 +248,8 @@ class Controller
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $randomFileName);
-                        $this->_db->uploadTutorImage($randomFileName, $param["id"]);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $imageFileName);
+                        $this->_db->uploadTutorImage($imageFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
                 }
@@ -315,21 +336,26 @@ class Controller
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
             if (!empty($userLogin)) {
-                //instantiate new user object
-                $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
-                //saving object to session
-                $_SESSION['user'] = $user;
-                //setting session login to true
-                //$_SESSION['user'] = true;
+                //check if user in the currently running year or if it is admin
+                if ($this->_db->getCurrentYear() == $this->_db->getTutorYear($userLogin['user_id'])['tutorYear_year']
+                    || $this->_db->checkAdmin($userLogin['user_id'])['user_is_admin'] == 1) {
+                    //instantiate new user object
+                    $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                    //saving object to session
+                    $_SESSION['user'] = $user;
+                    //setting session login to true
+                    //$_SESSION['user'] = true;
 
-                //call redirects method to redirect to correct page
-                $this->redirects();
-
+                    //call redirects method to redirect to correct page
+                    $this->redirects();
+                } else {
+                    //User is not in current year list
+                    $this->_f3->set('loginError', "Please Contact admin you are not enrolled as tutor for current year");
+                }
             } else {
                 //login info was not valid set error message
                 $this->_f3->set('loginError', "Invalid Username and/or Password");
             }
-
         }
         $view = new Template();
         echo $view->render("views/login.html");
@@ -375,11 +401,17 @@ class Controller
     /**
      * A function to check whether or not a user object has been set for the current session. If it is set the user
      * can proceed to the page they were attempting to access. If it's not set, they are redirected to the login screen
+     * @param int $param
      * @author Dallas Sloan
      */
-    private function isLoggedIn()
+    private function isLoggedIn($param)
     {
+        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
         if (!isset($_SESSION['user'])) {
+            $this->_f3->reroute('/login');
+        }
+
+        if ($_SESSION['user_id'] != $param) {
             $this->_f3->reroute('/login');
         }
     }
@@ -392,9 +424,11 @@ class Controller
     {
         // TODO check if logged in user is admin DONE
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn(); //comment to remove the login requirement
-
-
+        $this->isLoggedIn($_SESSION['user_id']); //comment to remove the login requirement
+        //if non admin tries to excess admin page info it will redirects them to their login page
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
+            $this->redirects();
+        }
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager');
 
@@ -421,9 +455,9 @@ class Controller
      */
     function tutorInfoPage($param)
     {
-
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($_SESSION['user_id']);
+
 
         //This is the navbar generating
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
@@ -435,6 +469,29 @@ class Controller
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
 
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
+
+        //let admin download the tutor's image
+        if (isset($_GET['download'])) {
+            $tutorImage = $this->_db->getTutorById($param["id"])["tutor_image"];//gets the image name from db
+//            echo $tutorImage;
+            $filePath = 'uploads/' . $tutorImage;
+//            echo $filePath; //gets the file path
+            if (file_exists($filePath)) {
+                //description of file/content
+                header('Content-Description: File Transfer');
+
+                //pull all types of file
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($filePath));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filePath));
+                readfile($filePath);
+                exit;
+            }
+
+        }
 
         $view = new Template();
         echo $view->render('views/tutorInfo.html');
@@ -504,7 +561,7 @@ class Controller
     function passwordPage($id)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn();
+        $this->isLoggedIn($id);
 
         if ($_SESSION['user']->getUserID() != $id) {
             $this->_f3->reroute("/login");
@@ -528,7 +585,18 @@ class Controller
     }
 
     /**
-     * Page to edit table items
+     * Generate the image file name to be tutor's name and tutor's id
+     * @param String $tutor_name the tutor name
+     * @param int $user_id the tutor id
+     * @return string name for upload image
+     * @author  laxmi
+     */
+    function nameForImage($tutor_name, $user_id)
+    {
+        return $tutor_name . "-" . $user_id;
+    }
+
+    /** Page to edit table items
      *
      * @param int $itemId The id of the item being edited
      * @author Keller Flint

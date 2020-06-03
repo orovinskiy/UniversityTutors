@@ -176,7 +176,7 @@ function toggleErrors(object, valClass, isValid, message) {
 //Helper Function to count characters within Bio text area
 $('.clearText').on("input", function() {
     let minCount = 100;
-    let currentCount = $(this).val().length;
+    let currentCount = $.trim($(this).val()).length;
     currentCount = minCount - currentCount;
     //console.log(currentCount); //current count
     //checking to see if min count has been reached

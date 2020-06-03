@@ -20,6 +20,12 @@ To enable routing for the docker container
 If adding files in not allowed
 * Permission for uploads folder on server ```chmod 777 uploads```
 
+If mkdir permission denied on load
+* ```chmod 777 html``` on the whole /var/www/html folder
+
+If error ```php_network_getaddresses: getaddrinfo failed: Temporary failure in name resolution```
+* Database configurations are wrong, change to mysql host to 'localhost'
+
 Git branches:
 * Create new branch ```git checkout -b name```
 * Push git branch ```git push origin head```

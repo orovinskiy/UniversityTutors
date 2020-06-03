@@ -2,7 +2,5 @@ vendor/
 tmp/
 .idea/
 uploads/
-attachments/
-
 Sprint-Summary.docx
 composer.lock

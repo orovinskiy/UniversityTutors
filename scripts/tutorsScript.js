@@ -159,10 +159,15 @@ $(".import").on("click", function () {
     if (result) {
         let user_id = $(this).data("userid");
 
-        // ajax deletion
+        // ajax importing
         $.post("../tutorsAjax", {
             user_id: user_id
         });
+        //hide Import button after displaying success message
+        let results = confirm("Tutor imported successfully ");
+        if (results) {
+            $(".import").hide();
+        }
     }
 });
 
@@ -185,17 +190,107 @@ $("#enable-edit").on("click", function () {
 });
 
 //event listener to save default email information
+//@author Dallas Sloan
 $("#save-default").on('click', function () {
-    console.log("Did this work?");
+    //console.log("Did this work?");
+
+    //getting th email and file values
     let newSubject = $("#email-subject").val();
     let newBody = $("#email-body").val();
-    //making ajax call to updated email json
+    //ajax call to update subjec and body of email
     $.post("../tutorsAjax", {
         subject: newSubject,
-        body: newBody
+        body: newBody,
     }, function () {
         alert("Changes have been saved");
         $("#email-modal").modal('hide');
+    });
+
+});
+
+
+//event listener uploading multiple files
+//@author Laxmi & Dallas
+$.fn.fileUploader = function (filesToUpload) {
+    this.closest(".files").change(function (evt) { //  div class on change run function
+        for (var i = 0; i < evt.target.files.length; i++) {
+            filesToUpload.push(evt.target.files[i]);
+
+            //ajax call for file upload will upload each file individually
+            let fd = new FormData(); //creating FormData object
+            let files = $('#files')[0].files[i];
+            fd.append('file', files);
+            //making ajax call to updated email json
+            $.ajax({
+                url: '../tutorsAjax',
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    //console.log(response);
+                    if (response == 1) {
+                        //alert("File uploaded");
+                        console.log(response);
+                    } else if (response == 0) {
+                        alert('Changes not saved');
+                    } else if (response ==2) {
+                        alert("File Already Exists")
+                    }
+                }
+            });
+        }
+        //console.log(filesToUpload);
+
+
+        var output = [];
+        for (var i = 0, f; f = evt.target.files[i]; i++) {
+            var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + i + "\">Remove</a>";
+
+            output.push("<li><strong>", escape(f.name), "</strong> - ",
+                f.size, " bytes. &nbsp; &nbsp; ", removeLink, "</li> ");
+        }
+        //append the remove link in each li
+        $(this).children(".fileList")
+            .append(output.join(""));
+    });
+};
+
+var filesToUpload = [];
+
+//remove files for the list
+$(document).on("click", ".removeFile", function (e) {
+    e.preventDefault();
+    var fileName = $(this).parent().children("strong").text();
+    // loop through the files array and check if the name of that file matches FileName
+    // and get the index of the match
+    for (i = 0; i < filesToUpload.length; ++i) {
+        if (filesToUpload[i].name == fileName) {
+            //console.log("match at: " + i);
+            // remove the one element at the index where we get a match
+            filesToUpload.splice(i, 1);
+        }
+    }
+    //console.log(filesToUpload);
+    // remove the <li> element of the removed file from the page DOM
+    $(this).parent().remove();
+});
+
+
+//stores all the files selected in ul list
+//@author Dallas Sloan
+$(".fileList").fileUploader(filesToUpload);
+
+//event listener to delete file from ajax document
+//@author Dallas Sloan
+$(".removeFile").on("click", function () {
+    let $fileToDelete = $(this).parent().attr("value");
+    //console.log($fileToDelete); //used for testing
+    $.post("../tutorsAjax", {
+        fileToDelete: $fileToDelete,
+    }, function (response) {
+        alert("File Deleted");
+        console.log(response);
     });
 });
 
