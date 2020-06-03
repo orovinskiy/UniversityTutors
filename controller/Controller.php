@@ -162,8 +162,12 @@ class Controller
      */
     function checklist($param)
     {
+
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($param['userId']);
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
+            $this->redirects();
+        }
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -199,6 +203,9 @@ class Controller
 //        echo($_SESSION['user_id']);
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($param['id']);
+        if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
+            $this->redirects();
+        }
 
 
         //this is for building up a navbar
