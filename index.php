@@ -26,7 +26,7 @@ $db = new Database();
 //create new Controller
 $controller = new Controller($f3, $db);
 
-//default place to upload image files
+//default place to uploads image files
 $dirName = 'uploads/';
 $directoryName = 'attachments/';
 
@@ -51,6 +51,10 @@ $f3->route('GET /', function () {
  */
 $f3->route('GET /checklist/@userId', function ($f3, $param) {
     $GLOBALS['controller']->checklist($param);
+});
+
+$f3->route('POST /tutFile',function(){
+    $GLOBALS['controller']->uploadTutFile();
 });
 
 /**

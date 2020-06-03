@@ -264,6 +264,16 @@ class Database
         $statement->execute([$filePath, $user_id]);
     }
 
+    function updateFileItem($filename,$itemId,$tutorYear){
+        $sql = 'UPDATE ItemTutorYear SET itemTutorYear_file = ? WHERE item_id = ? AND tutorYear_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$filename, $itemId,$tutorYear]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /** This fetches all the information to be displayed for the tutors view.
      * Only important data is chosen.
      * @param int $year the year that is required
@@ -273,7 +283,7 @@ class Database
      */
     function getTutorsChecklist($year, $userID)
     {
-        $sql = "SELECT State.state_is_done, State.state_order, State.state_id, State.state_text,State.state_set_by,
+        $sql = "SELECT State.state_is_done, Item.item_file, State.state_order, State.state_id, State.state_text,State.state_set_by,
                 Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
                 inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
                 inner join Item on ItemTutorYear.item_id = Item.item_id 

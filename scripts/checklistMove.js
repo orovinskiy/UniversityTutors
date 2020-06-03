@@ -7,7 +7,32 @@
 
 //  puts a listener on the body to see if any inputs
 // have been clicked
-$("body").on("click","input",function()
+$("body").on("change","#pdf",function(){
+    let $file = $(this).attr('id');
+    let fd = new FormData();
+    let $files = $(this)[0].files[0];
+    let input = $(this).parents(':eq(2)').find('.big');
+    let id = input.attr('id');
+    let tutorId = input.val();
+
+    console.log(id);
+    fd.append('file',$files);
+    fd.append('tutorId',tutorId);
+    fd.append('itemId',id);
+
+    $.ajax({
+        url: '../tutFile',
+        type: 'post',
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (response){
+            alert('Succesfully uploaded file');
+        }
+    });
+});
+
+$("body").on("click",".big",function()
 {
     //predefined variables
     let wholeCheckBox = $(this).parents(":eq(5)");
@@ -18,6 +43,7 @@ $("body").on("click","input",function()
 
     //check what data to put into the database
     if($(this).is(":checked")){
+
         dataValue = parseInt($(this).data('order'))+1;
         wholeCheckBox.find('input').attr('data-order',dataValue);
         wholeCheckBox.find('label').html('Completed');

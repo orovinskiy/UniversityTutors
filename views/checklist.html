@@ -35,7 +35,7 @@ what forms they have already completed
                                     <h2 class="card-title text-center">{{@isChecked['item_name']}}</h2>
                                     <div class="card-subtitle">
                                         <div class="row">
-                                            <div class="col-8">
+                                            <div class="col-9">
                                                 <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) =='tutor'">
                                                     <true>
                                                         <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@db->getNextStateText(@isChecked['item_id'],@isChecked['state_order'])}}</p>
@@ -45,18 +45,26 @@ what forms they have already completed
                                                     </false>
                                                 </check>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-check mt-3 mb-5 mr-5 text-center">
-                                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox"
-                                                           data-order="{{@isChecked['state_order']}}" value="{{@isChecked['tutorYear_id']}}"
-                                                           id="{{@isChecked['item_id']}}" name="doorInter[]"
-                                                    <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) !='tutor'">
-                                                        disabled
-                                                    </check>
-                                                    >
-                                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['item_id']}}">
-                                                        Complete
-                                                    </label>
+                                            <div class="col-3">
+                                                <div class="row mb-3">
+                                                    <a target="_blank" href="../uploads/{{@isChecked['item_file']}}" download="{{@isChecked['item_file']}}">PDF link</a>
+                                                </div>
+                                                <div class="row">
+                                                    <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                                        <input class="big form-check-input get" type="checkbox"
+                                                               data-order="{{@isChecked['state_order']}}" value="{{@isChecked['tutorYear_id']}}"
+                                                               id="{{@isChecked['item_id']}}" name="doorInter[]"
+                                                        <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) !='tutor'">
+                                                            disabled
+                                                        </check>
+                                                        >
+                                                        <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                            Complete
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -83,16 +91,16 @@ what forms they have already completed
                                     <h2 class="card-title text-center">{{@isChecked['item_name']}}</h2>
                                     <div class="card-subtitle">
                                         <div class="row">
-                                            <div class="col-8">
+                                            <div class="col-9">
                                                 <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@isChecked['state_text']}}</p>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                 <div class="form-check mt-3 mb-5 mr-5 text-center">
 
-                                                    <input class="ml-xl-4 ml-lg-2 form-check-input get" type="checkbox"
+                                                    <input class="big form-check-input get" type="checkbox"
                                                            value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
                                                            id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
-                                                    <label class="ml-xl-5 ml-lg-4 form-check-label" for="{{@isChecked['item_id']}}">
+                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
                                                         Completed
                                                     </label>
                                                 </div>

@@ -154,6 +154,22 @@ class Controller
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
+    function uploadTutFile(){
+        var_dump($_FILES);
+        $filename = $_FILES['file']['name'];
+        $filename = $this->changeFileName($filename,$_POST['itemId'],$_POST['tutorId']);
+        // Location
+        $location = 'uploads/' . $filename;
+        // Upload file
+        move_uploaded_file($_FILES['file']['tmp_name'], $location);
+        $this->_db->updateFileItem($filename,$_POST['itemId'],$_POST['tutorId']);
+    }
+
+    function changeFileName($filename, $itemID, $tutorId){
+        return substr($filename, 0, strpos($filename,'.')).'-'.$itemID.'-'.$tutorId
+            .substr($filename, strpos($filename,'.'));
+    }
+
     /**
      * View of all the required forms. Lets the user check of or uncheck a form if it has been
      * completed
@@ -163,7 +179,7 @@ class Controller
     function checklist($param)
     {
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn($param['userId']);
+        //$this->isLoggedIn($param['userId']);
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -588,7 +604,7 @@ class Controller
      * Generate the image file name to be tutor's name and tutor's id
      * @param String $tutor_name the tutor name
      * @param int $user_id the tutor id
-     * @return string name for upload image
+     * @return string name for uploads image
      * @author  laxmi
      */
     function nameForImage($tutor_name, $user_id)

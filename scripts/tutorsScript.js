@@ -216,7 +216,7 @@ $.fn.fileUploader = function (filesToUpload) {
         for (var i = 0; i < evt.target.files.length; i++) {
             filesToUpload.push(evt.target.files[i]);
 
-            //ajax call for file upload will upload each file individually
+            //ajax call for file uploads will uploads each file individually
             let fd = new FormData(); //creating FormData object
             let files = $('#files')[0].files[i];
             fd.append('file', files);
