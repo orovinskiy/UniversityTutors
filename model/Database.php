@@ -374,7 +374,7 @@ class Database
      */
     function getNextStateText($stateID,$order)
     {
-        $stateID += 1;
+        $order=$order+1;
         $sql = "SELECT State.state_text FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
