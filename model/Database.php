@@ -998,7 +998,7 @@ class Database
      * @param int $itemId id of the item to where file paths are going to be stored
      * @author Laxmi
      */
-    function updateAttachments($filePath, $itemId)
+    function updateItemTable($filePath, $itemId)
     {
         $sql = "UPDATE Item SET item_file =?  WHERE  item_id=?";
         $statement = $this->_dbh->prepare($sql);

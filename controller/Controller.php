@@ -631,7 +631,7 @@ class Controller
                     if (!empty($_FILES['fileToUpload']['name'])) {
                         $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
                         move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
-                        $this->_db->updateAttachments($fileName, $itemId);
+                        $this->_db->updateItemTable($fileName, $itemId);
                     }
                 }
                 if ($this->_val->validateItem($_POST["itemName"])) {
