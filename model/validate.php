@@ -234,6 +234,47 @@ class Validate
         return $isValid;
     }
 
+    /**File validator for tutors upload
+     * @param object $file a File object
+     * @return boolean bool returns true if passed the validation false for not passing
+     * @Oleg
+     */
+    function validateFileUploadTut($file)
+    {
+        global $f3;
+
+        $isValid = true;
+        //defining the valid file type
+        $validateType = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+
+        //checking the file size 2MB-maximum
+        if ($_SERVER['CONTENT_LENGTH'] > 500000) {
+            $f3->set("errors", "Sorry! file size too large Maximum file size is 500 KB ");
+            $isValid = false;
+            //check the file type
+        } elseif (in_array($file['type'], $validateType)) {
+            if ($file['error'] > 0) {
+                $f3->set("errors", "Sorry! file could not be uploaded Try again");
+                $isValid = false;
+            }
+
+            //since we have the used the tutor's id and name as image file name to store in our db
+            // we know file name is going to be unique so no need check for duplicates
+//            if (file_exists($dirName . $newName)) {
+//                echo $dirName.$newName;
+//                $f3->set("errors['duplicatedImage']", "Sorry! This image is already exist choose another one");
+//                $isValid = false;
+//            }
+            else {
+                $f3->set("success", "Your file was uploaded successfully");
+            }
+        } else {
+            $f3->set("errors", "Sorry! Only supports .docx, and .pdf files");
+            $isValid = false;
+        }
+        return $isValid;
+    }
+
     /**
      * Returns true if the item data is valid
      *

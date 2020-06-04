@@ -9,6 +9,7 @@
 //require the autoload file
 require_once('vendor/autoload.php');
 require_once("model/config.php");
+require_once("model/validate.php");
 
 //Turn on error reporting
 ini_set('display_errors', 1);
@@ -26,7 +27,7 @@ $db = new Database();
 //create new Controller
 $controller = new Controller($f3, $db);
 
-//default place to upload image files
+//default place to uploads image files
 $dirName = 'uploads/';
 $directoryName = 'attachments/';
 
@@ -52,6 +53,11 @@ $f3->route('GET /', function () {
 $f3->route('GET /checklist/@userId', function ($f3, $param) {
     $GLOBALS['controller']->checklist($param);
 });
+
+$f3->route('POST /tutFile',function(){
+    echo $GLOBALS['controller']->uploadTutFile();
+});
+
 
 /**
  * route to checklist ajax function

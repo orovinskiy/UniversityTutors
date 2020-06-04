@@ -149,9 +149,52 @@ class Controller
      */
     function checklistAjax()
     {
-        var_dump($_POST);
         $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
+    }
+
+    /**This function renames the file, moves it to the uploads folder and updates
+     * the file name in the database associated to the item.
+     * @return string mixed returns a error or a success string to be displayed
+     * @author Oleg
+     */
+    function uploadTutFile(){
+        if($this->_val->validateFileUploadTut($_FILES['file'])) {
+            $fileExtensions = array('.txt','.pdf','.docx');
+            $filename = $_FILES['file']['name'];
+            //change name of file
+            $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
+            //delete all files first
+            foreach ($fileExtensions as $ext){
+                if(file_exists('uploads/'.substr($filename,0,strpos($filename,".")).$ext)){
+                    unlink('uploads/'.substr($filename,0,strpos($filename,".")).$ext);
+                }
+            }
+            // Location
+            $location = 'uploads/' . $filename;
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
+        }
+        if(!empty($this->_f3->get('errors'))){
+            return $this->_f3->get('errors');
+        }
+        else{
+            return $this->_f3->get('success');
+        }
+    }
+
+
+    /**
+     * @param string $filename the name of the file
+     * @param int $itemID the id of item
+     * @param int $tutorId the id of tutorYear
+     * @param string $name the name of the item
+     * @return string name of the file
+     */
+    function changeFileName($filename, $itemID, $tutorId,$name){
+        return $name.'-'.$itemID.'-'.$tutorId
+            .substr($filename, strpos($filename,'.'));
     }
 
     /**
@@ -164,10 +207,10 @@ class Controller
     {
 
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn($param['userId']);
+        /*$this->isLoggedIn($param['userId']);
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
             $this->redirects();
-        }
+        }*/
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -592,7 +635,7 @@ class Controller
      * Generate the image file name to be tutor's name and tutor's id
      * @param String $tutor_name the tutor name
      * @param int $user_id the tutor id
-     * @return string name for upload image
+     * @return string name for uploads image
      * @author  laxmi
      */
     function nameForImage($tutor_name, $user_id)

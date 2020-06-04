@@ -264,6 +264,21 @@ class Database
         $statement->execute([$filePath, $user_id]);
     }
 
+    /**This updates the tutorYearItem with the passed in file name
+     * @param string $filename name of file
+     * @param int $itemId id of item()
+     * @param int $tutorYear id of tutorYear
+     */
+    function updateFileItem($filename,$itemId,$tutorYear){
+        $sql = 'UPDATE ItemTutorYear SET itemTutorYear_file = ? WHERE item_id = ? AND tutorYear_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$filename, $itemId,$tutorYear]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /** This fetches all the information to be displayed for the tutors view.
      * Only important data is chosen.
      * @param int $year the year that is required
@@ -273,8 +288,8 @@ class Database
      */
     function getTutorsChecklist($year, $userID)
     {
-        $sql = "SELECT State.state_is_done, State.state_order, State.state_id, State.state_text,State.state_set_by,
-                Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
+        $sql = "SELECT State.state_is_done, Item.item_file, State.state_order, State.state_id, State.state_text,State.state_set_by,
+                Item.item_name, Item.item_id, ItemTutorYear.itemTutorYear_file, Item.item_is_upload, TutorYear.tutorYear_id FROM ItemTutorYear 
                 inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
                 inner join Item on ItemTutorYear.item_id = Item.item_id 
                 inner join State on ItemTutorYear.state_id = State.state_id
@@ -375,7 +390,7 @@ class Database
      */
     function getNextStateText($stateID, $order)
     {
-        $stateID += 1;
+        $order=$order+1;
         $sql = "SELECT State.state_text FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
