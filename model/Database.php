@@ -992,5 +992,42 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * update the database to store the path of attachments
+     * @param String $filePath name of the file/attachments
+     * @param int $itemId id of the item to where file paths are going to be stored
+     * @author Laxmi
+     */
+    function updateItemTable($filePath, $itemId)
+    {
+        $sql = "UPDATE Item SET item_file =?  WHERE  item_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$filePath, $itemId]);
+    }
 
+    /**
+     * update the database if the file is upload
+     * @param int $uploadRequired value of checkbox
+     * @param int $itemId id of the item
+     * @author  Laxmi
+     */
+    function updateItemIsUpload($uploadRequired, $itemId)
+    {
+        $sql = "UPDATE Item SET item_is_upload =$uploadRequired   WHERE  item_id=?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+    }
+
+    /**
+     * Remove the file from the database
+     * @param int $itemId item's id to be removed
+     * @author Keller and Laxmi
+     */
+    function removeFile($itemId)
+    {
+        //TODO delete file in server
+        $sql = "UPDATE Item SET item_file= NULL WHERE item_id =?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+    }
 }
