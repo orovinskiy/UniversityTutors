@@ -39,3 +39,9 @@ $("#edit-item").submit(function (e) {
     }
 });
 
+// toggle display of add new state
+$("#add-new-state").hide();
+$("#add-toggle").on("click", function () {
+    $("#add-new-state").show();
+    $("#add-toggle").hide();
+});
