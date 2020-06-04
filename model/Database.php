@@ -284,7 +284,7 @@ class Database
     function getTutorsChecklist($year, $userID)
     {
         $sql = "SELECT State.state_is_done, Item.item_file, State.state_order, State.state_id, State.state_text,State.state_set_by,
-                Item.item_name, Item.item_id, TutorYear.tutorYear_id FROM ItemTutorYear 
+                Item.item_name, Item.item_id, ItemTutorYear.itemTutorYear_file, Item.item_is_upload, TutorYear.tutorYear_id FROM ItemTutorYear 
                 inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id 
                 inner join Item on ItemTutorYear.item_id = Item.item_id 
                 inner join State on ItemTutorYear.state_id = State.state_id

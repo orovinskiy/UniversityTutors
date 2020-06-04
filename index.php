@@ -9,6 +9,7 @@
 //require the autoload file
 require_once('vendor/autoload.php');
 require_once("model/config.php");
+require_once("model/validate.php");
 
 //Turn on error reporting
 ini_set('display_errors', 1);
@@ -54,8 +55,9 @@ $f3->route('GET /checklist/@userId', function ($f3, $param) {
 });
 
 $f3->route('POST /tutFile',function(){
-    $GLOBALS['controller']->uploadTutFile();
+    echo $GLOBALS['controller']->uploadTutFile();
 });
+
 
 /**
  * route to checklist ajax function

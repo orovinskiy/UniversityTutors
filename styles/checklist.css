@@ -25,3 +25,7 @@ legend{
     padding-left: 5%;
 }
 
+.hidden{
+    display: none;
+}
+

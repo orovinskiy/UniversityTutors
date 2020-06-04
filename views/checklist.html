@@ -46,14 +46,25 @@ what forms they have already completed
                                                 </check>
                                             </div>
                                             <div class="col-3">
-                                                <div class="row mb-3">
-                                                    <a target="_blank" href="../uploads/{{@isChecked['item_file']}}" download="{{@isChecked['item_file']}}">PDF link</a>
-                                                </div>
+                                                <check if="{{!empty(@isChecked['item_file'])}}">
+                                                    <div class="row mb-3">
+                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['item_file']}}"
+                                                           download="{{@isChecked['item_file']}}">PDF Download</a>
+                                                    </div>
+                                                </check>
+                                                <check if="{{!empty(@isChecked['itemTutorYear_file'])}}">
+                                                    <div class="row mb-3">
+                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
+                                                           download="{{@isChecked['itemTutorYear_file']}}">Uploaded File Download</a>
+                                                    </div>
+                                                </check>
+                                                <check if="{{!empty(@isChecked['item_is_upload'])}}">
+                                                    <div class="row checkHide mb-3">
+                                                        <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                    </div>
+                                                </check>
                                                 <div class="row">
-                                                    <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
-                                                </div>
-                                                <div class="row">
-                                                    <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                                    <div class="form-check  mb-5  text-center">
                                                         <input class="big form-check-input get" type="checkbox"
                                                                data-order="{{@isChecked['state_order']}}" value="{{@isChecked['tutorYear_id']}}"
                                                                id="{{@isChecked['item_id']}}" name="doorInter[]"
@@ -95,14 +106,33 @@ what forms they have already completed
                                                 <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@isChecked['state_text']}}</p>
                                             </div>
                                             <div class="col-3">
-                                                <div class="form-check mt-3 mb-5 mr-5 text-center">
+                                                <check if="{{!empty(@isChecked['item_file'])}}">
+                                                    <div class="row mb-3">
+                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['item_file']}}"
+                                                           download="{{@isChecked['item_file']}}">PDF Download</a>
+                                                    </div>
+                                                </check>
+                                                <check if="{{!empty(@isChecked['itemTutorYear_file'])}}">
+                                                    <div class="row mb-3">
+                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
+                                                           download="{{@isChecked['itemTutorYear_file']}}">Uploaded File Download</a>
+                                                    </div>
+                                                </check>
+                                                <check if="{{!empty(@isChecked['item_is_upload'])}}">
+                                                    <div class="row hidden checkHide mb-3">
+                                                        <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                    </div>
+                                                </check>
+                                                <div class="row">
+                                                    <div class="form-check mb-5 text-center">
 
-                                                    <input class="big form-check-input get" type="checkbox"
-                                                           value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
-                                                           id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
-                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
-                                                        Completed
-                                                    </label>
+                                                        <input class="big form-check-input get" type="checkbox"
+                                                               value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
+                                                               id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
+                                                        <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                            Completed
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

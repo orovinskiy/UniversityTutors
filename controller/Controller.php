@@ -154,19 +154,39 @@ class Controller
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
+    /**
+     * @return string mixed returns a error or a success string to be displayed
+     * @author Oleg
+     */
     function uploadTutFile(){
-        var_dump($_FILES);
-        $filename = $_FILES['file']['name'];
-        $filename = $this->changeFileName($filename,$_POST['itemId'],$_POST['tutorId']);
-        // Location
-        $location = 'uploads/' . $filename;
-        // Upload file
-        move_uploaded_file($_FILES['file']['tmp_name'], $location);
-        $this->_db->updateFileItem($filename,$_POST['itemId'],$_POST['tutorId']);
+        if($this->_val->validateFileUploadTut($_FILES['file'])) {
+            $fileExtensions = array('.txt','.pdf','.docx');
+            $filename = $_FILES['file']['name'];
+            //change name of file
+            $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
+            //delete all files first
+            foreach ($fileExtensions as $ext){
+                if(file_exists('uploads/'.substr($filename,0,strpos($filename,".")).$ext)){
+                    unlink('uploads/'.substr($filename,0,strpos($filename,".")).$ext);
+                }
+            }
+            // Location
+            $location = 'uploads/' . $filename;
+            // Upload file
+            move_uploaded_file($_FILES['file']['tmp_name'], $location);
+            $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
+        }
+        if(!empty($this->_f3->get('errors'))){
+            return $this->_f3->get('errors');
+        }
+        else{
+            return $this->_f3->get('success');
+        }
     }
 
-    function changeFileName($filename, $itemID, $tutorId){
-        return substr($filename, 0, strpos($filename,'.')).'-'.$itemID.'-'.$tutorId
+
+    function changeFileName($filename, $itemID, $tutorId,$name){
+        return $name.'-'.$itemID.'-'.$tutorId
             .substr($filename, strpos($filename,'.'));
     }
 
