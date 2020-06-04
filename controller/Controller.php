@@ -199,14 +199,11 @@ class Controller
 
     function formPage($param)
     {
-//        $_SESSION['user_id'] = $_SESSION['user']->getUserID();
-//        echo($_SESSION['user_id']);
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($param['id']);
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
             $this->redirects();
         }
-
 
         //this is for building up a navbar
         $this->navBuilder(array('Checklist' => '../checklist/' . $param["id"], 'Logout' => '../logout')
@@ -617,7 +614,7 @@ class Controller
         global $dirName;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            if(isset($_POST['remove'])){
+            if (isset($_POST['remove'])) {
                 //remove the file
                 $this->_db->removeFile($itemId);
             }
@@ -627,15 +624,14 @@ class Controller
                 if (isset($_POST['uploadRequired'])) {
                     $uploadRequired = 1;
                 }
-                $this->_db->updateItemIsUpload($uploadRequired,$itemId);
+                $this->_db->updateItemIsUpload($uploadRequired, $itemId);
 
                 // var_dump($_FILES);
                 if (isset($_FILES['fileToUpload'])) {
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $_FILES['fileToUpload']['name']);
-                        $this->_db->updateAttachments($_FILES['fileToUpload']['name'], $itemId);
-//                        $this->_db->updateItemIsUpload($itemId);
-
+                        $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
+                        $this->_db->updateAttachments($fileName, $itemId);
                     }
                 }
                 if ($this->_val->validateItem($_POST["itemName"])) {
@@ -742,4 +738,17 @@ class Controller
         echo $view->render('views/itemEdit.html');
     }
 
+    /**
+     * file name for avoiding naming convention
+     * @param string $itemName name of the item
+     * @param int $itemId id of the item
+     * @return string name for the file
+     * @author laxmi
+     */
+    function nameForFile($itemName, $itemId)
+    {
+        return $itemName . "-" . $itemId;
+    }
 }
+
+
