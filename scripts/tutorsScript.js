@@ -184,11 +184,6 @@ $("#current-year").on("click", function () {
     });
 });
 
-// show/hide edit item buttons
-$("#enable-edit").on("click", function () {
-    $(".edit-item").toggleClass("d-none");
-});
-
 //event listener to save default email information
 //@author Dallas Sloan
 $("#save-default").on('click', function () {
