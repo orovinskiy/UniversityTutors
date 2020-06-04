@@ -264,6 +264,11 @@ class Database
         $statement->execute([$filePath, $user_id]);
     }
 
+    /**This updates the tutorYearItem with the passed in file name
+     * @param string $filename name of file
+     * @param int $itemId id of item
+     * @param int $tutorYear id of tutorYear
+     */
     function updateFileItem($filename,$itemId,$tutorYear){
         $sql = 'UPDATE ItemTutorYear SET itemTutorYear_file = ? WHERE item_id = ? AND tutorYear_id = ?';
 

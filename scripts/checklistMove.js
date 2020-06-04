@@ -13,6 +13,9 @@ $("body").on("change","#pdf",function(){
     let name = $(this).parents(':eq(5)').find('.card-title').html();
     let id = input.attr('id');
     let tutorId = input.val();
+    console.log($files);
+
+    //$(this).parents(':eq(2)').find('.upload').attr('href','uploads/'+name+'-'+id+'-'+tutorId+'');
 
         fd.append('file',$files);
         fd.append('tutorId',tutorId);

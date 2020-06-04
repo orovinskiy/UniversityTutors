@@ -149,12 +149,12 @@ class Controller
      */
     function checklistAjax()
     {
-        var_dump($_POST);
         $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
-    /**
+    /**This function renames the file, moves it to the uploads folder and updates
+     * the file name in the database associated to the item.
      * @return string mixed returns a error or a success string to be displayed
      * @author Oleg
      */
@@ -185,6 +185,13 @@ class Controller
     }
 
 
+    /**
+     * @param string $filename the name of the file
+     * @param int $itemID the id of item
+     * @param int $tutorId the id of tutorYear
+     * @param string $name the name of the item
+     * @return string name of the file
+     */
     function changeFileName($filename, $itemID, $tutorId,$name){
         return $name.'-'.$itemID.'-'.$tutorId
             .substr($filename, strpos($filename,'.'));
@@ -200,10 +207,10 @@ class Controller
     {
 
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        $this->isLoggedIn($param['userId']);
+        /*$this->isLoggedIn($param['userId']);
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
             $this->redirects();
-        }
+        }*/
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
