@@ -266,7 +266,7 @@ class Database
 
     /**This updates the tutorYearItem with the passed in file name
      * @param string $filename name of file
-     * @param int $itemId id of item
+     * @param int $itemId id of item()
      * @param int $tutorYear id of tutorYear
      */
     function updateFileItem($filename,$itemId,$tutorYear){
