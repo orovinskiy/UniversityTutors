@@ -9,16 +9,16 @@ what forms they have already completed
 <include href="views/navbar.html"/><!-- This brings in the navbar -->
 
 
-<div class="container">
-    <div class="btn-group mb-3 mt-1 center">
-        <a class="border btn btn-secondary" href="#notCompleted">To Be Completed</a>
-        <a class="border btn btn-secondary" href="#completed">Completed</a>
-    </div><!-- Navigation -->
+<div class="container ">
 
     <!-- Welcome Intro -->
-    <p class="yearID" data-id="{{@yearID}}">Welcome, {{@userName}}</p>
-    <p>Academic year: {{@currentYear}} - {{@currentYear+1}}</p>
+    <p class="greetText mt-3 mb-3 h5 yearID" data-id="{{@yearID}}">Welcome, {{@userName}}</p>
+    <p class="greetText h6 mb-4">Academic year: {{@currentYear}} - {{@currentYear+1}}</p>
 
+    <div class="btn-group mb-2 mt-1 d-flex justify-content-center topBtn">
+        <a class="  border btn btn-secondary" href="#notCompleted">To Be Completed</a>
+        <a class="  border btn btn-secondary" href="#completed">Completed</a>
+    </div><!-- Navigation -->
     <div class="row">
         <div id="notCompleted" class="col-12">
             <fieldset>
@@ -32,7 +32,7 @@ what forms they have already completed
                         <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_set_by'] !='tutor' }}">
                             <div class="mb-3">
                                 <section class="card">
-                                    <h2 class="card-title text-center">{{@isChecked['item_name']}}</h2>
+                                    <h2 class="card-header text-center pb-1">{{@isChecked['item_name']}}</h2>
                                     <div class="card-subtitle">
                                         <div class="row">
                                             <div class="col-9">
@@ -99,43 +99,41 @@ what forms they have already completed
                         <check if="{{@isChecked['state_set_by'] == 'tutor'}}">
                             <div class="mb-3">
                                 <section class="card">
-                                    <h2 class="card-title text-center">{{@isChecked['item_name']}}</h2>
-                                    <div class="card-subtitle">
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@isChecked['state_text']}}</p>
-                                            </div>
-                                            <div class="col-3">
-                                                <check if="{{!empty(@isChecked['item_file'])}}">
-                                                    <div class="row mb-3">
-                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['item_file']}}"
-                                                           download="{{@isChecked['item_file']}}">PDF Download</a>
-                                                    </div>
-                                                </check>
-                                                <check if="{{!empty(@isChecked['itemTutorYear_file'])}}">
-                                                    <div class="row mb-3">
-                                                        <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
-                                                           download="{{@isChecked['itemTutorYear_file']}}">Uploaded File Download</a>
-                                                    </div>
-                                                </check>
-                                                <check if="{{!empty(@isChecked['item_is_upload'])}}">
-                                                    <div class="row hidden checkHide mb-3">
-                                                        <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
-                                                    </div>
-                                                </check>
-                                                <div class="row">
-                                                    <div class="form-check mb-5 text-center">
-
-                                                        <input class="big form-check-input get" type="checkbox"
-                                                               value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
-                                                               id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
-                                                        <label class=" form-check-label" for="{{@isChecked['item_id']}}">
-                                                            Completed
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <h2 class="card-header text-center">{{@isChecked['item_name']}}</h2>
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@isChecked['state_text']}}</p>
                                         </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <check if="{{!empty(@isChecked['item_file'])}}">
+                                            <div class=" mb-3">
+                                                <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['item_file']}}"
+                                                   download="{{@isChecked['item_file']}}">PDF Download</a>
+                                            </div>
+                                        </check>
+                                        <check if="{{!empty(@isChecked['itemTutorYear_file'])}}">
+                                            <div class=" mb-3">
+                                                <a class="btn btn-primary" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
+                                                   download="{{@isChecked['itemTutorYear_file']}}">Uploaded File Download</a>
+                                            </div>
+                                        </check>
+                                        <check if="{{!empty(@isChecked['item_is_upload'])}}">
+                                            <div class=" hidden checkHide mb-3">
+                                                <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                            </div>
+                                        </check>
+
+                                        <div class="form-check mb-5 text-center">
+
+                                            <input class="big form-check-input get" type="checkbox"
+                                                   value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
+                                                   id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
+                                            <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                Completed
+                                            </label>
+                                        </div>
+
                                     </div>
                                 </section>
                             </div>
@@ -149,7 +147,7 @@ what forms they have already completed
 </div><!--Container-->
 
 <!-- jQuery first, then Popper.js, Bootstrap JS then personal validation script-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="../scripts/checklistMove.js"></script>
