@@ -98,6 +98,9 @@ Page to create, edit and delete items in the table
                     <check if="{{ isset(@defaultWarning) }}">
                         <h2 class="text-warning">{{ @defaultWarning }}</h2>
                     </check>
+                    <check if="{{ @stateWarning }}">
+                        <h2 class="text-warning">{{ @stateWarning }}</h2>
+                    </check>
                 </false>
             </check>
         </check>

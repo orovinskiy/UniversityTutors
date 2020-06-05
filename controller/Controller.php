@@ -158,16 +158,17 @@ class Controller
      * @return string mixed returns a error or a success string to be displayed
      * @author Oleg
      */
-    function uploadTutFile(){
-        if($this->_val->validateFileUploadTut($_FILES['file'])) {
-            $fileExtensions = array('.txt','.pdf','.docx');
+    function uploadTutFile()
+    {
+        if ($this->_val->validateFileUploadTut($_FILES['file'])) {
+            $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];
             //change name of file
             $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
             //delete all files first
-            foreach ($fileExtensions as $ext){
-                if(file_exists('uploads/'.substr($filename,0,strpos($filename,".")).$ext)){
-                    unlink('uploads/'.substr($filename,0,strpos($filename,".")).$ext);
+            foreach ($fileExtensions as $ext) {
+                if (file_exists('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext)) {
+                    unlink('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext);
                 }
             }
             // Location
@@ -176,10 +177,9 @@ class Controller
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
         }
-        if(!empty($this->_f3->get('errors'))){
+        if (!empty($this->_f3->get('errors'))) {
             return $this->_f3->get('errors');
-        }
-        else{
+        } else {
             return $this->_f3->get('success');
         }
     }
@@ -192,9 +192,10 @@ class Controller
      * @param string $name the name of the item
      * @return string name of the file
      */
-    function changeFileName($filename, $itemID, $tutorId,$name){
-        return $name.'-'.$itemID.'-'.$tutorId
-            .substr($filename, strpos($filename,'.'));
+    function changeFileName($filename, $itemID, $tutorId, $name)
+    {
+        return $name . '-' . $itemID . '-' . $tutorId
+            . substr($filename, strpos($filename, '.'));
     }
 
     /**
@@ -728,6 +729,13 @@ class Controller
 
         }
 
+        // Delete item
+        if (isset($_POST["itemDelete"])) {
+            $this->_db->deleteItem($itemId);
+            $currentYear = $this->_db->getCurrentYear();
+            $this->_f3->reroute("tutors/$currentYear");
+        }
+
         // Move Up
         if (isset($_POST["moveUp"])) {
             $this->_db->updateStateOrder($_POST["stateId"], -1);
@@ -738,15 +746,9 @@ class Controller
             $this->_db->updateStateOrder($_POST["stateId"], 1);
         }
 
-        // Check for default state warnings
         $defaults = $this->_db->getStateCount($itemId, "default");
-        if ($defaults > 1) {
-            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
-        } else if ($defaults < 1) {
-            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
-        }
 
-        // Showing error messages for delete state
+        // Error messages for delete state
         if (isset($_POST["stateDelete"])) {
             if ($defaults < 1) {
                 // There must be at least one default state set
@@ -766,10 +768,22 @@ class Controller
             }
         }
 
-        if (isset($_POST["itemDelete"])) {
-            $this->_db->deleteItem($itemId);
-            $currentYear = $this->_db->getCurrentYear();
-            $this->_f3->reroute("tutors/$currentYear");
+        // Default state warnings
+        if ($defaults > 1) {
+            // More than one default state warning
+            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
+        } else if ($defaults < 1) {
+            // No default state warning
+            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
+        }
+
+        // Other state warnings
+
+        // Check if the item has more
+        if ($this->_db->getItem($itemId)["item_type"] == "checkbox") {
+            if ($this->_db->getMaxState($itemId) > 2) {
+                $this->_f3->set("stateWarning", "You have more than two states set for a checkbox item. Checkboxes will only use the item's first two states.");
+            }
         }
 
 
