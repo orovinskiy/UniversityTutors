@@ -652,8 +652,8 @@ class Controller
     {
 
         // Nav builder
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
-            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Column Edit');
+        $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(),
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), array("../styles/itemEditStyle.css"), 'Column Edit');
         global $dirName;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {

@@ -4,8 +4,12 @@ Styles for the admin tutors table
 @author Keller Flint
 */
 
+#add-img {
+    width: 20px;
+}
+
 .btn-file input[type=file] {
-    outline:none;
+    outline: none;
 }
 
 .checkbox-big {
@@ -14,15 +18,20 @@ Styles for the admin tutors table
 }
 
 .filter {
-    width: 10%;
+    width: 8%;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
+
 .placement {
     transform: translateY(8px);
     -webkit-transform: translateY(8px);;
+}
+
+.pointer:hover {
+    cursor: pointer;
 }
 
 .small {
@@ -30,6 +39,11 @@ Styles for the admin tutors table
 }
 
 th {
-    font-size: .7em;
+    font-size: 1em;
 }
 
+.year-change {
+    vertical-align: top;
+    transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+}

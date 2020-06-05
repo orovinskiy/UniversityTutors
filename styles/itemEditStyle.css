@@ -1,0 +1,13 @@
+#add-toggle {
+    width: 50px;
+    transform: translateX(20px);
+}
+
+#edit-item {
+    width: 50%;
+    margin-left: 25%;
+}
+
+.move {
+    width: 40px;
+}
