@@ -336,9 +336,10 @@ $("#filter-complete").on("click", function () {
         $("#" + id + " .item-input").each(function () {
             doneArray.push($(this).data("is-done"));
         });
-        if (!doneArray.includes(1)) {
+        if (doneArray.includes(0)) {
             $(this).hide();
         }
+        console.log(doneArray);
     });
 });
 
