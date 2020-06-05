@@ -146,10 +146,10 @@ $(".delete").on("click", function () {
         $.post("../tutorsAjax", {
             delete: true,
             user_id: user_id
+        }, function () {
+            let year = $("#year-current").data("year");
+            window.location.href = ("../tutors/" + year);
         });
-
-        let year = $("#year-current").data("year");
-        window.location.href = ("../tutors/" + year);
     }
 });
 
@@ -162,12 +162,13 @@ $(".import").on("click", function () {
         // ajax importing
         $.post("../tutorsAjax", {
             user_id: user_id
-        });
-        //hide Import button after displaying success message
-        let results = confirm("Tutor imported successfully ");
-        if (results) {
+        }, function () {
+            //hide Import button after displaying success message
+            alert("Tutor imported successfully ");
             $(".import").hide();
-        }
+            //TODO error message if user already exists in that year
+        });
+
     }
 });
 
@@ -229,7 +230,7 @@ $.fn.fileUploader = function (filesToUpload) {
                         console.log(response);
                     } else if (response == 0) {
                         alert('Changes not saved');
-                    } else if (response ==2) {
+                    } else if (response == 2) {
                         alert("File Already Exists")
                     }
                 }
