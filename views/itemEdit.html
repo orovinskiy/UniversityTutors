@@ -11,53 +11,59 @@ Page to create, edit and delete items in the table
 <form id="edit-item" class="text-center" method="POST" action="#" enctype="multipart/form-data">
     <input type="hidden" name="itemId" value="{{ @item['item_id'] }}">
 
-    <!-- Item name -->
-    <div class="form-group d-inline-block">
-        <label for="item-name">Item Name</label>
-        <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
-        <span class="text-danger">{{ @errors["itemName"] }}</span>
-    </div>
-
-    <!-- Item type -->
-    <div class="form-group d-inline-block">
-        <label for="item-type">Item Type</label>
-        <select class="form-control" id="item-type" name="itemType">
-            <check if="{{ @item['item_type'] == 'checkbox' }}">
-                <true>
-                    <option value="checkbox" selected>Checkbox</option>
-                </true>
-                <false>
-                    <option value="checkbox">Checkbox</option>
-                </false>
-            </check>
-            <check if="{{ @item['item_type'] == 'select' }}">
-                <true>
-                    <option value="select" selected>Dropdown</option>
-                </true>
-                <false>
-                    <option value="select">Dropdown</option>
-                </false>
-            </check>
-        </select>
-    </div>
-    <!--    <div class="form-check d-inline-block">-->
-    <!--        <input type="checkbox" class="form-check-input" id="upload-document">-->
-    <!--        <label class="form-check-label" for="upload-document"> Upload Document</label>-->
-    <!--    </div>-->
-    <div class="form-group d-inline-block">
-        <label for="file">Upload File</label>
-        <input type="file" class="form-control file-items border-0" name="fileToUpload"
-               id="file">
-    </div>
-    <div>
-        <check if="{{isset(@item['item_file'])}}">
-            <div>
-                <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
-                <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
+    <div class="row">
+        <!-- Item name -->
+        <div class="col-6">
+            <div class="form-group w-100 text-left">
+                <label for="item-name">Item Name</label>
+                <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
+                <span class="text-danger">{{ @errors["itemName"] }}</span>
             </div>
-        </check>
+        </div>
+        <div class="col-6">
+            <!-- Item type -->
+            <div class="form-group w-100 text-left">
+                <label for="item-type">Item Type</label>
+                <select class="form-control" id="item-type" name="itemType">
+                    <check if="{{ @item['item_type'] == 'checkbox' }}">
+                        <true>
+                            <option value="checkbox" selected>Checkbox</option>
+                        </true>
+                        <false>
+                            <option value="checkbox">Checkbox</option>
+                        </false>
+                    </check>
+                    <check if="{{ @item['item_type'] == 'select' }}">
+                        <true>
+                            <option value="select" selected>Dropdown</option>
+                        </true>
+                        <false>
+                            <option value="select">Dropdown</option>
+                        </false>
+                    </check>
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="form-check d-inline-block mb-3">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group w-100 text-left">
+                <label for="file">Upload File</label>
+                <input type="file" class="form-control file-items border-0" name="fileToUpload"
+                       id="file">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group w-100 text-left">
+                <check if="{{ isset(@item['item_file']) }}">
+                    <label>Current File</label><br>
+                    <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
+                    <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
+                </check>
+            </div>
+        </div>
+    </div>
+    <div class="form-check mb-3 text-center">
         <check if="{{ @item['item_is_upload'] == 0 }}">
             <true>
                 <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired">
@@ -68,9 +74,11 @@ Page to create, edit and delete items in the table
         </check>
         <label class="form-check-label" for="upload-required"> Tutor upload required</label>
     </div>
-    <br>
-    <button type="submit" id="delete" class="btn btn-danger" name="itemDelete" value="itemDelete">Delete Item</button>
-    <button type="submit" class="btn btn-success" name="itemSave" value="itemSave">Save Item</button>
+    <div class="text-center">
+        <button type="submit" id="delete" class="btn btn-danger" name="itemDelete" value="itemDelete">Delete Item
+        </button>
+        <button type="submit" class="btn btn-success" name="itemSave" value="itemSave">Save Item</button>
+    </div>
 </form>
 
 <hr class="mt-3 mb-2">
@@ -101,7 +109,7 @@ Page to create, edit and delete items in the table
                 <div class="row">
 
                     <!-- state name -->
-                    <div class="form-group d-inline-block col-5">
+                    <div class="form-group d-inline-block col-5 text-left">
                         <label for="name-{{ @state['state_id'] }}">Name</label>
                         <input type="text" class="form-control" id="name-{{ @state['state_id'] }}"
                                value="{{ @state['state_name'] }}"
@@ -113,7 +121,7 @@ Page to create, edit and delete items in the table
                     <div class="col-2"></div>
 
                     <!-- state set_by -->
-                    <div class="form-group d-inline-block col-5">
+                    <div class="form-group d-inline-block col-5 text-left">
                         <label for="set-by-{{ @state['state_id'] }}">Set By</label>
                         <select class="form-control" id="set-by-{{ @state['state_id'] }}" name="stateSetBy">
                             <check if="@state['state_set_by'] == 'default'">
@@ -144,7 +152,7 @@ Page to create, edit and delete items in the table
                     </div>
 
                     <!-- state text -->
-                    <div class="form-group col-12">
+                    <div class="form-group col-12 text-left">
                         <label for="description-{{ @state['state_id'] }}">Description</label>
                         <textarea class="form-control" id="description-{{ @state['state_id'] }}" rows="3"
                                   name="stateText">{{ @state['state_text'] }}</textarea>
@@ -179,11 +187,13 @@ Page to create, edit and delete items in the table
 
                 <!-- Button to change state order -->
                 <check if="{{ @state['state_order'] != 1 }}">
-                    <button type="submit" class="btn btn-white m-3" name="moveUp" value="moveUp"><img class="move" src="../styles/images/up.svg">
+                    <button type="submit" class="btn btn-white m-3" name="moveUp" value="moveUp"><img class="move"
+                                                                                                      src="../styles/images/up.svg">
                     </button>
                 </check>
                 <check if="{{ @state['state_order'] != @maxState }}">
-                    <button type="submit" class="btn btn-white m-3" name="moveDown" value="moveDown"><img class="move" src="../styles/images/down.svg">
+                    <button type="submit" class="btn btn-white m-3" name="moveDown" value="moveDown"><img class="move"
+                                                                                                          src="../styles/images/down.svg">
                     </button>
                 </check>
 
