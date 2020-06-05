@@ -1,3 +1,8 @@
 #add-toggle {
     width: 50px;
+    transform: translateX(20px);
+}
+
+.move {
+    width: 40px;
 }

@@ -12,14 +12,14 @@ Page to create, edit and delete items in the table
     <input type="hidden" name="itemId" value="{{ @item['item_id'] }}">
 
     <!-- Item name -->
-    <div class="form-group w-25 d-inline-block">
+    <div class="form-group d-inline-block">
         <label for="item-name">Item Name</label>
         <input type="text" class="form-control" id="item-name" value="{{ @item['item_name'] }}" name="itemName">
         <span class="text-danger">{{ @errors["itemName"] }}</span>
     </div>
 
     <!-- Item type -->
-    <div class="form-group w-25 d-inline-block">
+    <div class="form-group d-inline-block">
         <label for="item-type">Item Type</label>
         <select class="form-control" id="item-type" name="itemType">
             <check if="{{ @item['item_type'] == 'checkbox' }}">
@@ -44,17 +44,20 @@ Page to create, edit and delete items in the table
     <!--        <input type="checkbox" class="form-check-input" id="upload-document">-->
     <!--        <label class="form-check-label" for="upload-document"> Upload Document</label>-->
     <!--    </div>-->
-    <div class="form-group w-25 d-inline-block">
-        <input type="file" class="form-control file-items" name="fileToUpload"
-               id="img">
+    <div class="form-group d-inline-block">
+        <label for="file">Upload File</label>
+        <input type="file" class="form-control file-items border-0" name="fileToUpload"
+               id="file">
     </div>
     <div>
         <check if="{{isset(@item['item_file'])}}">
-            <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
-            <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
+            <div>
+                <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
+                <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
+            </div>
         </check>
     </div>
-    <div class="form-check d-inline-block">
+    <div class="form-check d-inline-block mb-3">
         <check if="{{ @item['item_is_upload'] == 0 }}">
             <true>
                 <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired">
@@ -176,12 +179,11 @@ Page to create, edit and delete items in the table
 
                 <!-- Button to change state order -->
                 <check if="{{ @state['state_order'] != 1 }}">
-                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveUp" value="moveUp">Move Up
+                    <button type="submit" class="btn btn-white m-3" name="moveUp" value="moveUp"><img class="move" src="../styles/images/up.svg">
                     </button>
                 </check>
                 <check if="{{ @state['state_order'] != @maxState }}">
-                    <button type="submit" class="btn btn-secondary m-3 w-25" name="moveDown" value="moveDown">Move
-                        Down
+                    <button type="submit" class="btn btn-white m-3" name="moveDown" value="moveDown"><img class="move" src="../styles/images/down.svg">
                     </button>
                 </check>
 
@@ -191,7 +193,7 @@ Page to create, edit and delete items in the table
         <!-- Add new state -->
         <check if="{{ @item != 0 }}">
             <div class="text-center">
-                <img id="add-toggle" class="m-3 ml-5" src="../styles/images/add.svg">
+                <img id="add-toggle" class="m-3" src="../styles/images/add.svg">
             </div>
             <form id="add-new-state" class="text-center w-100 border p-3 pb-5 m-3 bg-light rounded" method="post"
                   action="#">
