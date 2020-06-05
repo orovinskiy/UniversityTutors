@@ -57,7 +57,8 @@ Page to create, edit and delete items in the table
             <div class="form-group w-100 text-left">
                 <check if="{{ isset(@item['item_file']) }}">
                     <label>Current File</label><br>
-                    <a href="{{ @item['item_file'] }}">Download {{ @item['item_file'] }} </a>
+                    <a href=" ../uploads/{{ @item['item_file'] }}" download="{{ @item['item_file'] }}">Download {{
+                        @item['item_file'] }} </a>
                     <button type="submit" class="btn btn-warning" name="remove" value="remove">Remove</button>
                 </check>
             </div>
