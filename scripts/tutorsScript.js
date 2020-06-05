@@ -339,7 +339,6 @@ $("#filter-complete").on("click", function () {
         if (doneArray.includes(0)) {
             $(this).hide();
         }
-        console.log(doneArray);
     });
 });
 
