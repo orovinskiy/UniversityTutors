@@ -10,12 +10,9 @@ $("body").on("change","#pdf",function(){
     let fd = new FormData();
     let $files = $(this)[0].files[0];
     let input = $(this).parents(':eq(2)').find('.big');
-    let name = $(this).parents(':eq(5)').find('.card-title').html();
+    let name = $(this).parents(':eq(6)').find('.card-header').html();
     let id = input.attr('id');
     let tutorId = input.val();
-    console.log($files);
-
-    //$(this).parents(':eq(2)').find('.upload').attr('href','uploads/'+name+'-'+id+'-'+tutorId+'');
 
         fd.append('file',$files);
         fd.append('tutorId',tutorId);
@@ -29,7 +26,10 @@ $("body").on("change","#pdf",function(){
             contentType: false,
             processData: false,
             success: function (response) {
-                alert(response);
+                alert(response.substring(0,response.indexOf('/')));
+                if(response.substring(response.indexOf('/')+1) === "true"){
+                    window.location.reload();
+                }
             }
         });
 

@@ -249,12 +249,12 @@ class Validate
 
         //checking the file size 2MB-maximum
         if ($_SERVER['CONTENT_LENGTH'] > 500000) {
-            $f3->set("errors", "Sorry! file size too large Maximum file size is 500 KB ");
+            $f3->set("errors", "Sorry! file size too large Maximum file size is 500 KB/false");
             $isValid = false;
             //check the file type
         } elseif (in_array($file['type'], $validateType)) {
             if ($file['error'] > 0) {
-                $f3->set("errors", "Sorry! file could not be uploaded Try again");
+                $f3->set("errors", "Sorry! file could not be uploaded Try again/false");
                 $isValid = false;
             }
 
@@ -266,10 +266,10 @@ class Validate
 //                $isValid = false;
 //            }
             else {
-                $f3->set("success", "Your file was uploaded successfully");
+                $f3->set("success", "Your file was uploaded successfully/true");
             }
         } else {
-            $f3->set("errors", "Sorry! Only supports .docx, and .pdf files");
+            $f3->set("errors", "Sorry! Only supports .docx, and .pdf files/false");
             $isValid = false;
         }
         return $isValid;
