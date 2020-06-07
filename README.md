@@ -30,3 +30,12 @@ Git branches:
 * Create new branch ```git checkout -b name```
 * Push git branch ```git push origin head```
 * Get current branch ```git rev-parse --abbrev-ref HEAD```
+
+Deployment
+* If routing isn't working 
+** Go into apache config file ``` /etc/apache2/apache2.conf ```
+** Make sure overwrite is on If doesnt work change it to all the files ``` <Directory /var/www/>
+                                                                                    Options Indexes FollowSymLinks
+                                                                                    AllowOverride All
+                                                                                    Require all granted
+                                                                            </Directory>```
