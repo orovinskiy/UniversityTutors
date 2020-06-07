@@ -1046,15 +1046,15 @@ class Database
     }
 
     /**
-     * Gets the ItemTutorYear data
+     * Gets the tutor upload files
      * @param string $currentYear the current year
      * @param int $tutorId tutor year id
-     * @return array Array of data in ItemTutorYear table, TutorYear and Tutor
+     * @return array Array of items uploaded by tutor in that specified year
      * @author Laxmi Kandel
      */
     function getItemTutor($currentYear, $tutorId)
     {
-        $sql = "select * from tutors.ItemTutorYear
+        $sql = "select itemTutorYear_file from tutors.ItemTutorYear
                 inner join tutors.TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id
                 inner join tutors.Tutor on TutorYear.user_id = Tutor.user_id
                 where ItemTutorYear.tutorYear_id = ?
@@ -1067,16 +1067,16 @@ class Database
     /**
      * Get the yearId of the given tutor
      * @param int $userId tutor's id
-     * @return mixed array of data in TutorYear and Tutor table
+     * @return array  Array of tutorYear_id of given user_id
      * @author Laxmi Kandel
      */
     function getYearId($userId)
     {
-        $sql = "select * from tutors.TutorYear
+        $sql = "select tutorYear_id from tutors.TutorYear
                 inner join tutors.Tutor on Tutor.user_id = TutorYear.user_id
                 where Tutor.user_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$userId]);
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC)['tutorYear_id'];
     }
 }

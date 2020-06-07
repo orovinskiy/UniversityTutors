@@ -518,7 +518,7 @@ class Controller
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
         $currentYear = $this->_db->getYearId($param['id']);
         //get the all the files of current year uploaded by tutors
-        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear['tutorYear_id'],$param['id']));
+        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear,$param['id']));
 
         //let admin download the tutor's image
         if (isset($_GET['download'])) {

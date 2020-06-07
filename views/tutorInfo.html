@@ -17,6 +17,7 @@ Page to display additional information about a tutor that does not appear on the
                 <button type="submit" class="btn btn-info download" name="download" value="{{ @tutor['user_id'] }}">
                     Download Image
                 </button>
+                <!--Display the tutor uploaded files retrieved from database-->
                 <div class="mt-4">
                     <p class="h5 text-success">Files uploaded by tutors </p>
                     <repeat group="{{ @filesToDownload }}" value="{{ @value }}">
