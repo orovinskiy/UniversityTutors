@@ -207,10 +207,10 @@ class Controller
     {
 
         //checking to see if user is logged in. If not logged in, will redirect to login page
-        /*$this->isLoggedIn($param['userId']);
+        $this->isLoggedIn($param['userId']);
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 1) {
             $this->redirects();
-        }*/
+        }
 
         //this is for building up a navbar
         $this->navBuilder(array('Form' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
@@ -516,6 +516,9 @@ class Controller
         $this->_f3->set("user", $this->_db->getUserById($param["id"]));
 
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
+        $currentYear = $this->_db->getYearId($param['id']);
+        //get the all the files of current year uploaded by tutors
+        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear,$param['id']));
 
         //let admin download the tutor's image
         if (isset($_GET['download'])) {
