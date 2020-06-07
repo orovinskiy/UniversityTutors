@@ -33,9 +33,9 @@ Git branches:
 
 Deployment
 * If routing isn't working 
-** Go into apache config file ``` /etc/apache2/apache2.conf ```
-** Make sure overwrite is on If doesnt work change it to all the files ``` <Directory /var/www/>
-                                                                                    Options Indexes FollowSymLinks
+ - Go into apache config file ``` /etc/apache2/apache2.conf ```
+ - Make sure overwrite is on If doesnt work change it to all the files ``` <Directory /var/www/>
+                                                                                 
                                                                                     AllowOverride All
-                                                                                    Require all granted
+                                                                                   
                                                                             </Directory>```
