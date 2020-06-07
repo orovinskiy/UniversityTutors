@@ -8,6 +8,10 @@
     margin-left: 25%;
 }
 
+.edit-state {
+    height: 380px;
+}
+
 .move {
     width: 40px;
 }
