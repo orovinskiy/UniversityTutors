@@ -65,6 +65,10 @@ Page for admin viewing and management of tutor onboarding data.
                                 Import
                             </button>
                         </check>
+                        <button class="btn btn-warning d-none remove"
+                                data-tutoryearid="{{ @tutorData['info']['tutorYear_id'] }}">
+                            Remove
+                        </button>
                         <button class="btn btn-danger d-none delete" data-userid="{{ @tutorData['info']['user_id'] }}">
                             Delete
                         </button>

@@ -1087,4 +1087,23 @@ class Database
         $statement->execute([$userId]);
         return $statement->fetch(PDO::FETCH_ASSOC)['tutorYear_id'];
     }
+
+    /**
+     * Delete the given tutor year data
+     *
+     * @param int $tutorYearId The tutorYearId of the tutor to be deleted
+     * @author Keller Flint
+     */
+    function removeFromYear($tutorYearId)
+    {
+        // delete item data for tutorYear id
+        $sql = "DELETE FROM ItemTutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
+
+        // delete user data from tutorYear id
+        $sql = "DELETE FROM TutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
+    }
 }

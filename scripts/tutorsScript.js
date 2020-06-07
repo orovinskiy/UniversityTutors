@@ -118,28 +118,47 @@ $(".year-change").on("click", function () {
 $(window).on("click", function () {
     $(".delete").addClass("d-none");
     $(".import").addClass("d-none");
+    $(".remove").addClass("d-none");
 });
 
-// show delete and import buttons on email click
+// show delete, remove and import buttons on email click
 $(".email").on("click", function (event) {
 
     // hide any open buttons
     $(".delete").addClass("d-none");
     $(".import").addClass("d-none");
+    $(".remove").addClass("d-none");
 
     // show current buttons
     $(this).find(".delete").removeClass("d-none");
     $(this).find(".import").removeClass("d-none");
+    $(this).find(".remove").removeClass("d-none");
 
     // stop window event propagation to keep the window event listener from hiding the button again
     event.stopPropagation();
+});
+
+// Event listener for remove button clicked
+$(".remove").on("click", function () {
+    let result = confirm("Are you sure you want to remove this user and all their data for this year?");
+    if (result) {
+        let tutorYear_id = $(this).data("tutoryearid");
+
+        // ajax deletion
+        $.post("../tutorsAjax", {
+            remove: true,
+            tutorYear_id: tutorYear_id
+        }, function () {
+            let year = $("#year-current").data("year");
+            window.location.href = ("../tutors/" + year);
+        });
+    }
 });
 
 // Event listener for delete button clicked
 $(".delete").on("click", function () {
     let result = confirm("Are you sure you want to delete this user and all data associated with them?");
     if (result) {
-
         let user_id = $(this).data("userid");
 
         // ajax deletion

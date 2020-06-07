@@ -125,6 +125,8 @@ class Controller
             $this->_db->setCurrentYear($_POST["current_year"]);
         } else if (isset($_POST["user_id"])) {
             $this->_db->importUser($_POST["user_id"]);
+        } else if (isset($_POST["remove"])) {
+            $this->_db->removeFromYear($_POST["tutorYear_id"]);
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
