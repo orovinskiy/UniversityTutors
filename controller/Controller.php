@@ -214,7 +214,7 @@ class Controller
         }
 
         //this is for building up a navbar
-        $this->navBuilder(array('Form' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
+        $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
             , 'Tutor Checklist');
 
         //get the current year
@@ -251,7 +251,7 @@ class Controller
 
         //this is for building up a navbar
         $this->navBuilder(array('Checklist' => '../checklist/' . $param["id"], 'Logout' => '../logout')
-            , array('../styles/formStyle.css'), 'Onboarding Form');
+            , array('../styles/formStyle.css'), 'Profile');
 
         global $dirName;
         //retrieving data form database
