@@ -754,7 +754,6 @@ class Controller
         // Error messages for delete state
         if (isset($_POST["stateDelete"])) {
             if ($defaults < 1) {
-                // There must be at least one default state set
                 $this->_f3->set("defaultError", "You must have a default state set before deleting this state!");
             } else if ($defaults == 1 && $_POST["stateSetBy"] == "default") {
                 // Error for if the user is trying to delete the only default state
@@ -784,7 +783,7 @@ class Controller
 
         // Other state warnings
 
-        // Check if the item has more
+        // Check if the item has more than 2 items on a checkbox
         if ($this->_db->getItem($itemId)["item_type"] == "checkbox") {
             if ($this->_db->getMaxState($itemId) > 2) {
                 $this->_f3->set("stateWarning", "You have more than two states set for a checkbox item. Checkboxes will only use the item's first two states.");
@@ -793,6 +792,10 @@ class Controller
         // Check if an item has more than one tutor state
         if ($this->_db->getStateCount($itemId, "tutor") > 1) {
             $this->_f3->set("stateWarning", "You have two or more states set by the tutor. Having multiple states set by the tutor can result errors displaying the tutor's checklist. If you need tutors to take another action, consider adding another item instead.");
+        }
+
+        if ($this->_db->getStateCount($itemId, "all") <= 1) {
+            $this->_f3->set("stateWarning", "Items should have at least 2 states.");
         }
 
 

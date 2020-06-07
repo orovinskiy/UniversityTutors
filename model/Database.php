@@ -794,10 +794,18 @@ class Database
      */
     function getStateCount($itemId, $state)
     {
-        $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?;";
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$itemId, $state]);
-        return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        $sql = "";
+        if ($state == "all") {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        } else {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId, $state]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        }
     }
 
     /**
