@@ -19,7 +19,7 @@ $(".checkbox-big").on("click", function () {
     let stateOrder = $(this).is(":checked") ? 2 : 1;
 
     // Update database
-    updateCheckbox(itemId, tutorYearId, stateOrder);
+    updateCheckbox($(this), itemId, tutorYearId, stateOrder);
 
 });
 
@@ -32,39 +32,45 @@ $(".tutor-select").on("change", function () {
     let stateId = $(this).val();
 
     // Update database
-    updateSelect(itemId, tutorYearId, stateId);
+    updateSelect($(this), itemId, tutorYearId, stateId);
 
 });
 
 /**
  * Updates selects via ajax
  *
+ * @param element The JQuery object that was clicked on
  * @param itemId The id of the item being updated
  * @param tutorYearId The id of the tutor year being updated
  * @param stateId The id of the state the item is being updated to
  * @author Keller Flint
  */
-function updateSelect(itemId, tutorYearId, stateId) {
+function updateSelect(element, itemId, tutorYearId, stateId) {
     $.post("../tutorsAjax", {
         itemId: itemId,
         tutorYearId: tutorYearId,
         stateId: stateId
+    }, function (result) {
+        element.attr("data-is-done", result);
     });
 }
 
 /**
  * Updates checkboxes via ajax
  *
+ * @param element The JQuery object that was clicked on
  * @param itemId The id of the item being updated
  * @param tutorYearId The id of the tutor year being updated
  * @param stateOrder The order of the state the item is being updated to
  * @author Keller Flint
  */
-function updateCheckbox(itemId, tutorYearId, stateOrder) {
+function updateCheckbox(element, itemId, tutorYearId, stateOrder) {
     $.post("../tutorsAjax", {
         itemId: itemId,
         tutorYearId: tutorYearId,
         stateOrder: stateOrder
+    }, function (result) {
+        element.attr("data-is-done", result);
     });
 }
 
@@ -336,8 +342,9 @@ $("#filter-incomplete").on("click", function () {
         let id = $(this).attr("id");
         let doneArray = [];
         $("#" + id + " .item-input").each(function () {
-            doneArray.push($(this).data("is-done"));
+            doneArray.push(parseInt($(this).attr("data-is-done")));
         });
+        console.log(doneArray);
         if (!doneArray.includes(0)) {
             $(this).hide();
         }
@@ -354,8 +361,9 @@ $("#filter-complete").on("click", function () {
         let id = $(this).attr("id");
         let doneArray = [];
         $("#" + id + " .item-input").each(function () {
-            doneArray.push($(this).data("is-done"));
+            doneArray.push(parseInt($(this).attr("data-is-done")));
         });
+        console.log(doneArray);
         if (doneArray.includes(0)) {
             $(this).hide();
         }

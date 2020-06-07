@@ -105,6 +105,8 @@ class Database
         $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$stateId, $itemId, $tutorYearId]);
+
+        return "true";
     }
 
     /**

@@ -96,8 +96,10 @@ class Controller
     {
         if (isset($_POST["stateId"])) {
             $this->_db->updateItemTutorYearSelect($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
+            echo $this->_db->getState($_POST["stateId"])["state_is_done"];
         } else if (isset($_POST["stateOrder"])) {
             $this->_db->updateItemTutorYearCheck($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateOrder"]);
+            echo $this->_db->getStateByOrder($_POST["itemId"], $_POST["stateOrder"])["state_is_done"];
         } else if (isset($_POST["email"])) {
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //creating temp password and add new tutor
