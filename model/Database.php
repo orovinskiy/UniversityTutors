@@ -105,6 +105,8 @@ class Database
         $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$stateId, $itemId, $tutorYearId]);
+
+        return "true";
     }
 
     /**
@@ -794,10 +796,18 @@ class Database
      */
     function getStateCount($itemId, $state)
     {
-        $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?;";
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$itemId, $state]);
-        return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        $sql = "";
+        if ($state == "all") {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        } else {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId, $state]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        }
     }
 
     /**
@@ -1078,5 +1088,24 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$userId]);
         return $statement->fetch(PDO::FETCH_ASSOC)['tutorYear_id'];
+    }
+
+    /**
+     * Delete the given tutor year data
+     *
+     * @param int $tutorYearId The tutorYearId of the tutor to be deleted
+     * @author Keller Flint
+     */
+    function removeFromYear($tutorYearId)
+    {
+        // delete item data for tutorYear id
+        $sql = "DELETE FROM ItemTutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
+
+        // delete user data from tutorYear id
+        $sql = "DELETE FROM TutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
     }
 }

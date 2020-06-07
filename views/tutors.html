@@ -65,6 +65,10 @@ Page for admin viewing and management of tutor onboarding data.
                                 Import
                             </button>
                         </check>
+                        <button class="btn btn-warning d-none remove"
+                                data-tutoryearid="{{ @tutorData['info']['tutorYear_id'] }}">
+                            Remove
+                        </button>
                         <button class="btn btn-danger d-none delete" data-userid="{{ @tutorData['info']['user_id'] }}">
                             Delete
                         </button>
@@ -114,12 +118,13 @@ Page for admin viewing and management of tutor onboarding data.
                                         <repeat group="{{ @items[@column['item_id']]['states'] }}" value="{{ @value }}">
                                             <check if="{{ @value['state_id'] == @column['state_id'] }}">
                                                 <true>
-                                                    <option value="{{ @value['state_id'] }}" selected>{{
-                                                        @value['state_name'] }}
+                                                    <option value="{{ @value['state_id'] }}" selected>
+                                                        {{ @value['state_name'] }}
                                                     </option>
                                                 </true>
                                                 <false>
-                                                    <option value="{{ @value['state_id'] }}">{{ @value['state_name'] }}
+                                                    <option value="{{ @value['state_id'] }}">
+                                                        {{ @value['state_name'] }}
                                                     </option>
                                                 </false>
                                             </check>

@@ -19,7 +19,7 @@ $(".checkbox-big").on("click", function () {
     let stateOrder = $(this).is(":checked") ? 2 : 1;
 
     // Update database
-    updateCheckbox(itemId, tutorYearId, stateOrder);
+    updateCheckbox($(this), itemId, tutorYearId, stateOrder);
 
 });
 
@@ -32,39 +32,45 @@ $(".tutor-select").on("change", function () {
     let stateId = $(this).val();
 
     // Update database
-    updateSelect(itemId, tutorYearId, stateId);
+    updateSelect($(this), itemId, tutorYearId, stateId);
 
 });
 
 /**
  * Updates selects via ajax
  *
+ * @param element The JQuery object that was clicked on
  * @param itemId The id of the item being updated
  * @param tutorYearId The id of the tutor year being updated
  * @param stateId The id of the state the item is being updated to
  * @author Keller Flint
  */
-function updateSelect(itemId, tutorYearId, stateId) {
+function updateSelect(element, itemId, tutorYearId, stateId) {
     $.post("../tutorsAjax", {
         itemId: itemId,
         tutorYearId: tutorYearId,
         stateId: stateId
+    }, function (result) {
+        element.attr("data-is-done", result);
     });
 }
 
 /**
  * Updates checkboxes via ajax
  *
+ * @param element The JQuery object that was clicked on
  * @param itemId The id of the item being updated
  * @param tutorYearId The id of the tutor year being updated
  * @param stateOrder The order of the state the item is being updated to
  * @author Keller Flint
  */
-function updateCheckbox(itemId, tutorYearId, stateOrder) {
+function updateCheckbox(element, itemId, tutorYearId, stateOrder) {
     $.post("../tutorsAjax", {
         itemId: itemId,
         tutorYearId: tutorYearId,
         stateOrder: stateOrder
+    }, function (result) {
+        element.attr("data-is-done", result);
     });
 }
 
@@ -118,38 +124,57 @@ $(".year-change").on("click", function () {
 $(window).on("click", function () {
     $(".delete").addClass("d-none");
     $(".import").addClass("d-none");
+    $(".remove").addClass("d-none");
 });
 
-// show delete and import buttons on email click
+// show delete, remove and import buttons on email click
 $(".email").on("click", function (event) {
 
     // hide any open buttons
     $(".delete").addClass("d-none");
     $(".import").addClass("d-none");
+    $(".remove").addClass("d-none");
 
     // show current buttons
     $(this).find(".delete").removeClass("d-none");
     $(this).find(".import").removeClass("d-none");
+    $(this).find(".remove").removeClass("d-none");
 
     // stop window event propagation to keep the window event listener from hiding the button again
     event.stopPropagation();
+});
+
+// Event listener for remove button clicked
+$(".remove").on("click", function () {
+    let result = confirm("Are you sure you want to remove this user and all their data for this year?");
+    if (result) {
+        let tutorYear_id = $(this).data("tutoryearid");
+
+        // ajax deletion
+        $.post("../tutorsAjax", {
+            remove: true,
+            tutorYear_id: tutorYear_id
+        }, function () {
+            let year = $("#year-current").data("year");
+            window.location.href = ("../tutors/" + year);
+        });
+    }
 });
 
 // Event listener for delete button clicked
 $(".delete").on("click", function () {
     let result = confirm("Are you sure you want to delete this user and all data associated with them?");
     if (result) {
-
         let user_id = $(this).data("userid");
 
         // ajax deletion
         $.post("../tutorsAjax", {
             delete: true,
             user_id: user_id
+        }, function () {
+            let year = $("#year-current").data("year");
+            window.location.href = ("../tutors/" + year);
         });
-
-        let year = $("#year-current").data("year");
-        window.location.href = ("../tutors/" + year);
     }
 });
 
@@ -162,12 +187,16 @@ $(".import").on("click", function () {
         // ajax importing
         $.post("../tutorsAjax", {
             user_id: user_id
+        }, function (result) {
+            //hide Import button after displaying success message
+            if (result === "true") {
+                $(".import").hide();
+            } else {
+                alert("Import failed: " + result);
+            }
+
         });
-        //hide Import button after displaying success message
-        let results = confirm("Tutor imported successfully ");
-        if (results) {
-            $(".import").hide();
-        }
+
     }
 });
 
@@ -229,7 +258,7 @@ $.fn.fileUploader = function (filesToUpload) {
                         console.log(response);
                     } else if (response == 0) {
                         alert('Changes not saved');
-                    } else if (response ==2) {
+                    } else if (response == 2) {
                         alert("File Already Exists")
                     }
                 }
@@ -316,8 +345,9 @@ $("#filter-incomplete").on("click", function () {
         let id = $(this).attr("id");
         let doneArray = [];
         $("#" + id + " .item-input").each(function () {
-            doneArray.push($(this).data("is-done"));
+            doneArray.push(parseInt($(this).attr("data-is-done")));
         });
+        console.log(doneArray);
         if (!doneArray.includes(0)) {
             $(this).hide();
         }
@@ -334,8 +364,9 @@ $("#filter-complete").on("click", function () {
         let id = $(this).attr("id");
         let doneArray = [];
         $("#" + id + " .item-input").each(function () {
-            doneArray.push($(this).data("is-done"));
+            doneArray.push(parseInt($(this).attr("data-is-done")));
         });
+        console.log(doneArray);
         if (doneArray.includes(0)) {
             $(this).hide();
         }

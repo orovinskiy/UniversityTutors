@@ -96,8 +96,10 @@ class Controller
     {
         if (isset($_POST["stateId"])) {
             $this->_db->updateItemTutorYearSelect($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateId"]);
+            echo $this->_db->getState($_POST["stateId"])["state_is_done"];
         } else if (isset($_POST["stateOrder"])) {
             $this->_db->updateItemTutorYearCheck($_POST["itemId"], $_POST["tutorYearId"], $_POST["stateOrder"]);
+            echo $this->_db->getStateByOrder($_POST["itemId"], $_POST["stateOrder"])["state_is_done"];
         } else if (isset($_POST["email"])) {
             if ($this->_val->uniqueEmail($_POST["email"]) && $this->_val->validEmail($_POST["email"])) {
                 //creating temp password and add new tutor
@@ -124,7 +126,15 @@ class Controller
         } else if (isset($_POST["current_year"])) {
             $this->_db->setCurrentYear($_POST["current_year"]);
         } else if (isset($_POST["user_id"])) {
-            $this->_db->importUser($_POST["user_id"]);
+            // check if user already exists in this year
+            if ($this->_db->getTutorYear($_POST["user_id"]) == NULL) {
+                $this->_db->importUser($_POST["user_id"]);
+                echo "true";
+            } else {
+                echo "Tutor already exists in the current year";
+            }
+        } else if (isset($_POST["remove"])) {
+            $this->_db->removeFromYear($_POST["tutorYear_id"]);
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
             $this->_mail->setSubject($_POST['subject']);
             $this->_mail->setBody($_POST['body']);
@@ -158,16 +168,17 @@ class Controller
      * @return string mixed returns a error or a success string to be displayed
      * @author Oleg
      */
-    function uploadTutFile(){
-        if($this->_val->validateFileUploadTut($_FILES['file'])) {
-            $fileExtensions = array('.txt','.pdf','.docx');
+    function uploadTutFile()
+    {
+        if ($this->_val->validateFileUploadTut($_FILES['file'])) {
+            $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];
             //change name of file
             $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
             //delete all files first
-            foreach ($fileExtensions as $ext){
-                if(file_exists('uploads/'.substr($filename,0,strpos($filename,".")).$ext)){
-                    unlink('uploads/'.substr($filename,0,strpos($filename,".")).$ext);
+            foreach ($fileExtensions as $ext) {
+                if (file_exists('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext)) {
+                    unlink('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext);
                 }
             }
             // Location
@@ -176,10 +187,9 @@ class Controller
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
         }
-        if(!empty($this->_f3->get('errors'))){
+        if (!empty($this->_f3->get('errors'))) {
             return $this->_f3->get('errors');
-        }
-        else{
+        } else {
             return $this->_f3->get('success');
         }
     }
@@ -192,9 +202,10 @@ class Controller
      * @param string $name the name of the item
      * @return string name of the file
      */
-    function changeFileName($filename, $itemID, $tutorId,$name){
-        return $name.'-'.$itemID.'-'.$tutorId
-            .substr($filename, strpos($filename,'.'));
+    function changeFileName($filename, $itemID, $tutorId, $name)
+    {
+        return $name . '-' . $itemID . '-' . $tutorId
+            . substr($filename, strpos($filename, '.'));
     }
 
     /**
@@ -213,7 +224,7 @@ class Controller
         }
 
         //this is for building up a navbar
-        $this->navBuilder(array('Form' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
+        $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
             , 'Tutor Checklist');
 
         //get the current year
@@ -250,7 +261,7 @@ class Controller
 
         //this is for building up a navbar
         $this->navBuilder(array('Checklist' => '../checklist/' . $param["id"], 'Logout' => '../logout')
-            , array('../styles/formStyle.css'), 'Onboarding Form');
+            , array('../styles/formStyle.css'), 'Profile');
 
         global $dirName;
         //retrieving data form database
@@ -518,7 +529,7 @@ class Controller
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
         $currentYear = $this->_db->getYearId($param['id']);
         //get the all the files of current year uploaded by tutors
-        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear,$param['id']));
+        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear, $param['id']));
 
         //let admin download the tutor's image
         if (isset($_GET['download'])) {
@@ -731,6 +742,13 @@ class Controller
 
         }
 
+        // Delete item
+        if (isset($_POST["itemDelete"])) {
+            $this->_db->deleteItem($itemId);
+            $currentYear = $this->_db->getCurrentYear();
+            $this->_f3->reroute("tutors/$currentYear");
+        }
+
         // Move Up
         if (isset($_POST["moveUp"])) {
             $this->_db->updateStateOrder($_POST["stateId"], -1);
@@ -741,18 +759,11 @@ class Controller
             $this->_db->updateStateOrder($_POST["stateId"], 1);
         }
 
-        // Check for default state warnings
         $defaults = $this->_db->getStateCount($itemId, "default");
-        if ($defaults > 1) {
-            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
-        } else if ($defaults < 1) {
-            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
-        }
 
-        // Showing error messages for delete state
+        // Error messages for delete state
         if (isset($_POST["stateDelete"])) {
             if ($defaults < 1) {
-                // There must be at least one default state set
                 $this->_f3->set("defaultError", "You must have a default state set before deleting this state!");
             } else if ($defaults == 1 && $_POST["stateSetBy"] == "default") {
                 // Error for if the user is trying to delete the only default state
@@ -769,10 +780,32 @@ class Controller
             }
         }
 
-        if (isset($_POST["itemDelete"])) {
-            $this->_db->deleteItem($itemId);
-            $currentYear = $this->_db->getCurrentYear();
-            $this->_f3->reroute("tutors/$currentYear");
+        $defaults = $this->_db->getStateCount($itemId, "default");
+
+        // Default state warnings
+        if ($defaults > 1) {
+            // More than one default state warning
+            $this->_f3->set("defaultWarning", "You have more than one default state set! Please have only one default state for this item. Having more than one default states can result in errors displaying the item.");
+        } else if ($defaults < 1) {
+            // No default state warning
+            $this->_f3->set("defaultWarning", "You do not have a default state set! Please have exactly one default state for this item. Having no default states can result in errors displaying the item.");
+        }
+
+        // Other state warnings
+
+        // Check if the item has more than 2 items on a checkbox
+        if ($this->_db->getItem($itemId)["item_type"] == "checkbox") {
+            if ($this->_db->getMaxState($itemId) > 2) {
+                $this->_f3->set("stateWarning", "You have more than two states set for a checkbox item. Checkboxes will only use the item's first two states.");
+            }
+        }
+        // Check if an item has more than one tutor state
+        if ($this->_db->getStateCount($itemId, "tutor") > 1) {
+            $this->_f3->set("stateWarning", "You have two or more states set by the tutor. Having multiple states set by the tutor can result errors displaying the tutor's checklist. If you need tutors to take another action, consider adding another item instead.");
+        }
+
+        if ($this->_db->getStateCount($itemId, "all") <= 1) {
+            $this->_f3->set("stateWarning", "Items should have at least 2 states.");
         }
 
 
