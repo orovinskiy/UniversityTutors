@@ -683,10 +683,17 @@ class Controller
                 }
                 $this->_db->updateItemIsUpload($uploadRequired, $itemId);
 
-                // var_dump($_FILES);
+//                 var_dump($_FILES);
                 if (isset($_FILES['fileToUpload'])) {
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        //checking if the file type is doc
+                        if ($_FILES['fileToUpload']['type'] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                            //add the docx extension
+                            $_FILES['fileToUpload']['type'] = ".docx";
+                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . $_FILES['fileToUpload']['type'];
+                        } else {
+                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        }
                         move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
                         $this->_db->updateItemTable($fileName, $itemId);
                     }
