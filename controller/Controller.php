@@ -390,6 +390,10 @@ class Controller
         //when form is posted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //var_dump($_POST);
+
+            //set user name and user password in hive variable
+            $this->_f3->set("username",$_POST['username']);
+            $this->_f3->set("password",$_POST['password']);
             //attempt to grab user info from login credentials
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found

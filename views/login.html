@@ -29,7 +29,7 @@ Login page for university tutors website
     <form method="post" action="#">
         <div class="form-group mt-2 val-empty val-hasSpaces"> <!--Username Div -->
             <label class="h2" for="username">Username </label>
-            <input class="input" type="text" size=30 id="username" name="username">
+            <input class="input" type="text" size=30 id="username" name="username" value="{{ @username }}">
             <check if="{{ @errors['username'] }}">
                 <p class="err-validate">{{ @errors['username'] }}</p>
             </check>
@@ -38,7 +38,7 @@ Login page for university tutors website
 
         <div class="form-group val-empty val-hasSpaces"> <!-- Password Div -->
             <label class="h2" for="password">&nbsp;Password </label>
-            <input class="input" type="password" size=30 id="password" name="password">
+            <input class="input" type="password" size=30 id="password" name="password" value="{{ @password}}">
             <check if="{{ @errors['password'] }}">
                 <p class="err-validate">{{ @errors['password'] }}</p>
             </check>
