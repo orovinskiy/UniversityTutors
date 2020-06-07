@@ -126,7 +126,13 @@ class Controller
         } else if (isset($_POST["current_year"])) {
             $this->_db->setCurrentYear($_POST["current_year"]);
         } else if (isset($_POST["user_id"])) {
-            $this->_db->importUser($_POST["user_id"]);
+            // check if user already exists in this year
+            if ($this->_db->getTutorYear($_POST["user_id"]) == NULL) {
+                $this->_db->importUser($_POST["user_id"]);
+                echo "true";
+            } else {
+                echo "Tutor already exists in the current year";
+            }
         } else if (isset($_POST["remove"])) {
             $this->_db->removeFromYear($_POST["tutorYear_id"]);
         } else if (isset($_POST['subject']) && isset($_POST['body'])) { //updating default email info
@@ -523,7 +529,7 @@ class Controller
         $this->_f3->set("ssn", $this->decryption($tutor["tutor_ssn"]));
         $currentYear = $this->_db->getYearId($param['id']);
         //get the all the files of current year uploaded by tutors
-        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear,$param['id']));
+        $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear, $param['id']));
 
         //let admin download the tutor's image
         if (isset($_GET['download'])) {

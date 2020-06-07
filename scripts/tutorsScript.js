@@ -187,11 +187,14 @@ $(".import").on("click", function () {
         // ajax importing
         $.post("../tutorsAjax", {
             user_id: user_id
-        }, function () {
+        }, function (result) {
             //hide Import button after displaying success message
-            alert("Tutor imported successfully ");
-            $(".import").hide();
-            //TODO error message if user already exists in that year
+            if (result === "true") {
+                $(".import").hide();
+            } else {
+                alert("Import failed: " + result);
+            }
+
         });
 
     }
