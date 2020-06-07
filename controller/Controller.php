@@ -771,6 +771,8 @@ class Controller
             }
         }
 
+        $defaults = $this->_db->getStateCount($itemId, "default");
+
         // Default state warnings
         if ($defaults > 1) {
             // More than one default state warning
