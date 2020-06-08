@@ -238,6 +238,7 @@ class Controller
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist', $checkBoxes);
         $this->_f3->set('db', $this->_db);
+        $this->_f3->set('imgBio',$this->_db->getTutorBioImage($param['userId']));
         $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
 
 

@@ -323,6 +323,18 @@ class Database
         return $finalRes;
     }
 
+    function getTutorBioImage($userID){
+        $sql = "SELECT tutor_bio, tutor_image FROM Tutor WHERE user_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$userID]);
+
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $results;
+    }
+
     /**This function gets the name of a tutor based on the id
      * @param int $userID the id of a user
      * @return string The full name of a user

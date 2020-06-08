@@ -42,33 +42,49 @@ $("body").on("click",".big",function()
     //predefined variables
     let wholeCheckBox = $(this).parents(":eq(6)");
     let dataValue;
+    let uploadFile = $(this).parents(":eq(3)");
+    let proceed = true;
 
-    //remove whole checkbox
-    wholeCheckBox.remove();
+    //check if the file upload exits
+    if(uploadFile.find('.big').length){
+        if(uploadFile.find('.uploads').length === 0){
+            proceed = false;
+        }
+    }
 
-    //check what data to put into the database
-    if($(this).is(":checked")){
+    if(proceed){
+        //remove whole checkbox
+        wholeCheckBox.remove();
 
-        dataValue = parseInt($(this).data('order'))+1;
-        wholeCheckBox.find('input').attr('data-order',dataValue);
-        wholeCheckBox.find('label').html('Completed');
-        wholeCheckBox.find('.checkHide').toggleClass('hidden');
-        $(".completedBox").append(wholeCheckBox);
+        //check what data to put into the database
+        if($(this).is(":checked")){
 
+            dataValue = parseInt($(this).data('order'))+1;
+            wholeCheckBox.find('input').attr('data-order',dataValue);
+            wholeCheckBox.find('label').html('Completed');
+            wholeCheckBox.find('.checkHide').toggleClass('hidden');
+            $(".completedBox").append(wholeCheckBox);
+
+        }
+        else{
+            dataValue = parseInt($(this).data('order'))-1;
+            wholeCheckBox.find('input').attr('data-order',dataValue);
+            wholeCheckBox.find('.checkHide').toggleClass('hidden');
+            wholeCheckBox.find('label').html('Complete');
+            $(".notCompletedBox").append(wholeCheckBox);
+        }
+
+        //Post to makeBox to save the data
+        $.post("../makeBox",
+            {
+                user: $(this).val(),
+                value : dataValue,
+                item: $(this).attr('id')
+            });
     }
     else{
-        dataValue = parseInt($(this).data('order'))-1;
-        wholeCheckBox.find('input').attr('data-order',dataValue);
-        wholeCheckBox.find('.checkHide').toggleClass('hidden');
-        wholeCheckBox.find('label').html('Complete');
-        $(".notCompletedBox").append(wholeCheckBox);
+        alert('Please upload a file before checking off the task.');
+        this.checked = false; // reset first
+        event.preventDefault();
     }
-
-    //Post to makeBox to save the data
-    $.post("../makeBox",
-        {
-            user: $(this).val(),
-            value : dataValue,
-            item: $(this).attr('id')
-        });
 });
