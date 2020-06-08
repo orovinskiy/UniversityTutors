@@ -9,11 +9,14 @@ let table;
 $(document).ready(function () {
     let checkboxArray = []
     let selectArray = []
+    let add = 0;
     $("th").each(function ($item) {
         if ($(this).data("type") === "select") {
             selectArray.push($item);
-        } else {
+        } else if ($(this).data("type") === "checkbox") {
             checkboxArray.push($item);
+        } else {
+            add = $item;
         }
     });
     console.log(checkboxArray);
@@ -23,7 +26,8 @@ $(document).ready(function () {
         scrollX: true,
         columnDefs: [
             {width: "150px", "targets": selectArray},
-            {width: "50px", "targets": checkboxArray}
+            {width: "50px", "targets": checkboxArray},
+            {width: "500px", "targets": add}
         ],
         fixedColumns:   {
             leftColumns: 1

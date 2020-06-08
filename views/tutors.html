@@ -36,14 +36,14 @@ Page for admin viewing and management of tutor onboarding data.
             <tr>
                 <th data-type="select">Name</th>
                 <th data-type="select">Email</th>
-                <th data-type="check">Bio</th>
-                <th data-type="check">Picture</th>
+                <th data-type="checkbox">Bio</th>
+                <th data-type="checkbox">Picture</th>
                 <repeat group="{{ @items }}" value="{{ @item }}">
                     <th data-type="{{ @item['item_type'] }}">{{ @item['item_name'] }}
                         <a href="../edit/{{ @item['item_id'] }}"><img class="edit-item" src="../styles/images/edit.svg"></a>
                     </th>
                 </repeat>
-                <th data-type="check"><a id="add-new-item" href="../edit/0">Add <img id="add-img" src="../styles/images/add.svg"></a></th>
+                <th data-type="add"><a id="add-new-item" href="../edit/0">Add <img id="add-img" src="../styles/images/add.svg"></a></th>
             </tr>
             </thead>
             <tbody>
