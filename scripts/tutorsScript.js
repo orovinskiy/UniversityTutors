@@ -27,7 +27,7 @@ $(document).ready(function () {
         columnDefs: [
             {width: "150px", "targets": selectArray},
             {width: "50px", "targets": checkboxArray},
-            {width: "500px", "targets": add}
+            {width: "1500px", "targets": add}
         ],
         fixedColumns:   {
             leftColumns: 1
