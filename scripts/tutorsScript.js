@@ -5,8 +5,28 @@
 
 // Creates tutors DataTable
 $(document).ready(function () {
+    let checkboxArray = []
+    let selectArray = []
+    $("th").each(function ($item) {
+        if ($(this).data("type") === "select") {
+            selectArray.push($item);
+        } else {
+            checkboxArray.push($item);
+        }
+    });
+    console.log(checkboxArray);
+    console.log(selectArray);
     $('#tutors-table').DataTable({
-        responsive: true
+        //autoWidth: false,
+        scrollX: true,
+        fixedHeader: true,
+        columnDefs: [
+            {width: "150px", "targets": selectArray},
+            {width: "50px", "targets": checkboxArray}
+        ],
+        fixedColumns:   {
+            leftColumns: 1
+        }
     });
 });
 

@@ -34,12 +34,12 @@ Page for admin viewing and management of tutor onboarding data.
         <table id="tutors-table" class="compact stripe">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Bio</th>
-                <th>Picture</th>
+                <th data-type="select">Name</th>
+                <th data-type="select">Email</th>
+                <th data-type="check">Bio</th>
+                <th data-type="check">Picture</th>
                 <repeat group="{{ @items }}" value="{{ @item }}">
-                    <th>{{ @item['item_name'] }}
+                    <th data-type="{{ @item['item_type'] }}">{{ @item['item_name'] }}
                         <a href="../edit/{{ @item['item_id'] }}"><img class="edit-item" src="../styles/images/edit.svg"></a>
                     </th>
                 </repeat>
@@ -245,6 +245,8 @@ Page for admin viewing and management of tutor onboarding data.
 
 <!-- DataTables -->
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.1/js/dataTables.fixedColumns.min.js"></script>
 
 <script src="../scripts/tutorsScript.js"></script>
 </body>
