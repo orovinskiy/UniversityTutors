@@ -3,6 +3,8 @@
  * @author Keller Flint
  */
 
+let table;
+
 // Creates tutors DataTable
 $(document).ready(function () {
     let checkboxArray = []
@@ -16,10 +18,9 @@ $(document).ready(function () {
     });
     console.log(checkboxArray);
     console.log(selectArray);
-    $('#tutors-table').DataTable({
+    table = $('#tutors-table').DataTable({
         //autoWidth: false,
         scrollX: true,
-        fixedHeader: true,
         columnDefs: [
             {width: "150px", "targets": selectArray},
             {width: "50px", "targets": checkboxArray}
@@ -28,6 +29,11 @@ $(document).ready(function () {
             leftColumns: 1
         }
     });
+});
+
+// redraw table on size change
+$(window).resize(function(){
+    table.draw();
 });
 
 // Event listener for updating checkboxes
