@@ -390,6 +390,10 @@ class Controller
         //when form is posted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //var_dump($_POST);
+
+            //set user name and user password in hive variable
+            $this->_f3->set("username", $_POST['username']);
+            $this->_f3->set("password", $_POST['password']);
             //attempt to grab user info from login credentials
             $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
             //check to see if valid input was found
@@ -661,6 +665,7 @@ class Controller
      *
      * @param int $itemId The id of the item being edited
      * @author Keller Flint
+     * @author laxmi (file uploading)
      */
     function editPage($itemId)
     {
@@ -677,38 +682,47 @@ class Controller
             }
             // Save Item
             if (isset($_POST["itemSave"])) {
-                $uploadRequired = 0;
-                if (isset($_POST['uploadRequired'])) {
-                    $uploadRequired = 1;
-                }
-                $this->_db->updateItemIsUpload($uploadRequired, $itemId);
-
-                // var_dump($_FILES);
-                if (isset($_FILES['fileToUpload'])) {
-                    if (!empty($_FILES['fileToUpload']['name'])) {
-                        $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
-                        $this->_db->updateItemTable($fileName, $itemId);
-                    }
-                }
-                if ($this->_val->validateItem($_POST["itemName"])) {
-                    $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
-                } else {
-                    $this->_f3->set("errors", $this->_val->getErrors());
-                }
-
                 // Creating a new item
                 if ($itemId == 0) {
                     if ($this->_val->validateItem($_POST["itemName"])) {
                         $itemId = $this->_db->addItem($_POST["itemName"], $_POST["itemType"]);
-                        $this->_f3->reroute("edit/$itemId");
                     } else {
                         $this->_f3->set("errors", $this->_val->getErrors());
                     }
                 }
+                //Updating existing item
+                else {
+                    if ($this->_val->validateItem($_POST["itemName"])) {
+                        $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
+                    } else {
+                        $this->_f3->set("errors", $this->_val->getErrors());
+                    }
+                }
+                //file uploading
+                if (isset($_FILES['fileToUpload'])) {
+                    if (!empty($_FILES['fileToUpload']['name'])) {
+                        if ($_FILES['fileToUpload']['type'] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                            //add the docx extension
+                            $_FILES['fileToUpload']['type'] = ".docx";
+                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . $_FILES['fileToUpload']['type'];
+                        } else {
+                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        }
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
+                        $this->_db->updateItemTable($fileName, $itemId);
+                    }
+                }
+
+                //Checking if tutor's are required to upload file or not
+                $uploadRequired = 0;
+                if (isset($_POST['uploadRequired'])) {
+                    $uploadRequired = 1;
+                }
+                //update database if admin requires tutor to upload file
+                $this->_db->updateItemIsUpload($uploadRequired, $itemId);
+                $this->_f3->reroute("edit/$itemId");
             }
         }
-
 
         // Save State
         if (isset($_POST["stateSave"])) {
