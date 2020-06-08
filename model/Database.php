@@ -74,7 +74,6 @@ class Database
                 WHERE tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$tutorYearId]);
-
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -106,6 +105,8 @@ class Database
         $sql = "UPDATE ItemTutorYear SET state_id = ? WHERE item_id = ? AND tutorYear_id = ?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$stateId, $itemId, $tutorYearId]);
+
+        return "true";
     }
 
     /**
@@ -269,12 +270,13 @@ class Database
      * @param int $itemId id of item()
      * @param int $tutorYear id of tutorYear
      */
-    function updateFileItem($filename,$itemId,$tutorYear){
+    function updateFileItem($filename, $itemId, $tutorYear)
+    {
         $sql = 'UPDATE ItemTutorYear SET itemTutorYear_file = ? WHERE item_id = ? AND tutorYear_id = ?';
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$filename, $itemId,$tutorYear]);
+        $statement->execute([$filename, $itemId, $tutorYear]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -300,7 +302,6 @@ class Database
         $statement->execute([$userID, $year]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
         $finalRes = array();
         foreach ($results as $array) {
             $allStates = $this->getStates($array['item_id']);
@@ -402,7 +403,7 @@ class Database
      */
     function getNextStateText($stateID, $order)
     {
-        $order=$order+1;
+        $order = $order + 1;
         $sql = "SELECT State.state_text FROM State WHERE State.item_id = ? AND state_order = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -807,10 +808,18 @@ class Database
      */
     function getStateCount($itemId, $state)
     {
-        $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?;";
-        $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$itemId, $state]);
-        return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        $sql = "";
+        if ($state == "all") {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        } else {
+            $sql = "SELECT count(state_set_by) AS count FROM State WHERE item_id = ? AND state_set_by = ?";
+            $statement = $this->_dbh->prepare($sql);
+            $statement->execute([$itemId, $state]);
+            return $statement->fetch(PDO::FETCH_ASSOC)["count"];
+        }
     }
 
     /**
@@ -1056,5 +1065,59 @@ class Database
         $sql = "UPDATE Item SET item_file= NULL WHERE item_id =?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
+    }
+
+    /**
+     * Gets the tutor upload files
+     * @param string $currentYear the current year
+     * @param int $tutorId tutor year id
+     * @return array Array of items uploaded by tutor in that specified year
+     * @author Laxmi Kandel
+     */
+    function getItemTutor($currentYear, $tutorId)
+    {
+        $sql = "select itemTutorYear_file from tutors.ItemTutorYear
+                inner join tutors.TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id
+                inner join tutors.Tutor on TutorYear.user_id = Tutor.user_id
+                where ItemTutorYear.tutorYear_id = ?
+                and Tutor.user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$currentYear, $tutorId]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the yearId of the given tutor
+     * @param int $userId tutor's id
+     * @return array  Array of tutorYear_id of given user_id
+     * @author Laxmi Kandel
+     */
+    function getYearId($userId)
+    {
+        $sql = "select tutorYear_id from tutors.TutorYear
+                inner join tutors.Tutor on Tutor.user_id = TutorYear.user_id
+                where Tutor.user_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$userId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)['tutorYear_id'];
+    }
+
+    /**
+     * Delete the given tutor year data
+     *
+     * @param int $tutorYearId The tutorYearId of the tutor to be deleted
+     * @author Keller Flint
+     */
+    function removeFromYear($tutorYearId)
+    {
+        // delete item data for tutorYear id
+        $sql = "DELETE FROM ItemTutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
+
+        // delete user data from tutorYear id
+        $sql = "DELETE FROM TutorYear WHERE tutorYear_id = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$tutorYearId]);
     }
 }
