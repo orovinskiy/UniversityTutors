@@ -517,6 +517,8 @@ class Controller
      */
     function tutorInfoPage($param)
     {
+//        echo class_exists('ZipArchive');
+
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($_SESSION['user_id']);
 
@@ -535,12 +537,30 @@ class Controller
         //get the all the files of current year uploaded by tutors
         $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear, $param['id']));
 
+        //creating zip folder
+        $zip = new ZipArchive();
+        $zipFile = ($tutor['tutor_first'] . "_" . $tutor['tutor_last'] . "_" . $param['id'] . ".zip");
+        $this->_f3->set("zipFolderName", $zipFile);
+
+        //if zip file already exist delete it
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile)) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile);
+        }
+
+        //open zip file when has been created
+        $zip->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile, ZipArchive::CREATE);
+        foreach ($this->_f3->get("filesToDownload") as $file) {
+            if (!empty($file['itemTutorYear_file'])) {
+                $zip->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+            }
+        }
+        //close and save zip archive
+        $zip->close();
+
         //let admin download the tutor's image
         if (isset($_GET['download'])) {
             $tutorImage = $this->_db->getTutorById($param["id"])["tutor_image"];//gets the image name from db
-//            echo $tutorImage;
             $filePath = 'uploads/' . $tutorImage;
-//            echo $filePath; //gets the file path
             if (file_exists($filePath)) {
                 //description of file/content
                 header('Content-Description: File Transfer');
@@ -669,7 +689,6 @@ class Controller
      */
     function editPage($itemId)
     {
-
         // Nav builder
         $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), array("../styles/itemEditStyle.css"), 'Column Edit');
@@ -689,8 +708,7 @@ class Controller
                     } else {
                         $this->_f3->set("errors", $this->_val->getErrors());
                     }
-                }
-                //Updating existing item
+                } //Updating existing item
                 else {
                     if ($this->_val->validateItem($_POST["itemName"])) {
                         $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
@@ -842,6 +860,7 @@ class Controller
     {
         return $itemName . "-" . $itemId;
     }
+
 }
 
 
