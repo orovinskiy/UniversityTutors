@@ -139,11 +139,12 @@ class Mail {
      * @param String $from Sender of email
      * @param String $from_name Name of sender
      * @param String $loginBody login portion of welcome email
+     * @param string $type type of email being send, 'normal' is default parameter
      * @return bool true if email was sent successfully, false otherwise
      * @throws phpmailerException
      * @author Dallas Sloan and GitHub
      */
-    function smtpmailer($to, $from, $from_name, $loginBody)
+    function smtpmailer($to, $from, $from_name, $loginBody, $type = 'normal')
     {
         $this->pullFromJSON();
         //instantiating new mailer object
@@ -157,30 +158,38 @@ class Mail {
         $mail->Username = 'universitytutors@kold-tutors.greenriverdev.com';
         $mail->Password = 'Monday!99';
 
-        //check to see if there are any attachments to be added if there are, add attachment to email
-        if (!empty($this->_defaultAttachments))
-        {
-            for ($i = 0; $i < count($this->_defaultAttachments); $i++)
-            {
-                $mail->addAttachment($this->_defaultAttachments[$i]);
+        //checking to see what type of email to send
+        if ($type == "normal") {
+            //check to see if there are any attachments to be added if there are, add attachment to email
+            if (!empty($this->_defaultAttachments)) {
+                for ($i = 0; $i < count($this->_defaultAttachments); $i++) {
+                    $mail->addAttachment($this->_defaultAttachments[$i]);
+                }
             }
+
+
+            //email information
+            $mail->IsHTML(true);
+            $mail->From = $from;
+            $mail->FromName = $from_name;
+            $mail->Sender = $from;
+            $mail->AddReplyTo($from, $from_name);
+            $mail->Subject = $this->_subject;
+            $mail->Body = "<p>" . $this->_body . "</p>" . "<p>$loginBody</p>";
+            $mail->AddAddress($to);
+        } else {
+            //email information
+            $mail->IsHTML(true);
+            $mail->From = $from;
+            $mail->FromName = $from_name;
+            $mail->Sender = $from;
+            $mail->AddReplyTo($from, $from_name);
+            $mail->Subject = "Temporary Password";
+            $mail->Body = "<p>" . $loginBody . "</p>";
+            $mail->AddAddress($to);
+
         }
 
-        //adding attachments to email
-        //$path = 'attachments/IT355.zip';
-        //$path2 = 'attachments/PyramidMod.png';
-        //$mail->AddAttachment($path);
-        //$mail->AddAttachment($path2);
-
-        //email information
-        $mail->IsHTML(true);
-        $mail->From = $from;
-        $mail->FromName = $from_name;
-        $mail->Sender = $from;
-        $mail->AddReplyTo($from, $from_name);
-        $mail->Subject = $this->_subject;
-        $mail->Body = "<p>" . $this->_body . "</p>" . "<p>$loginBody</p>";
-        $mail->AddAddress($to);
         //checking whether or not email was successful
         if (!$mail->Send()) {
             //$error ="Please try Later, Error Occurred while Processing...";

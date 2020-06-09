@@ -33,6 +33,42 @@ what forms they have already completed
                 <legend>To Be Completed</legend>
                 <div class="notCompletedBox">
 
+                    <!-- check for bio and image -->
+                    <repeat group="{{@imgBio}}" key="{{@name}}"  value="{{@value}}">
+                        <check if="{{empty(@value)}}">
+                            <div class="mb-3">
+                                <section class="card">
+                                    <check if="{{@name === 'tutor_image'}}">
+                                        <true>
+                                            <h2 class="card-header bg-light pl-5">Professional Head Shot</h2>
+                                        </true>
+                                        <false>
+                                            <h2 class="card-header bg-light pl-5">Bio</h2>
+                                        </false>
+                                    </check>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-7">
+                                                <check if="{{@name === 'tutor_image'}}">
+                                                    <true>
+                                                        <p class=" mt-3 mb-3 mr-1 ml-5">You haven't uploaded your head shot yet. To upload a head shot visit your
+                                                        <a href="../form/{{@userID}}">Profile</a>.
+                                                        </p>
+                                                    </true>
+                                                    <false>
+                                                        <p class=" mt-3 mb-3 mr-1 ml-5">You haven't written your bio yet. To write your bio visit your
+                                                            <a href="../form/{{@userID}}">Profile</a>.
+                                                        </p>
+                                                    </false>
+                                                </check>
+                                            </div>
+                                        </div>
+                                    </div><!-- Card Body -->
+                                </section>
+                            </div>
+                        </check>
+                    </repeat>
+
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checklist}}"  value="{{@isChecked}}">
                         <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_set_by'] !='tutor' }}">
@@ -41,7 +77,7 @@ what forms they have already completed
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
                                     <div class="card-body">
                                         <check if="{{!empty(@isChecked['item_file'])}}">
-                                            <div class=" mb-3">
+                                            <div class=" mb-3 ml-5">
                                                 <i class='far fa-file-alt'></i>
                                                 <a target="_blank" href="../uploads/{{@isChecked['item_file']}}"
                                                    download="{{@isChecked['item_file']}}">PDF Download</a>
@@ -51,10 +87,10 @@ what forms they have already completed
                                             <div class="col-lg-8 col-md-7">
                                                 <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) =='tutor'">
                                                     <true>
-                                                        <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@db->getNextStateText(@isChecked['item_id'],@isChecked['state_order'])}}</p>
+                                                        <p class=" mt-3 mb-3 mr-1 ml-5">{{@db->getNextStateText(@isChecked['item_id'],@isChecked['state_order'])}}</p>
                                                     </true>
                                                     <false>
-                                                        <p class="text-center mt-3 mb-3 mr-1 ml-1">Please Wait for admin to activate this for you.</p>
+                                                        <p class=" mt-3 mb-3 mr-1 ml-5">Please Wait for admin to activate this for you.</p>
                                                     </false>
                                                 </check>
                                             </div>
@@ -106,6 +142,42 @@ what forms they have already completed
                 <legend>Completed</legend>
                 <div class="completedBox">
 
+                    <!-- check for bio and image -->
+                    <repeat group="{{@imgBio}}" key="{{@name}}"  value="{{@value}}">
+                        <check if="{{!empty(@value)}}">
+                            <div class="mb-3">
+                                <section class="card">
+                                    <check if="{{@name === 'tutor_image'}}">
+                                        <true>
+                                            <h2 class="card-header bg-light pl-5">Professional Head Shot</h2>
+                                        </true>
+                                        <false>
+                                            <h2 class="card-header bg-light pl-5">Bio</h2>
+                                        </false>
+                                    </check>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-7">
+                                                <check if="{{@name === 'tutor_image'}}">
+                                                    <true>
+                                                        <p class="mt-3 mb-3 mr-1 ml-5">You have successfully uploaded your head shot. To update your head shot visit your
+                                                            <a href="../form/{{@userID}}">Profile</a>.
+                                                        </p>
+                                                    </true>
+                                                    <false>
+                                                        <p class="mt-3 mb-3 mr-1 ml-5">You have successfully written your bio. To update your bio visit your
+                                                            <a href="../form/{{@userID}}">Profile</a>.
+                                                        </p>
+                                                    </false>
+                                                </check>
+                                            </div>
+                                        </div>
+                                    </div><!-- Card Body -->
+                                </section>
+                            </div>
+                        </check>
+                    </repeat>
+
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checklist}}"  value="{{@isChecked}}">
                         <check if="{{@isChecked['state_set_by'] == 'tutor'}}">
@@ -114,7 +186,7 @@ what forms they have already completed
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
                                     <div class="card-body">
                                         <check if="{{!empty(@isChecked['item_file'])}}">
-                                            <div class=" mb-3">
+                                            <div class=" mb-3 ml-5">
                                                 <i class='far fa-file-alt'></i>
                                                 <a target="_blank" href="../uploads/{{@isChecked['item_file']}}"
                                                    download="{{@isChecked['item_file']}}">PDF Download</a>
@@ -123,7 +195,7 @@ what forms they have already completed
                                         <div class="row">
                                             <div class="col-lg-8 col-md-7">
                                                 <div class="card-text">
-                                                    <p class="text-center mt-3 mb-3 mr-1 ml-1">{{@isChecked['state_text']}}</p>
+                                                    <p class=" mt-3 mb-3 mr-1 ml-5">{{@isChecked['state_text']}}</p>
                                                 </div>
                                             </div><!-- Column 7 -->
                                             <div class="col-lg-3 col-md-4 ml-md-5">
@@ -131,7 +203,7 @@ what forms they have already completed
                                                     <div class="row">
                                                         <div >
                                                             <i class='far fa-file-alt'></i>
-                                                            <a target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
+                                                            <a class="uploads" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
                                                                download="{{@isChecked['itemTutorYear_file']}}">
                                                                 {{@isChecked['itemTutorYear_file']}}
                                                             </a>

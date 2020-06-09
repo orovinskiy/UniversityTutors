@@ -40,6 +40,7 @@ Styles for the admin tutors table
 
 th {
     font-size: 1em;
+    white-space: nowrap;
 }
 
 .year-change {
