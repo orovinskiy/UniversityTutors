@@ -17,7 +17,7 @@ Page to display additional information about a tutor that does not appear on the
                 <!--Display the tutor uploaded files retrieved from database-->
                 <div class="mt-4">
                     <p class="h5 text-success">Files uploaded by tutors </p>
-                    <!--                    Download file if uploaded by user-->
+                    <!--Download file if uploaded by user-->
                     <check if="{{@tutor['tutor_image']!=NULL}}">
                         <true>
                             <button type="submit" class="btn btn-info download mb-4" name="download"

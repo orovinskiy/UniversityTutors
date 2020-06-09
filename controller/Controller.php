@@ -75,6 +75,29 @@ class Controller
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
 
+        //get all files uploaded by tutors in specific year
+        $this->_f3->set("allFiles" , $this->_db->getAllTutorUploads($this->_db->getCurrentYear()));
+
+        //creating zip folder
+        $zipFolder = new ZipArchive();
+        $zipFiles = ($currentYear."files" .".zip");
+        $this->_f3->set("zipFolderYear", $zipFiles);
+
+        //if zip file already exist delete it
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles)) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles);
+        }
+
+        //open zip file when has been created
+        $zipFolder->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles, ZipArchive::CREATE);
+        foreach ($this->_f3->get("allFiles") as $file) {
+            if (!empty($file['itemTutorYear_file'])) {
+                $zipFolder->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+            }
+        }
+        //close and save zip archive
+        $zipFolder->close();
+
         // Store tutor data is hive
         $this->_f3->set("tableData", $tableData);
         $this->_f3->set("items", $items);
@@ -517,8 +540,6 @@ class Controller
      */
     function tutorInfoPage($param)
     {
-//        echo class_exists('ZipArchive');
-
         //checking to see if user is logged in. If not logged in, will redirect to login page
         $this->isLoggedIn($_SESSION['user_id']);
 

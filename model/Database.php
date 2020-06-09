@@ -1108,4 +1108,22 @@ class Database
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$tutorYearId]);
     }
+
+    /**
+     * Get all files uploaded by tutor of specific year
+     * @param year  $currentYear specified year
+     * @return array Array of all files upload by tutors of specified year
+     * @author Laxmi Kandel
+     */
+    function getAllTutorUploads($currentYear)
+    {
+        $sql = "SELECT ItemTutorYear.itemTutorYear_file FROM ItemTutorYear 
+                inner join TutorYear on ItemTutorYear.tutorYear_id = TutorYear.tutorYear_id
+                where tutorYear_year = ?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$currentYear]);
+        return ($statement->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+
 }
