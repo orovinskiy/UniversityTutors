@@ -61,6 +61,8 @@ class Controller
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
                 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
+                'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css',
+                'https://cdn.datatables.net/fixedcolumns/3.3.1/css/fixedColumns.dataTables.min.css',
                 '../styles/tutorsStyle.css'), 'Tutors');
 
         // Get current year
@@ -238,7 +240,7 @@ class Controller
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist', $checkBoxes);
         $this->_f3->set('db', $this->_db);
-        $this->_f3->set('imgBio',$this->_db->getTutorBioImage($param['userId']));
+        $this->_f3->set('imgBio', $this->_db->getTutorBioImage($param['userId']));
         $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
 
 
@@ -722,8 +724,7 @@ class Controller
                     } else {
                         $this->_f3->set("errors", $this->_val->getErrors());
                     }
-                }
-                //Updating existing item
+                } //Updating existing item
                 else {
                     if ($this->_val->validateItem($_POST["itemName"])) {
                         $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
