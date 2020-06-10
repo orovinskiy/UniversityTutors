@@ -22,11 +22,12 @@ class Controller
      * @param string $title This will be the title of the page
      * @author Oleg
      */
-    private function navBuilder($link, $style, $title)
+    private function navBuilder($link, $style, $title,$ext)
     {
         $this->_f3->set('link', $link);
         $this->_f3->set('style', $style);
         $this->_f3->set('title', $title);
+        $this->_f3->set('ext', $ext);
     }
 
     /**
@@ -63,7 +64,7 @@ class Controller
                 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
                 'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css',
                 'https://cdn.datatables.net/fixedcolumns/3.3.1/css/fixedColumns.dataTables.min.css',
-                '../styles/tutorsStyle.css'), 'Tutors');
+                '../styles/tutorsStyle.css'), 'Tutors','../');
 
         // Get current year
         $currentYear = $this->_db->getCurrentYear();
@@ -250,7 +251,7 @@ class Controller
 
         //this is for building up a navbar
         $this->navBuilder(array('Profile' => '../form/' . $param['userId'], 'Logout' => '../logout'), array('../styles/checklist.css')
-            , 'Tutor Checklist');
+            , 'Tutor Checklist','../');
 
         //get the current year
         $currentYear = $this->_db->getCurrentYear();
@@ -287,7 +288,7 @@ class Controller
 
         //this is for building up a navbar
         $this->navBuilder(array('Checklist' => '../checklist/' . $param["id"], 'Logout' => '../logout')
-            , array('../styles/formStyle.css'), 'Profile');
+            , array('../styles/formStyle.css'), 'Profile','../');
 
         global $dirName;
         //retrieving data form database
@@ -533,7 +534,7 @@ class Controller
             $this->redirects();
         }
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
-            '', 'Admin Manager');
+            '', 'Admin Manager','/');
 
         // add user
         if (isset($_POST["email"])) {
@@ -564,7 +565,7 @@ class Controller
 
         //This is the navbar generating
         $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
-            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor');
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor','../');
 
         $tutor = $this->_db->getTutorById($param["id"]);
 
@@ -747,7 +748,7 @@ class Controller
     {
         // Nav builder
         $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(),
-            'Admin Manager' => '../admin', 'Logout' => '../logout'), array("../styles/itemEditStyle.css"), 'Column Edit');
+            'Admin Manager' => '../admin', 'Logout' => '../logout'), array("../styles/itemEditStyle.css"), 'Column Edit','../');
         global $dirName;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {

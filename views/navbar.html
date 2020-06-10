@@ -13,13 +13,14 @@
             <link rel="stylesheet" href="{{@sheet}}">
         </repeat>
     </check>
-
+    <link rel="stylesheet" href="{{@ext}}styles/nav.css">
+    <link rel="icon" type="image/png" href="{{@ext}}styles/images/logo.png">
     <title>{{@title}}</title>
 </head>
 <body>
 <nav class="navbar bg-dark navbar-dark navbar-expand-sm">
     <div class="container">
-        <a class="navbar-brand d-none d-sm-inline-block" href="">UTSS</a>
+        <img class="logo navbar-brand d-none d-sm-inline-block" src="{{@ext}}styles/images/logo.png" alt="UTSS logo"/>
         <div class="navbar-nav">
             <repeat group="{{@link}}" key="{{@name}}" value="{{@route}}">
                 <a class="nav-item nav-link" href="{{@route}}">{{@name}}</a>
