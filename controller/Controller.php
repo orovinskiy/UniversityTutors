@@ -61,6 +61,8 @@ class Controller
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
                 'https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css',
+                'https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css',
+                'https://cdn.datatables.net/fixedcolumns/3.3.1/css/fixedColumns.dataTables.min.css',
                 '../styles/tutorsStyle.css'), 'Tutors');
 
         // Get current year
@@ -74,6 +76,29 @@ class Controller
 
         $this->_f3->set("year", $param["year"]);
         $this->_f3->set("currentYear", $currentYear);
+
+        //get all files uploaded by tutors in specific year
+        $this->_f3->set("allFiles" , $this->_db->getAllTutorUploads($this->_db->getCurrentYear()));
+
+        //creating zip folder
+        $zipFolder = new ZipArchive();
+        $zipFiles = ($currentYear."files" .".zip");
+        $this->_f3->set("zipFolderYear", $zipFiles);
+
+        //if zip file already exist delete it
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles)) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles);
+        }
+
+        //open zip file when has been created
+        $zipFolder->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles, ZipArchive::CREATE);
+        foreach ($this->_f3->get("allFiles") as $file) {
+            if (!empty($file['itemTutorYear_file'])) {
+                $zipFolder->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+            }
+        }
+        //close and save zip archive
+        $zipFolder->close();
 
         // Store tutor data is hive
         $this->_f3->set("tableData", $tableData);
@@ -238,7 +263,7 @@ class Controller
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist', $checkBoxes);
         $this->_f3->set('db', $this->_db);
-        $this->_f3->set('imgBio',$this->_db->getTutorBioImage($param['userId']));
+        $this->_f3->set('imgBio', $this->_db->getTutorBioImage($param['userId']));
         $this->_f3->set('userName', $this->_db->getTutorName($param['userId']));
 
 
@@ -390,34 +415,49 @@ class Controller
         }
         //when form is posted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            //var_dump($_POST);
+            var_dump($_POST);
+            //checking to see if POST came from forgot password link
+            if (isset($_POST['saveChanges'])) {
+                //check to see if email submitted is valid
+                $user = $this->_db->getUserByEmail($_POST['email']);
+                var_dump($user);
+                if ($user != null) {
+                    $tempPassword = $this->generateRandomString();
+                    //set existing user with new random password
+                    $this->_db->updatePassword($user['user_id'], md5($tempPassword));
+                    //email new password to user
+                    $this->sendForgotEmail($_POST['email'], $tempPassword);
 
-            //set user name and user password in hive variable
-            $this->_f3->set("username", $_POST['username']);
-            $this->_f3->set("password", $_POST['password']);
-            //attempt to grab user info from login credentials
-            $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
-            //check to see if valid input was found
-            if (!empty($userLogin)) {
-                //check if user in the currently running year or if it is admin
-                if ($this->_db->getCurrentYear() == $this->_db->getTutorYear($userLogin['user_id'])['tutorYear_year']
-                    || $this->_db->checkAdmin($userLogin['user_id'])['user_is_admin'] == 1) {
-                    //instantiate new user object
-                    $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
-                    //saving object to session
-                    $_SESSION['user'] = $user;
-                    //setting session login to true
-                    //$_SESSION['user'] = true;
 
-                    //call redirects method to redirect to correct page
-                    $this->redirects();
-                } else {
-                    //User is not in current year list
-                    $this->_f3->set('loginError', "Please Contact admin you are not enrolled as tutor for current year");
                 }
             } else {
-                //login info was not valid set error message
-                $this->_f3->set('loginError', "Invalid Username and/or Password");
+                //set user name and user password in hive variable
+                $this->_f3->set("username", $_POST['username']);
+                $this->_f3->set("password", $_POST['password']);
+                //attempt to grab user info from login credentials
+                $userLogin = $this->_db->login($_POST['username'], md5($_POST['password']));
+                //check to see if valid input was found
+                if (!empty($userLogin)) {
+                    //check if user in the currently running year or if it is admin
+                    if ($this->_db->getCurrentYear() == $this->_db->getTutorYear($userLogin['user_id'])['tutorYear_year']
+                        || $this->_db->checkAdmin($userLogin['user_id'])['user_is_admin'] == 1) {
+                        //instantiate new user object
+                        $user = new User($userLogin['user_id'], $userLogin['user_email'], $userLogin['user_is_admin']);
+                        //saving object to session
+                        $_SESSION['user'] = $user;
+                        //setting session login to true
+                        //$_SESSION['user'] = true;
+
+                        //call redirects method to redirect to correct page
+                        $this->redirects();
+                    } else {
+                        //User is not in current year list
+                        $this->_f3->set('loginError', "Please Contact admin you are not enrolled as tutor for current year");
+                    }
+                } else {
+                    //login info was not valid set error message
+                    $this->_f3->set('loginError', "Invalid Username and/or Password");
+                }
             }
         }
         $view = new Template();
@@ -536,12 +576,30 @@ class Controller
         //get the all the files of current year uploaded by tutors
         $this->_f3->set("filesToDownload", $this->_db->getItemTutor($currentYear, $param['id']));
 
+        //creating zip folder
+        $zip = new ZipArchive();
+        $zipFile = ($tutor['tutor_first'] . "_" . $tutor['tutor_last'] . "_" . $param['id'] . ".zip");
+        $this->_f3->set("zipFolderName", $zipFile);
+
+        //if zip file already exist delete it
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile)) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile);
+        }
+
+        //open zip file when has been created
+        $zip->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile, ZipArchive::CREATE);
+        foreach ($this->_f3->get("filesToDownload") as $file) {
+            if (!empty($file['itemTutorYear_file'])) {
+                $zip->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+            }
+        }
+        //close and save zip archive
+        $zip->close();
+
         //let admin download the tutor's image
         if (isset($_GET['download'])) {
             $tutorImage = $this->_db->getTutorById($param["id"])["tutor_image"];//gets the image name from db
-//            echo $tutorImage;
             $filePath = 'uploads/' . $tutorImage;
-//            echo $filePath; //gets the file path
             if (file_exists($filePath)) {
                 //description of file/content
                 header('Content-Description: File Transfer');
@@ -581,6 +639,23 @@ class Controller
                 Information:</p>" . "<p>Username: " . $to . "</p>" . "<p>Temporary Password: " . $tempPassword . "</p>" .
             "<p>$loginLink</p>";
         $success = $this->_mail->smtpmailer($to, $from, $fromName, $loginBody);
+        return $success;
+    }
+
+    /**
+     * Function that creates and sends an email for Forgot Email functionality on login page
+     * @param String $to email address of email recipient
+     * @param String $tempPassword randomly generated password
+     * @return bool returns true if email was sent successfully false if not sent successfully
+     * @throws phpmailerException
+     * @author Dallas Sloan
+     */
+    function sendForgotEmail($to, $tempPassword)
+    {
+        $from = 'universitytutors@kold-tutors.greenriverdev.com';
+        $fromName = "University Tutors Admin";
+        $body = "<p>Your temporary password is " . $tempPassword . "</p> <p>Please reset password upon login!</p>";
+        $success = $this->_mail->smtpmailer($to, $from, $fromName, $body, "forgot");
         return $success;
     }
 
@@ -670,7 +745,6 @@ class Controller
      */
     function editPage($itemId)
     {
-
         // Nav builder
         $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), array("../styles/itemEditStyle.css"), 'Column Edit');
@@ -690,8 +764,7 @@ class Controller
                     } else {
                         $this->_f3->set("errors", $this->_val->getErrors());
                     }
-                }
-                //Updating existing item
+                } //Updating existing item
                 else {
                     if ($this->_val->validateItem($_POST["itemName"])) {
                         $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
@@ -843,6 +916,7 @@ class Controller
     {
         return $itemName . "-" . $itemId;
     }
+
 }
 
 

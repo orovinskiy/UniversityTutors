@@ -34,16 +34,16 @@ Page for admin viewing and management of tutor onboarding data.
         <table id="tutors-table" class="compact stripe">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Bio</th>
-                <th>Picture</th>
+                <th data-type="select">Name</th>
+                <th data-type="select">Email</th>
+                <th data-type="checkbox">Bio</th>
+                <th data-type="checkbox">Picture</th>
                 <repeat group="{{ @items }}" value="{{ @item }}">
-                    <th>{{ @item['item_name'] }}
+                    <th data-type="{{ @item['item_type'] }}">{{ @item['item_name'] }}
                         <a href="../edit/{{ @item['item_id'] }}"><img class="edit-item" src="../styles/images/edit.svg"></a>
                     </th>
                 </repeat>
-                <th><a id="add-new-item" href="../edit/0">Add <img id="add-img" src="../styles/images/add.svg"></a></th>
+                <th data-type="add"><a id="add-new-item" href="../edit/0">Add <img id="add-img" src="../styles/images/add.svg"></a></th>
             </tr>
             </thead>
             <tbody>
@@ -166,7 +166,15 @@ Page for admin viewing and management of tutor onboarding data.
     <!-- Add new tutor email input and button -->
     <div class="text-primary text-center" id="email-status"></div>
     <div class="row">
-        <div class="col-4"></div>
+        <!--Files uploaded by tutors-->
+        <div class="col-4">
+            <!--show download all files button if admin is current year-->
+            <check if="{{@currentYear}}== {{@year}}">
+                <p><a target="_blank" class="btn btn-info" href="../uploads/{{ @zipFolderYear }}"
+                      download=" {{ @zipFolderYear }}">Download current year files
+                </a></p>
+            </check>
+        </div>
         <div class="col-3 text-center px-1">
             <div class="form-group">
                 <input type="text" id="add-tutor-input" class="form-control" placeholder="someone@example.com">
@@ -178,7 +186,6 @@ Page for admin viewing and management of tutor onboarding data.
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#email-modal"
                     data-whatever="@mdo">Edit Default Email
             </button>
-
             <form method="post" enctype="multipart/form-data">
                 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog"
                      aria-hidden="true">
@@ -245,6 +252,8 @@ Page for admin viewing and management of tutor onboarding data.
 
 <!-- DataTables -->
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.1/js/dataTables.fixedColumns.min.js"></script>
 
 <script src="../scripts/tutorsScript.js"></script>
 </body>
