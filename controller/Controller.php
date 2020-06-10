@@ -533,7 +533,7 @@ class Controller
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
             $this->redirects();
         }
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
+        $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(), 'Logout' => 'logout'),
             '', 'Admin Manager','/');
 
         // add user
@@ -564,7 +564,7 @@ class Controller
 
 
         //This is the navbar generating
-        $this->navBuilder(array('Tutors Info' => '../tutors/' . $this->_db->getCurrentYear(),
+        $this->navBuilder(array('Tutors' => '../tutors/' . $this->_db->getCurrentYear(),
             'Admin Manager' => '../admin', 'Logout' => '../logout'), '', 'Tutor','../');
 
         $tutor = $this->_db->getTutorById($param["id"]);
