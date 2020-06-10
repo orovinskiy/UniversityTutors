@@ -1123,7 +1123,7 @@ class Database
 
     /**
      * Get all files uploaded by tutor of specific year
-     * @param year  $currentYear specified year
+     * @param int  $currentYear specified year
      * @return array Array of all files upload by tutors of specified year
      * @author Laxmi Kandel
      */
