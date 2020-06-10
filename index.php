@@ -8,6 +8,7 @@
 
 //require the autoload file
 require_once('vendor/autoload.php');
+// ON SERVER: require_once("../config.php");
 require_once("model/config.php");
 require_once("model/validate.php");
 
@@ -28,6 +29,7 @@ $db = new Database();
 $controller = new Controller($f3, $db);
 
 //default place to uploads image files
+// ON SERVER: $dirName = '../uploads/';
 $dirName = 'uploads/';
 $directoryName = 'attachments/';
 
