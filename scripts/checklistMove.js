@@ -46,7 +46,7 @@ $("body").on("click",".big",function()
     let proceed = true;
 
     //check if the file upload exits
-    if(uploadFile.find('.big').length){
+    if(uploadFile.find('.uploadFile').length){
         if(uploadFile.find('.uploads').length === 0){
             proceed = false;
         }
