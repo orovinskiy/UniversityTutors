@@ -416,12 +416,12 @@ class Controller
         }
         //when form is posted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            var_dump($_POST);
+            //var_dump($_POST);
             //checking to see if POST came from forgot password link
             if (isset($_POST['saveChanges'])) {
                 //check to see if email submitted is valid
                 $user = $this->_db->getUserByEmail($_POST['email']);
-                var_dump($user);
+                //var_dump($user);
                 if ($user != null) {
                     $tempPassword = $this->generateRandomString();
                     //set existing user with new random password
