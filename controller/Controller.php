@@ -58,6 +58,7 @@ class Controller
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
             $this->redirects();
         }
+        $_SESSION['isAdmin'] = 1;
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
@@ -84,18 +85,19 @@ class Controller
         //creating zip folder
         $zipFolder = new ZipArchive();
         $zipFiles = ($currentYear."files" .".zip");
+        $this->_f3->set('currentAllFiles',$zipFiles);
         $this->_f3->set("zipFolderYear", $zipFiles);
 
         //if zip file already exist delete it
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles)) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles);
+        if (file_exists( "/var/www/uploads/" . $zipFiles)) {
+            unlink("/var/www/uploads/" . $zipFiles);
         }
 
         //open zip file when has been created
-        $zipFolder->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles, ZipArchive::CREATE);
+        $zipFolder->open("/var/www/uploads/" . $zipFiles, ZipArchive::CREATE);
         foreach ($this->_f3->get("allFiles") as $file) {
             if (!empty($file['itemTutorYear_file'])) {
-                $zipFolder->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+                $zipFolder->addFile(  "/var/www/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
             }
         }
         //close and save zip archive
@@ -334,7 +336,7 @@ class Controller
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $imageFileName);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], '/var/www/'.$dirName . $imageFileName);
                         $this->_db->uploadTutorImage($imageFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
@@ -584,15 +586,15 @@ class Controller
         $this->_f3->set("zipFolderName", $zipFile);
 
         //if zip file already exist delete it
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile)) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile);
+        if (file_exists("/var/www/uploads/" . $zipFile)) {
+            unlink( "/var/www/uploads/" . $zipFile);
         }
 
         //open zip file when has been created
-        $zip->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile, ZipArchive::CREATE);
+        $zip->open("/var/www/uploads/" . $zipFile, ZipArchive::CREATE);
         foreach ($this->_f3->get("filesToDownload") as $file) {
             if (!empty($file['itemTutorYear_file'])) {
-                $zip->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+                $zip->addFile("/var/www/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
             }
         }
         //close and save zip archive

@@ -407,6 +407,18 @@ class Database
         return $results[0]["itemTutorYear_file"];
     }
 
+    function getOgFile($itemID){
+        $sql = 'SELECT item_file FROM Item WHERE item_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$itemID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]["item_file"];
+    }
+
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
      * of a different item)
      * @param int $stateID

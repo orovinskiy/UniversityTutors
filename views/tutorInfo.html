@@ -20,31 +20,36 @@ Page to display additional information about a tutor that does not appear on the
                     <!--Download file if uploaded by user-->
                     <check if="{{@tutor['tutor_image']!=NULL}}">
                         <true>
-                            <button type="submit" class="btn btn-info download mb-4" name="download"
-                                    value="{{ @tutor['user_id'] }}">
+                            <a type="submit" class="btn btn-info downloads mb-4" href="#"
+                                    data-file="{{ @tutor['tutor_image'] }}">
                                 Download Image
-                            </button>
+                            </a>
                         </true>
                     </check>
                     <repeat group="{{ @filesToDownload }}" value="{{ @value }}">
                         <check if="{{ @value['itemTutorYear_file'] != null }}">
-                            <p><a target="_blank" href="../uploads/{{@value['itemTutorYear_file']}}"
-                                  download="{{@value['itemTutorYear_file']}}">{{@value['itemTutorYear_file']}}
+                            <p><a class="downloads" href="#"
+                                  data-file="{{@value['itemTutorYear_file']}}">{{@value['itemTutorYear_file']}}
                             </a></p>
                         </check>
                     </repeat>
                     <!--Download zip folder-->
-                    <p><a target="_blank" class="btn btn-info" href="../uploads/{{ @zipFolderName }}"
-                          download=" {{ @zipFolderName }}">Download Files
+                    <p><a class="btn btn-info downloads" href="#"
+                          data-file="{{ @zipFolderName }}">Download All Files
                     </a></p>
                 </div>
             </form>
         </div>
         <div class="col">
-            <img src="../uploads/{{ @tutor['tutor_image'] }}" class="img-fluid img-thumbnail">
+            <img src="" data-img="{{ @tutor['tutor_image'] }}" class="image img-fluid img-thumbnail">
         </div>
     </div>
 </div>
-
+<script
+        src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+        crossorigin="anonymous"></script>
+<script src="../scripts/fileDownload.js"></script>
+<script src="../scripts/getImage.js"></script>
 </body>
 </html>
