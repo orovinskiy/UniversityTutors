@@ -395,6 +395,18 @@ class Database
         return $results[0]['state_id'];
     }
 
+    function getTutorFile($tutorID, $itemID){
+        $sql = 'SELECT itemTutorYear_file FROM tutors.ItemTutorYear WHERE tutorYear_id = ? AND item_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$tutorID,$itemID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]["itemTutorYear_file"];
+    }
+
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state
      * of a different item)
      * @param int $stateID

@@ -60,6 +60,11 @@ $f3->route('POST /tutFile',function(){
     echo $GLOBALS['controller']->uploadTutFile();
 });
 
+$f3->route('POST /sessSett',function(){
+    $_SESSION['item'] = $_POST['item'];
+    $_SESSION['file'] = $_POST['fileName'];
+});
+
 
 /**
  * route to checklist ajax function

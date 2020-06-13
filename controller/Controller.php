@@ -189,6 +189,7 @@ class Controller
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
+
     /**This function renames the file, moves it to the uploads folder and updates
      * the file name in the database associated to the item.
      * @return string mixed returns a error or a success string to be displayed
@@ -203,12 +204,12 @@ class Controller
             $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
             //delete all files first
             foreach ($fileExtensions as $ext) {
-                if (file_exists('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext)) {
-                    unlink('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext);
+                if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . substr($filename, 0, strpos($filename, ".")) . $ext)) {
+                    unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . substr($filename, 0, strpos($filename, ".")) . $ext);
                 }
             }
             // Location
-            $location = 'uploads/' . $filename;
+            $location = $_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $filename;
             // Upload file
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
@@ -258,9 +259,9 @@ class Controller
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
 
+        $_SESSION['yearID'] = $checkBoxes[0]['tutorYear_id'];
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
-        $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist', $checkBoxes);
         $this->_f3->set('db', $this->_db);
