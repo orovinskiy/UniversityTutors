@@ -380,6 +380,7 @@ class Database
      * @param int $itemID
      * @param int $order what order
      * @return string state id
+     * @author Oleg
      */
     function getNextStateID($itemID, $order)
     {
@@ -393,6 +394,40 @@ class Database
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $results[0]['state_id'];
+    }
+
+    /**This function gets the file of a tutors specific item
+     * @param int $tutorID the id of tutorYear
+     * @param int $itemID the id of the item
+     * @return string mixed returns the file name if exists
+     * @author  oleg
+     */
+    function getTutorFile($tutorID, $itemID){
+        $sql = 'SELECT itemTutorYear_file FROM tutors.ItemTutorYear WHERE tutorYear_id = ? AND item_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$tutorID,$itemID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]["itemTutorYear_file"];
+    }
+
+    /**This gets the original file of a item
+     * @param int $itemID id of the item
+     * @return string mixed returns the file name if exists
+     */
+    function getOgFile($itemID){
+        $sql = 'SELECT item_file FROM Item WHERE item_id = ?';
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$itemID]);
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $results[0]["item_file"];
     }
 
     /**Gets the next state of a item (WARNING: if its the last state of a item it will go to the first state

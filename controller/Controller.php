@@ -58,6 +58,7 @@ class Controller
         if ($this->_db->checkAdmin($_SESSION['user_id'])['user_is_admin'] == 0) {
             $this->redirects();
         }
+        $_SESSION['isAdmin'] = 1;
         //This is for building up a navbar
         $this->navBuilder(array('Admin Manager' => '../admin', 'Logout' => '../logout'),
             array('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
@@ -84,18 +85,19 @@ class Controller
         //creating zip folder
         $zipFolder = new ZipArchive();
         $zipFiles = ($currentYear."files" .".zip");
+        $this->_f3->set('currentAllFiles',$zipFiles);
         $this->_f3->set("zipFolderYear", $zipFiles);
 
         //if zip file already exist delete it
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles)) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles);
+        if (file_exists( "/var/www/uploads/" . $zipFiles)) {
+            unlink("/var/www/uploads/" . $zipFiles);
         }
 
         //open zip file when has been created
-        $zipFolder->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFiles, ZipArchive::CREATE);
+        $zipFolder->open("/var/www/uploads/" . $zipFiles, ZipArchive::CREATE);
         foreach ($this->_f3->get("allFiles") as $file) {
             if (!empty($file['itemTutorYear_file'])) {
-                $zipFolder->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+                $zipFolder->addFile(  "/var/www/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
             }
         }
         //close and save zip archive
@@ -189,6 +191,7 @@ class Controller
         $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
     }
 
+
     /**This function renames the file, moves it to the uploads folder and updates
      * the file name in the database associated to the item.
      * @return string mixed returns a error or a success string to be displayed
@@ -203,12 +206,12 @@ class Controller
             $filename = $this->changeFileName($filename, $_POST['itemId'], $_POST['tutorId'], $_POST['name']);
             //delete all files first
             foreach ($fileExtensions as $ext) {
-                if (file_exists('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext)) {
-                    unlink('uploads/' . substr($filename, 0, strpos($filename, ".")) . $ext);
+                if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . substr($filename, 0, strpos($filename, ".")) . $ext)) {
+                    unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . substr($filename, 0, strpos($filename, ".")) . $ext);
                 }
             }
             // Location
-            $location = 'uploads/' . $filename;
+            $location = $_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $filename;
             // Upload file
             move_uploaded_file($_FILES['file']['tmp_name'], $location);
             $this->_db->updateFileItem($filename, $_POST['itemId'], $_POST['tutorId']);
@@ -258,9 +261,9 @@ class Controller
 
         $checkBoxes = $GLOBALS['db']->getTutorsChecklist($currentYear, $param['userId']);
 
+        $_SESSION['yearID'] = $checkBoxes[0]['tutorYear_id'];
 
         $this->_f3->set("currentYear", $this->_db->getCurrentYear());
-        $this->_f3->set('yearID', $checkBoxes['year_id']);
         $this->_f3->set('userID', $param['userId']);
         $this->_f3->set('checklist', $checkBoxes);
         $this->_f3->set('db', $this->_db);
@@ -333,7 +336,7 @@ class Controller
 
                     //if file name  is not empty save  file to uploads dir and store it in database
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $imageFileName);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], '/var/www/'.$dirName . $imageFileName);
                         $this->_db->uploadTutorImage($imageFileName, $param["id"]);
                     }
                     $this->_f3->reroute("/checklist/" . $param["id"]);
@@ -583,15 +586,15 @@ class Controller
         $this->_f3->set("zipFolderName", $zipFile);
 
         //if zip file already exist delete it
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile)) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile);
+        if (file_exists("/var/www/uploads/" . $zipFile)) {
+            unlink( "/var/www/uploads/" . $zipFile);
         }
 
         //open zip file when has been created
-        $zip->open($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $zipFile, ZipArchive::CREATE);
+        $zip->open("/var/www/uploads/" . $zipFile, ZipArchive::CREATE);
         foreach ($this->_f3->get("filesToDownload") as $file) {
             if (!empty($file['itemTutorYear_file'])) {
-                $zip->addFile($_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
+                $zip->addFile("/var/www/uploads/" . $file['itemTutorYear_file'], $file['itemTutorYear_file']);
             }
         }
         //close and save zip archive
@@ -783,7 +786,7 @@ class Controller
                         } else {
                             $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
                         }
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
                         $this->_db->updateItemTable($fileName, $itemId);
                     }
                 }

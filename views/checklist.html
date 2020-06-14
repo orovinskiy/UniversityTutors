@@ -79,8 +79,10 @@ what forms they have already completed
                                         <check if="{{!empty(@isChecked['item_file'])}}">
                                             <div class=" mb-3 ml-5">
                                                 <i class='far fa-file-alt'></i>
-                                                <a target="_blank" href="../uploads/{{@isChecked['item_file']}}"
-                                                   download="{{@isChecked['item_file']}}">PDF Download</a>
+                                                <a  class="downloads" href="#"
+                                                   data-item="{{@isChecked['item_id']}}"
+                                                data-file="{{@isChecked['item_file']}}"
+                                                data-og="1">PDF Download</a>
                                             </div>
                                         </check>
                                         <div class="row">
@@ -99,8 +101,11 @@ what forms they have already completed
                                                     <div class="row">
                                                         <div>
                                                             <i class='far fa-file-alt'></i>
-                                                            <a class="uploads" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
-                                                               download="{{@isChecked['itemTutorYear_file']}}">{{@isChecked['itemTutorYear_file']}}</a>
+                                                            <a class="uploads downloads" href="#"
+                                                               data-og="0"
+                                                               data-item="{{@isChecked['item_id']}}"
+                                                               data-file="{{@isChecked['itemTutorYear_file']}}">
+                                                                {{@isChecked['itemTutorYear_file']}}</a>
                                                         </div>
                                                     </div><!-- Row -->
                                                 </check>
@@ -188,8 +193,10 @@ what forms they have already completed
                                         <check if="{{!empty(@isChecked['item_file'])}}">
                                             <div class=" mb-3 ml-5">
                                                 <i class='far fa-file-alt'></i>
-                                                <a target="_blank" href="../uploads/{{@isChecked['item_file']}}"
-                                                   download="{{@isChecked['item_file']}}">PDF Download</a>
+                                                <a  class="downloads" href="#"
+                                                    data-item="{{@isChecked['item_id']}}"
+                                                    data-file="{{@isChecked['item_file']}}"
+                                                    data-og="1">PDF Download</a>
                                             </div>
                                         </check>
                                         <div class="row">
@@ -201,12 +208,13 @@ what forms they have already completed
                                             <div class="col-lg-3 col-md-4 ml-md-5">
                                                 <check if="{{!empty(@isChecked['itemTutorYear_file'])}}">
                                                     <div class="row">
-                                                        <div >
+                                                        <div>
                                                             <i class='far fa-file-alt'></i>
-                                                            <a class="uploads" target="_blank" href="../uploads/{{@isChecked['itemTutorYear_file']}}"
-                                                               download="{{@isChecked['itemTutorYear_file']}}">
-                                                                {{@isChecked['itemTutorYear_file']}}
-                                                            </a>
+                                                            <a class="uploads downloads" href="#"
+                                                               data-item="{{@isChecked['item_id']}}"
+                                                               data-file="{{@isChecked['itemTutorYear_file']}}"
+                                                               data-og="0">
+                                                                {{@isChecked['itemTutorYear_file']}}</a>
                                                         </div>
                                                     </div> <!-- Row -->
                                                 </check>
@@ -248,6 +256,7 @@ what forms they have already completed
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="../scripts/checklistMove.js"></script>
+<script src="../scripts/fileDownload.js"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </body>
 </html>
