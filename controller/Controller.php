@@ -786,7 +786,7 @@ class Controller
                         } else {
                             $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
                         }
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $dirName . $fileName);
+                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
                         $this->_db->updateItemTable($fileName, $itemId);
                     }
                 }
