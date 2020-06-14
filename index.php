@@ -29,7 +29,7 @@ $db = new Database();
 $controller = new Controller($f3, $db);
 
 //default place to uploads image files
-// ON SERVER: $dirName = '../uploads/';
+
 $dirName = 'uploads/';
 $directoryName = 'attachments/';
 

@@ -1,10 +1,15 @@
 <?php
+/**This checks what picture to send over to the page.
+ * @author Oleg Rovinskiy
+ * @version 1.0
+ */
 session_start();
 
+//set what picture
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $_SESSION['file'] = $_POST['fileName'];
 }
-else {
+else {//get the set picture if it exists
     $ext = strtolower(substr($_SESSION['file'], strpos($_SESSION['file'], '.')));
     $type = '';
     switch ($ext) {

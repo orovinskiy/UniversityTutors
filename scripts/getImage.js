@@ -1,10 +1,18 @@
+/**This is a script to retreive the tutors picture and
+ * display it. It gets the file from getImage.php
+ * @author Oleg Rovinskiy
+ * @version 1.0
+ */
+
+
 let tag = $('.image');
-console.log(tag.data('img'));
+
+//set the image name
 $.post("../scripts/getImage.php",{
     fileName: tag.data('img')
 });
 
-
+//get the image and display it on the page
 setTimeout(function () {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', '../scripts/getImage.php', true);
