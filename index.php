@@ -34,17 +34,17 @@ $dirName = 'uploads/';
 $directoryName = 'attachments/';
 
 // Define a default route
-$f3->route('GET /', function () {
+$f3->route('GET|POST /', function () {
     //below is code to test the database functions
 //    $result = $GLOBALS['db']->getTutors();
     //$result2 = $GLOBALS['db']->getTutor(2020, 1);
 //    $results = $GLOBALS['db']->testDatabase();
-    //$newUser = new User("Andy@mail.com", $GLOBALS['db']); //used to test user object
+    //$newUser = new User("Andy@mail.com", $GLOBALS['db']); //used to test user$
     //$userAdmin = $newUser->getUserIsAdmin(); //used to test user object
     //$userID = $newUser->getUserID(); //used to test user object
     //echo $userAdmin. " and ". $userID; //used to test user object
-    $view = new Template();
-    echo $view->render("views/home.html");
+    global $controller;
+    $controller->login();
 });
 
 
