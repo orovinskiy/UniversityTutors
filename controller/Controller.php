@@ -712,6 +712,11 @@ class Controller
             $this->_f3->reroute("/login");
         }
 
+        //this is for building up a navbar
+        $this->navBuilder(array('Checklist' => '../checklist/' . $id, 'Logout' => '../logout')
+            , array('../styles/formStyle.css'), 'Profile','../');
+
+
         if (isset($_POST["new"])) {
             if ($this->_db->confirmPassword($id, md5($_POST["current"]))) {
                 if ($_POST["new"] == $_POST["confirm"]) {

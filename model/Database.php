@@ -655,8 +655,8 @@ class Database
      */
     function confirmPassword($userId, $userPassword)
     {
-        var_dump($userId);
-        var_dump($userPassword);
+        //var_dump($userId);
+        //var_dump($userPassword);
 
         $sql = "SELECT user_id FROM User WHERE user_id = ? AND user_password = ?";
         $statement = $this->_dbh->prepare($sql);
