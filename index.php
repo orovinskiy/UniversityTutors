@@ -60,6 +60,13 @@ $f3->route('POST /tutFile',function(){
     echo $GLOBALS['controller']->uploadTutFile();
 });
 
+/**
+ * Placement
+ */
+$f3->route('GET /schools', function ($f3, $param) {
+    $view = new Template();
+    echo $view->render('views/placement/schools.html');
+});
 
 /**
  * route to checklist ajax function
