@@ -63,9 +63,12 @@ $f3->route('POST /tutFile',function(){
 /**
  * Placement
  */
-$f3->route('GET /schools', function ($f3, $param) {
-    $view = new Template();
-    echo $view->render('views/placement/schools.html');
+$f3->route('GET /schools', function () {
+    $GLOBALS['controller']->school();
+});
+
+$f3->route('POST /addSchool', function () {
+    $GLOBALS['controller']->addSchool();
 });
 
 /**

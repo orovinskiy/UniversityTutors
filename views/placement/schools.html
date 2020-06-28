@@ -12,32 +12,25 @@
 <div class="container">
     <div class="mb-5"></div>
     <div class="text-center">
-        <form>
+        <label class="err" id="school-err" for="school"></label>
         <div class="input-group">
             <div class="input-group-prepend">
-                <button id="button-addSchool" type="submit" class="btn btn-primary">Add School +</button>
+                <button id="button-addSchool" class="btn btn-primary">Add School +</button>
             </div>
-            <input type="text" placeholder="Type school name here" aria-describedby="button-addSchool" class="form-control">
+            <input id="school" type="text" placeholder="Type school name here" aria-describedby="button-addSchool" class="form-control">
         </div>
-        </form>
         <br>
     </div>
     <div class="row">
     <div class="col-md-3 scroll ">
-        <button class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-up"></i></button>
-        <div class="schools text-center" data-id="GreenRiver">
-            <p class="h4">Green River</p>
-        </div>
-        <div class="schools text-center">
-            <p class="h4">Green River elem</p>
-        </div>
-        <div class="schools text-center">
-            <p class="h4">Green River high school</p>
-        </div>
-        <div class="schools text-center">
-            <p class="h4">Green River kindergarten</p>
-        </div>
-        <button class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-down"></i></button>
+        <button id="up" hidden class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-up"></i></button>
+        <repeat group="{{@schools}}" key="{{@number}}" value="{{@school}}">
+            <div id="{{@number}}" class="schools text-center" data-id="{{@school['school_name']}}"
+            <check if="{{@number >= 6}}"> hidden</check>>
+                <p class="h4">{{@school['school_name']}}</p>
+            </div>
+        </repeat>
+        <button id="down" class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-down"></i></button>
 
     </div>
     <div class="col-md-8 ">
@@ -70,5 +63,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script src="../../scripts/placement/schools.js"></script>
 </body>
 </html>

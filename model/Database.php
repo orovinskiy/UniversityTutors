@@ -1172,5 +1172,33 @@ class Database
         return ($statement->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    /*----------------------------------------------------------------------------------*/
+    /* Code for placement Project */
+
+    function insertSchool($school){
+        $sql = "INSERT INTO School VALUE(DEFAULT ,?);";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+    }
+
+    function checkSchool($school){
+        $sql = "SELECT * FROM School WHERE school_name = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function getAllSchools(){
+        $sql = "SELECT * FROM School ";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

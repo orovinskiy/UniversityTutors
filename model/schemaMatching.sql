@@ -12,12 +12,8 @@
  CREATE TABLE School(
     school_id int NOT NULL AUTO_INCREMENT,
     school_name VARCHAR(255) NOT NULL,
-    school_region int NOT NULL,
-    school_notes TEXT,
 
-    PRIMARY KEY (school_id),
-    FOREIGN KEY (school_region) REFERENCES Region(region_id) ON DELETE CASCADE
-
+    PRIMARY KEY (school_id)
  );
 
  CREATE TABLE Role(

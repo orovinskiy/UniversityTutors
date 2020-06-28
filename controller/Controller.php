@@ -921,6 +921,22 @@ class Controller
         return $itemName . "-" . $itemId;
     }
 
+    function addSchool(){
+        if($this->_db->checkSchool($_POST['school'])){
+            echo 'false';
+        }
+        else{
+            $this->_db->insertSchool($_POST['school']);
+            echo 'true';
+        }
+    }
+
+    function school(){
+        $this->_f3->set('schools',$this->_db->getAllSchools());
+        $view = new Template();
+        echo $view->render('views/placement/schools.html');
+    }
+
 }
 
 
