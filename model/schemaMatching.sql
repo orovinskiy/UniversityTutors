@@ -10,8 +10,8 @@
  );
 
  CREATE TABLE School(
-    school_id int NOT NULL AUTO_INCRMENT,
-    school_name NOT NULL VARCHAR(255),
+    school_id int NOT NULL AUTO_INCREMENT,
+    school_name VARCHAR(255) NOT NULL,
     school_region int NOT NULL,
     school_notes TEXT,
 
@@ -37,7 +37,7 @@
     PRIMARY KEY (tag_id)
  );
 
- CREATE TABLE Tutor(
+ CREATE TABLE TutorPlace(
     tutor_id int NOT NULL AUTO_INCREMENT,
     tutor_name VARCHAR(255) NOT NULL,
     tutor_notes TEXT,
@@ -49,7 +49,7 @@
     tagGroup_id int NOT NULL AUTO_INCREMENT,
     role_id int NOT NULL,
     tagGroup_name VARCHAR(255) NOT NULL,
-    tagGroup_weight int(3) NOT NULL,
+    tagGroup_weight int NOT NULL,
 
     PRIMARY KEY (tagGroup_id),
     FOREIGN KEY (role_id) REFERENCES Role(role_id) ON DELETE CASCADE
@@ -69,7 +69,7 @@
     tutor_id int NOT NULL,
     tag_id int NOT NULL,
 
-    FOREIGN KEY (tutor_id) REFERENCES Tutor(tutor_id) ON DELETE  CASCADE,
+    FOREIGN KEY (tutor_id) REFERENCES TutorPlace(tutor_id) ON DELETE  CASCADE,
     FOREIGN KEY (tag_id) REFERENCES Tag(tag_id) ON DELETE  CASCADE
  );
 
@@ -77,6 +77,6 @@
     tutor_id int NOT NULL,
     region_id int NOT NULL,
 
-    FOREIGN KEY (tutor_id) REFERENCES Tutor(tutor_id) ON DELETE  CASCADE,
+    FOREIGN KEY (tutor_id) REFERENCES TutorPlace(tutor_id) ON DELETE  CASCADE,
     FOREIGN KEY (region_id) REFERENCES Region(region_id) ON DELETE  CASCADE
  );
