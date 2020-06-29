@@ -921,6 +921,9 @@ class Controller
         return $itemName . "-" . $itemId;
     }
 
+    //Placement
+    //--------------------------------------------------------------------------
+
     function addSchool(){
         if($this->_db->checkSchool($_POST['school'])){
             echo 'false';
@@ -937,6 +940,14 @@ class Controller
         echo $view->render('views/placement/schools.html');
     }
 
+    function getJobnRole(){
+
+    }
+
+    //--------------------------------------------------------------------------
+
 }
+
+
 
 

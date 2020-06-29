@@ -60,16 +60,35 @@ $f3->route('POST /tutFile',function(){
     echo $GLOBALS['controller']->uploadTutFile();
 });
 
+
+// Placement
+// -------------------------------------------------------------------
+
 /**
- * Placement
+ *  route for the school placement page
+ * @author oleg
  */
 $f3->route('GET /schools', function () {
     $GLOBALS['controller']->school();
 });
 
+/**
+ * ajax to add a school
+ * @author oleg
+ */
 $f3->route('POST /addSchool', function () {
     $GLOBALS['controller']->addSchool();
 });
+
+/**
+ * ajax to get all job/roles of a school
+ * @author oleg
+ */
+$f3->route('POST /getJobnRoles', function () {
+    //$GLOBALS['controller']->();
+});
+
+// -------------------------------------------------------------------
 
 /**
  * route to checklist ajax function

@@ -6,7 +6,9 @@
  **/
 let position = 0;
 
+//this is to go down the school list
 $('#down').on('click',function(){
+    $('#addJob').attr('hidden',true);
     for(let i = position; i < position+6; i++){
         let next = i+6;
         if($('#'+next).length !== 0){
@@ -25,6 +27,28 @@ $('#down').on('click',function(){
     $('#up').attr('hidden',false);
 });
 
+//this is to go up the school list
+$('#up').on('click',function(){
+    $('#addJob').attr('hidden',true);
+    for(let i = position; i > position-6; i--){
+        let next = i-6;
+        if($('#'+next).length !== 0){
+            $('#'+next).attr('hidden',false);
+            $('#'+i).attr('hidden',true);
+        }
+        else{
+            $(this).attr('hidden',true);
+            $('#down').attr('hidden',false);
+        }
+    }
+    position -= 6;
+    if($('#'+(position-6)).length === 0){
+        $(this).attr('hidden',true);
+    }
+    $('#down').attr('hidden',false);
+});
+
+//this will add a school
 $('#button-addSchool').on('click',function(){
     let school = $('#school').val();
     if(validSchool(school)){
@@ -37,12 +61,23 @@ $('#button-addSchool').on('click',function(){
             }
             else{
                 $('#school-err').html('');
+                window.location.reload();
             }
         });
     }
     else {
         $('#school-err').html('*Please enter a valid school')
     }
+});
+
+$('body').on('click','.schools',function(){
+    let school = $(this).data('id');
+    let input =  $('#addJob');
+
+    input.data('school',school);
+    input.attr('hidden',false);
+    console.log($('#addJob').data('school'));
+    //$.post()
 });
 
 function validSchool(school) {

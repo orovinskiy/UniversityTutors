@@ -1200,5 +1200,9 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getJobsForSchool($school){
+
+    }
+
 
 }
