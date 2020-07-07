@@ -30,7 +30,12 @@
                 <p class="h4">{{ucfirst(@school['school_name'])}}</p>
             </div>
         </repeat>
-        <button id="down" class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-down"></i></button>
+        <div id="13" class="schools text-center" data-id="test" hidden="hidden">
+        <p class="h4">Main Test</p>
+        </div>
+        <button id="down" class="btn btn-secondary text-light scroll"
+        <check if="{{@numOfSchools <= 6}}"> hidden="hidden"</check>
+        ><i class="pic-scroll fas fa-angle-down"></i></button>
 
     </div>
     <div class="col-md-8 ">

@@ -935,7 +935,9 @@ class Controller
     }
 
     function school(){
-        $this->_f3->set('schools',$this->_db->getAllSchools());
+        $schoolArray = $this->_db->getAllSchools();
+        $this->_f3->set('schools',$schoolArray);
+        $this->_f3->set('numOfSchools',count($schoolArray));
         $view = new Template();
         echo $view->render('views/placement/schools.html');
     }

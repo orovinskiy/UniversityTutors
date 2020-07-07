@@ -4,24 +4,30 @@
  * Logic for the school view as well as the validation
  * for the page
  **/
-let position = 0;
+let current = 5;
+let prev = 0;
+let max = 5;
 
 //this is to go down the school list
 $('#down').on('click',function(){
     $('#addJob').attr('hidden',true);
-    for(let i = position; i < position+6; i++){
-        let next = i+6;
+    for(let i = current; i < max+6; i++){
+        let next = i+1;
         if($('#'+next).length !== 0){
+            current++;
             $('#'+next).attr('hidden',false);
-            $('#'+i).attr('hidden',true);
+            $('#'+(prev)).attr('hidden',true);
+            prev++;
         }
         else{
             $(this).attr('hidden',true);
             $('#up').attr('hidden',false);
+            break;
         }
     }
-    position += 6;
-    if($('#'+(position+6)).length === 0){
+    max = current;
+    console.log(max);
+    if($('#'+(current+1)).length === 0){
         $(this).attr('hidden',true);
     }
     $('#up').attr('hidden',false);
@@ -30,19 +36,23 @@ $('#down').on('click',function(){
 //this is to go up the school list
 $('#up').on('click',function(){
     $('#addJob').attr('hidden',true);
-    for(let i = position; i > position-6; i--){
+    for(let i = current; i > max-6; i--){
         let next = i-6;
         if($('#'+next).length !== 0){
+            current--;
             $('#'+next).attr('hidden',false);
             $('#'+i).attr('hidden',true);
+            prev--;
         }
         else{
             $(this).attr('hidden',true);
             $('#down').attr('hidden',false);
+            break;
         }
     }
-    position -= 6;
-    if($('#'+(position-6)).length === 0){
+    max = current;
+    console.log(max);
+    if($('#'+(max-6)).length === 0){
         $(this).attr('hidden',true);
     }
     $('#down').attr('hidden',false);
