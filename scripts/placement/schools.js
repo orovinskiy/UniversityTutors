@@ -10,7 +10,10 @@ let max = 5;
 
 //this is to go down the school list
 $('#down').on('click',function(){
+    $('#schoolHeader').html('');
+    $('#schoolJobs').html('');
     $('#addJob').attr('hidden',true);
+
     for(let i = current; i < max+6; i++){
         let next = i+1;
         if($('#'+next).length !== 0){
@@ -26,7 +29,6 @@ $('#down').on('click',function(){
         }
     }
     max = current;
-    console.log(max);
     if($('#'+(current+1)).length === 0){
         $(this).attr('hidden',true);
     }
@@ -35,7 +37,10 @@ $('#down').on('click',function(){
 
 //this is to go up the school list
 $('#up').on('click',function(){
+    $('#schoolHeader').html('');
+    $('#schoolJobs').html('');
     $('#addJob').attr('hidden',true);
+
     for(let i = current; i > max-6; i--){
         let next = i-6;
         if($('#'+next).length !== 0){
@@ -51,7 +56,6 @@ $('#up').on('click',function(){
         }
     }
     max = current;
-    console.log(max);
     if($('#'+(max-6)).length === 0){
         $(this).attr('hidden',true);
     }
@@ -81,11 +85,26 @@ $('#button-addSchool').on('click',function(){
 });
 
 $('body').on('click','.schools',function(){
-    let school = $(this).data('id');
+    let school = $(this).data('name');
     let input =  $('#addJob');
 
     input.data('school',school);
     input.attr('hidden',false);
+    $('#schoolHeader').html(school);
+
+    let allData = new FormData();
+    allData.append('school',$(this).data('id'));
+
+    $.ajax({
+        url: '/getJobRoles',
+        type: 'post',
+        data: allData,
+        contentType: false,
+        processData: false,
+        success: function(response){
+            $('#schoolJobs').html(response);
+        }
+    });
     console.log($('#addJob').data('school'));
     //$.post()
 });

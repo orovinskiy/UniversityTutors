@@ -84,8 +84,8 @@ $f3->route('POST /addSchool', function () {
  * ajax to get all job/roles of a school
  * @author oleg
  */
-$f3->route('POST /getJobnRoles', function () {
-    //$GLOBALS['controller']->();
+$f3->route('POST /getJobRoles', function () {
+    $GLOBALS['controller']->getJobRole();
 });
 
 // -------------------------------------------------------------------

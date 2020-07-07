@@ -1201,7 +1201,12 @@ class Database
     }
 
     function getJobsForSchool($school){
+        $sql = "SELECT * FROM Role WHERE school_id = ?";
 
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

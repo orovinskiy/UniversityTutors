@@ -942,8 +942,14 @@ class Controller
         echo $view->render('views/placement/schools.html');
     }
 
-    function getJobnRole(){
-
+    function getJobRole(){
+        $jobArray = $this->_db->getJobsForSchool($_POST['school']);
+        foreach ($jobArray as $job){
+            echo '<br><div>
+                <p class="h5">'.$job['role_name'].' <i class="fas fa-edit"></i></p>
+                <p>'.$job['role_notes'].'</p>
+            </div>';
+        }
     }
 
     //--------------------------------------------------------------------------
