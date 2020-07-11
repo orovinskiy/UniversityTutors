@@ -1209,5 +1209,18 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function insertJob($id,$name){
+        $sql = "INSERT INTO Role VALUES (DEFAULT, ?, ?, 'Click the edit icon to change the text.')";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$id,$name]);
+    }
+
+    function deleteSchoolnRoles($schoolId){
+        $sql = "DELETE FROM School WHERE school_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+        return $statement->execute([$schoolId]);
+    }
 
 }

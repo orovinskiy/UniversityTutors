@@ -952,6 +952,14 @@ class Controller
         }
     }
 
+    function insertJobRole(){
+        $this->_db->insertJob($_POST['schoolId'],$_POST['jobName']);
+        echo '<br><div>
+                <p class="h5">'.$_POST['jobName'].' <i class="fas fa-edit"></i></p>
+                <p>Click the edit icon to change the text</p>
+            </div>';
+    }
+
     //--------------------------------------------------------------------------
 
 }

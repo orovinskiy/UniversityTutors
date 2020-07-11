@@ -1,3 +1,4 @@
+
 .schools{
     width: 13rem;
     border: 2px solid black;
@@ -13,6 +14,13 @@
 .scroll{
     width: 13rem;
 }
+
+.scrollContainer{
+    height: 500px;
+    width: auto;
+    overflow: auto;
+}
+
 
 .pic-scroll{
     font-size: 2rem;
