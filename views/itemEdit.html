@@ -104,6 +104,9 @@ Page to create, edit and delete items in the table
                 </false>
             </check>
         </check>
+        <check if="{{ isset(@SESSION.test)}}">
+            <h2 class="text-danger">{{ @SESSION.test}}</h2>
+        </check>
 
         <!-- Creates form for each state associated with the item to view and update-->
         <repeat group="{{ @stateData }}" value="{{ @state }}">

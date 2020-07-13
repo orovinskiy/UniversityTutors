@@ -758,6 +758,7 @@ class Controller
             if (isset($_POST['remove'])) {
                 //remove the file
                 $this->_db->removeFile($itemId);
+
             }
             // Save Item
             if (isset($_POST["itemSave"])) {
@@ -779,15 +780,16 @@ class Controller
                 //file uploading
                 if (isset($_FILES['fileToUpload'])) {
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        if ($_FILES['fileToUpload']['type'] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                            //add the docx extension
-                            $_FILES['fileToUpload']['type'] = ".docx";
-                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . $_FILES['fileToUpload']['type'];
-                        } else {
-                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
+                            $_SESSION['test'] = "File name already exits. Rename the file or delete the existing file.";
                         }
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
-                        $this->_db->updateItemTable($fileName, $itemId);
+                        else{
+                            unset($_SESSION['test']);
+                            $fileName = $_FILES['fileToUpload']['name'];
+                            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
+                            $this->_db->deleteFileComplete($itemId);
+                            $this->_db->updateItemTable($fileName, $itemId);
+                        }
                     }
                 }
 

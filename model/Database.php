@@ -1096,10 +1096,27 @@ class Database
      */
     function removeFile($itemId)
     {
-        //TODO delete file in server
+        $this->deleteFileComplete($itemId);
+
         $sql = "UPDATE Item SET item_file= NULL WHERE item_id =?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
+    }
+
+    /**
+     * Remove the file from the server
+     * @param int $itemId item's id to be removed
+     * @author Keller and Laxmi
+     */
+    function deleteFileComplete($itemId){
+        $sql = "SELECT item_file FROM Item WHERE item_id =?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        $return = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if(isset($return[0]['item_file']) && file_exists("/var/www/uploads/" . $return[0]['item_file'])){
+            unlink("/var/www/uploads/" . $return[0]['item_file']);
+        }
     }
 
     /**
