@@ -102,8 +102,9 @@
                                 <span> <em>(Not uploaded yet)</em></span>
                             </check>
                             <input type="file" class="form-control-file" name="fileToUpload"
-                                   id="img">
+                                   id="img"><span class="text-danger">*Only .jpg .png .jpeg .gif files accepted</span>
                         </div>
+                        <br>
                         <!--div for image preview-->
                         <div>
                             <img id="preview" src="../uploads/{{ @image }}" class = "img-fluid img-thumbnail " alt="Image will display here ">

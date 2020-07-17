@@ -200,6 +200,12 @@ class Controller
     function uploadTutFile()
     {
         if ($this->_val->validateFileUploadTut($_FILES['file'])) {
+
+            $tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
+            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] .$tutOldFile)) {
+                unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $tutOldFile);
+            }
+
             $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];
             //change name of file
@@ -780,15 +786,23 @@ class Controller
                 //file uploading
                 if (isset($_FILES['fileToUpload'])) {
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
-                            $_SESSION['test'] = "File name already exits. Rename the file or delete the existing file.";
+                        $fileTest = $_FILES['fileToUpload']['name'];
+                        $fileTest = substr($fileTest,0,strripos($fileTest,'.'));
+                        if(empty(strrpos($fileTest,'.'))){
+                            if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
+                                $_SESSION['fileNameError'] = "*File name already exits. Rename the file or delete the existing file.";
+                            }
+                            else{
+                                unset($_SESSION['test']);
+                                $fileName = $_FILES['fileToUpload']['name'];
+                                move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
+                                $this->_db->deleteFileComplete($itemId);
+                                $this->_db->updateItemTable($fileName, $itemId);
+                            }
                         }
-                        else{
-                            unset($_SESSION['test']);
-                            $fileName = $_FILES['fileToUpload']['name'];
-                            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
-                            $this->_db->deleteFileComplete($itemId);
-                            $this->_db->updateItemTable($fileName, $itemId);
+                        else
+                        {
+                            $_SESSION['fileNameError'] = "*File name can't have periods except for the extension";
                         }
                     }
                 }
