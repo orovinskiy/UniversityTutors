@@ -71,7 +71,7 @@ class Database
         $sql = "SELECT * FROM ItemTutorYear 
                 INNER JOIN State ON ItemTutorYear.state_id = State.state_id
                 INNER JOIN Item ON ItemTutorYear.item_id = Item.item_id
-                WHERE tutorYear_id = ?";
+                WHERE tutorYear_id = ? ORDER BY Item.item_order ASC";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$tutorYearId]);
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -954,7 +954,7 @@ class Database
      */
     function getItems()
     {
-        $sql = "SELECT * FROM Item";
+        $sql = "SELECT * FROM Item ORDER BY item_order ASC";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
 
@@ -986,7 +986,7 @@ class Database
         if (!$result) {
             $result = 0;
         }
-        return $result;
+        return $result + 1;
     }
 
     /**
@@ -1005,7 +1005,7 @@ class Database
         $max = $this->getMaxItem();
 
         // Create the new item
-        $sql = "INSERT INTO Item VALUES (DEFAULT, ?, ?, $max, 0, NULL)";
+        $sql = "INSERT INTO Item VALUES (DEFAULT, ?, ?, 0, NULL, $max)";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemName, $itemType]);
         $itemId = $this->_dbh->lastInsertId();
