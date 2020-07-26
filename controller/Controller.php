@@ -200,6 +200,12 @@ class Controller
     function uploadTutFile()
     {
         if ($this->_val->validateFileUploadTut($_FILES['file'])) {
+
+            $tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
+            if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] .$tutOldFile)) {
+                unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $tutOldFile);
+            }
+
             $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];
             //change name of file
@@ -758,6 +764,7 @@ class Controller
             if (isset($_POST['remove'])) {
                 //remove the file
                 $this->_db->removeFile($itemId);
+
             }
             // Save Item
             if (isset($_POST["itemSave"])) {
@@ -779,15 +786,24 @@ class Controller
                 //file uploading
                 if (isset($_FILES['fileToUpload'])) {
                     if (!empty($_FILES['fileToUpload']['name'])) {
-                        if ($_FILES['fileToUpload']['type'] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                            //add the docx extension
-                            $_FILES['fileToUpload']['type'] = ".docx";
-                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . $_FILES['fileToUpload']['type'];
-                        } else {
-                            $fileName = $this->nameForFile($_POST['itemName'], $itemId) . "." . explode("/", $_FILES['fileToUpload']['type'])[1];
+                        $fileTest = $_FILES['fileToUpload']['name'];
+                        $fileTest = substr($fileTest,0,strripos($fileTest,'.'));
+                        if(empty(strrpos($fileTest,'.'))){
+                            if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
+                                $_SESSION['fileNameError'] = "*File name already exits. Rename the file or delete the existing file.";
+                            }
+                            else{
+                                unset($_SESSION['test']);
+                                $fileName = $_FILES['fileToUpload']['name'];
+                                move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
+                                $this->_db->deleteFileComplete($itemId);
+                                $this->_db->updateItemTable($fileName, $itemId);
+                            }
                         }
-                        move_uploaded_file($_FILES['fileToUpload']['tmp_name'], "/var/www/".$dirName . $fileName);
-                        $this->_db->updateItemTable($fileName, $itemId);
+                        else
+                        {
+                            $_SESSION['fileNameError'] = "*File name can't have periods except for the extension";
+                        }
                     }
                 }
 
@@ -921,6 +937,49 @@ class Controller
         return $itemName . "-" . $itemId;
     }
 
+    //Placement
+    //--------------------------------------------------------------------------
+
+    function addSchool(){
+        if($this->_db->checkSchool($_POST['school'])){
+            echo 'false';
+        }
+        else{
+            $this->_db->insertSchool($_POST['school']);
+            echo 'true';
+        }
+    }
+
+    function school(){
+        $schoolArray = $this->_db->getAllSchools();
+        $this->_f3->set('schools',$schoolArray);
+        $this->_f3->set('numOfSchools',count($schoolArray));
+        $view = new Template();
+        echo $view->render('views/placement/schools.html');
+    }
+
+    function getJobRole(){
+        $jobArray = $this->_db->getJobsForSchool($_POST['school']);
+        foreach ($jobArray as $job){
+            echo '<br><div>
+                <p class="h5">'.$job['role_name'].' <i class="fas fa-edit"></i></p>
+                <p>'.$job['role_notes'].'</p>
+            </div>';
+        }
+    }
+
+    function insertJobRole(){
+        $this->_db->insertJob($_POST['schoolId'],$_POST['jobName']);
+        echo '<br><div>
+                <p class="h5">'.$_POST['jobName'].' <i class="fas fa-edit"></i></p>
+                <p>Click the edit icon to change the text</p>
+            </div>';
+    }
+
+    //--------------------------------------------------------------------------
+
 }
+
+
 
 

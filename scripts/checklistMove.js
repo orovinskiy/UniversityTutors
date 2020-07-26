@@ -5,12 +5,18 @@
  * @version 1.0
  */
 //Uploads file if file passes validation
-$("body").on("change","#pdf",function(){
+$("body").on("change",".pdf",function(){
     let $file = $(this).attr('id');
     let fd = new FormData();
     let $files = $(this)[0].files[0];
     let input = $(this).parents(':eq(2)').find('.big');
     let name = $(this).parents(':eq(6)').find('.card-header').html();
+
+    if($(this).data('file').length !== 0){
+        name = $(this).data('file').substr(0,$(this).data('file').indexOf('.'));
+    }
+
+
     let id = input.attr('id');
     let tutorId = input.val();
 

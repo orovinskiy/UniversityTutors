@@ -1096,10 +1096,27 @@ class Database
      */
     function removeFile($itemId)
     {
-        //TODO delete file in server
+        $this->deleteFileComplete($itemId);
+
         $sql = "UPDATE Item SET item_file= NULL WHERE item_id =?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
+    }
+
+    /**
+     * Remove the file from the server
+     * @param int $itemId item's id to be removed
+     * @author Keller and Laxmi
+     */
+    function deleteFileComplete($itemId){
+        $sql = "SELECT item_file FROM Item WHERE item_id =?";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        $return = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if(isset($return[0]['item_file']) && file_exists("/var/www/uploads/" . $return[0]['item_file'])){
+            unlink("/var/www/uploads/" . $return[0]['item_file']);
+        }
     }
 
     /**
@@ -1172,5 +1189,55 @@ class Database
         return ($statement->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    /*----------------------------------------------------------------------------------*/
+    /* Code for placement Project */
+
+    function insertSchool($school){
+        $sql = "INSERT INTO School VALUE(DEFAULT ,?);";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+    }
+
+    function checkSchool($school){
+        $sql = "SELECT * FROM School WHERE school_name = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function getAllSchools(){
+        $sql = "SELECT * FROM School ";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function getJobsForSchool($school){
+        $sql = "SELECT * FROM Role WHERE school_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$school]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function insertJob($id,$name){
+        $sql = "INSERT INTO Role VALUES (DEFAULT, ?, ?, 'Click the edit icon to change the text.')";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$id,$name]);
+    }
+
+    function deleteSchoolnRoles($schoolId){
+        $sql = "DELETE FROM School WHERE school_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+        return $statement->execute([$schoolId]);
+    }
 
 }

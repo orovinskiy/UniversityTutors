@@ -1,0 +1,31 @@
+
+.schools{
+    width: 13rem;
+    border: 2px solid black;
+    border-bottom: 1px solid black;
+    padding: 1rem 1rem;
+}
+
+.schools:hover{
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
+.scroll{
+    width: 13rem;
+}
+
+.scrollContainer{
+    height: 500px;
+    width: auto;
+    overflow: auto;
+}
+
+
+.pic-scroll{
+    font-size: 2rem;
+}
+
+.err{
+    color: red;
+}

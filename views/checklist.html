@@ -77,9 +77,9 @@ what forms they have already completed
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
                                     <div class="card-body">
                                         <check if="{{!empty(@isChecked['item_file'])}}">
-                                            <div class=" mb-3 ml-5">
+                                            <div class=" mb-3 ml-5 ">
                                                 <i class='far fa-file-alt'></i>
-                                                <a  class="downloads" href="#"
+                                                <a  class="downloads mainFile" href="#"
                                                    data-item="{{@isChecked['item_id']}}"
                                                 data-file="{{@isChecked['item_file']}}"
                                                 data-og="1">PDF Download</a>
@@ -112,7 +112,8 @@ what forms they have already completed
                                                 <check if="{{!empty(@isChecked['item_is_upload'])}}">
                                                     <div class="row uploadFile">
                                                         <div class="row pl-3 mt-3 checkHide">
-                                                            <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                            <input type="file" data-file="{{@isChecked['item_file']}}" class="form-control-file pdf" name="fileToUpload">
+                                                            <span class="text-danger">*Only .pdf .docx files accepted</span>
                                                         </div>
                                                     </div><!-- Row -->
                                                 </check>
@@ -191,9 +192,9 @@ what forms they have already completed
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
                                     <div class="card-body">
                                         <check if="{{!empty(@isChecked['item_file'])}}">
-                                            <div class=" mb-3 ml-5">
+                                            <div class=" mb-3 ml-5 ">
                                                 <i class='far fa-file-alt'></i>
-                                                <a  class="downloads" href="#"
+                                                <a  class="downloads mainFile" href="#"
                                                     data-item="{{@isChecked['item_id']}}"
                                                     data-file="{{@isChecked['item_file']}}"
                                                     data-og="1">PDF Download</a>
@@ -223,6 +224,7 @@ what forms they have already completed
                                                     <div class="uploadFile row">
                                                         <div class=" hidden checkHide mt-3">
                                                             <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                            <span class="text-danger">*Only .pdf .docx files accepted</span>
                                                         </div>
                                                     </div><!-- Row -->
                                                 </check>

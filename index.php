@@ -61,6 +61,51 @@ $f3->route('POST /tutFile',function(){
 });
 
 
+// Placement
+// -------------------------------------------------------------------
+
+/**
+ *  route for the school placement page
+ * @author oleg
+ */
+$f3->route('GET /schools', function () {
+    $GLOBALS['controller']->school();
+});
+
+/**
+ * ajax to add a school
+ * @author oleg
+ */
+$f3->route('POST /addSchool', function () {
+    $GLOBALS['controller']->addSchool();
+});
+
+/**
+ * ajax to get all job/roles of a school
+ * @author oleg
+ */
+$f3->route('POST /getJobRoles', function () {
+    $GLOBALS['controller']->getJobRole();
+});
+
+/**
+ * ajax to add a new job role
+ * @author oleg
+ */
+$f3->route('POST /insertJobRoles', function () {
+    $GLOBALS['controller']->insertJobRole();
+});
+
+/**
+ * This will delete a school and roles
+ * @author oleg
+ */
+$f3->route('POST /deleteSchool', function () {
+    var_dump($GLOBALS['db']->deleteSchoolnRoles($_POST['schoolId']));
+});
+
+// -------------------------------------------------------------------
+
 /**
  * route to checklist ajax function
  * @author Oleg

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../styles/placement/schools.css">
+    <title>UTSS</title>
+
+</head>
+<body>
+<div class="container">
+    <div class="mb-5"></div>
+    <div class="text-center">
+        <label class="err" id="school-err" for="school"></label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button id="button-addSchool" class="btn btn-primary">Add School +</button>
+            </div>
+            <input id="school" type="text" placeholder="Type school name here" aria-describedby="button-addSchool" class="form-control">
+        </div>
+        <br>
+    </div>
+    <div class="row">
+    <div class="col-md-3 scroll ">
+        <button id="up" hidden class="btn btn-secondary text-light scroll"><i class="pic-scroll fas fa-angle-up"></i></button>
+        <repeat group="{{@schools}}" key="{{@number}}" value="{{@school}}">
+            <div id="{{@number}}" class="schools" data-id="{{@school['school_id']}}"
+                 data-name="{{@school['school_name']}}"
+            <check if="{{@number >= 6}}"> hidden</check>>
+                <p class="h4 text-center">{{ucfirst(@school['school_name'])}} <i class="fa fa-sort-down float-right"></i></p>
+                <button class="btn btn-danger delete"> Delete</button>
+            </div>
+        </repeat>
+
+<!--   <div id="13" class="schools text-center" data-id="test" hidden="hidden">
+        <p class="h4">Main Test</p>
+       </div>-->
+
+        <button id="down" class="btn btn-secondary text-light scroll"
+            <check if="{{@numOfSchools <= 6}}"> hidden="hidden"</check>
+        ><i class="pic-scroll fas fa-angle-down"></i></button>
+
+    </div>
+    <div class="col-md-8 scrollContainer">
+        <div id="GreenRiver">
+            <h2 class="text-center" id="schoolHeader"></h2>
+            <br>
+            <label class="err" id="job-err" for="addJobInput"></label>
+            <div class="input-group" id="addJob" hidden>
+                <div class="input-group-prepend">
+                    <button id="button-addJob" type="submit" class="btn btn-primary">Add Job/Role +</button>
+                </div>
+                <input id="addJobInput" type="text" placeholder="Type job/role here" aria-describedby="button-addJob" class="form-control">
+            </div>
+            <div id="schoolJobs">
+
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script src="../../scripts/placement/schools.js"></script>
+</body>
+</html>
