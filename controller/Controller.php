@@ -793,6 +793,7 @@ class Controller
                     if (!empty($_FILES['fileToUpload']['name'])) {
                         $fileTest = $_FILES['fileToUpload']['name'];
                         $fileTest = substr($fileTest,0,strripos($fileTest,'.'));
+                        unset($_SESSION['fileNameError']);
                         if(empty(strrpos($fileTest,'.'))){
                             if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
                                 $_SESSION['fileNameError'] = "*File name already exits. Rename the file or delete the existing file.";

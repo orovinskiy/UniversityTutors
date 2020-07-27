@@ -51,7 +51,7 @@ Page to create, edit and delete items in the table
                 <label for="file">Upload File</label>
                 <input type="file" class="form-control file-items border-0" name="fileToUpload"
                        id="file">
-                <check if="{{ isset(@SESSION.test)}}">
+                <check if="{{ isset(@SESSION.fileNameError)}}">
                     <span class="text-danger">{{ @SESSION.fileNameError}}</span>
                 </check>
             </div>
