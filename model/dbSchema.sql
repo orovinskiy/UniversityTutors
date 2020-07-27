@@ -3,6 +3,7 @@ Schema for application's database.
 
 @author Keller Flint
  */
+  DROP TABLE if exists User, Tutor, Info, TutorYear, Item, State, ItemTutorYear;
 
 /* User table containing basic user data. */
 CREATE TABLE User (
@@ -23,6 +24,7 @@ CREATE TABLE Tutor (
     tutor_ssn varchar(255) NULL,
     tutor_image varchar(255) NULL,
     tutor_bio varchar(5000) NULL,
+    tutor_bio_done tinyint DEFAULT 0
 
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES User (user_id) ON UPDATE CASCADE

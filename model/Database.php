@@ -37,7 +37,7 @@ class Database
     function getTutors($year = "2020")
     {
         // Get all tutors data for the given year
-        $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio, tutor_image FROM TutorYear 
+        $sql = "SELECT tutorYear_id, User.user_id, user_email, tutor_first, tutor_last, tutor_bio_done, tutor_image FROM TutorYear 
                 INNER JOIN Tutor ON TutorYear.user_id = Tutor.user_id
                 INNER JOIN User ON TutorYear.user_id = User.user_id
                 WHERE tutorYear_year = ?";
@@ -324,7 +324,7 @@ class Database
     }
 
     function getTutorBioImage($userID){
-        $sql = "SELECT tutor_bio, tutor_image FROM Tutor WHERE user_id = ?";
+        $sql = "SELECT tutor_bio_done, tutor_image FROM Tutor WHERE user_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
 
@@ -463,6 +463,14 @@ class Database
         $statement = $this->_dbh->prepare($sql);
 
         $statement->execute([$state, $item, $user]);
+    }
+
+    function updateBio($userId, $bioDone){
+        $sql = "UPDATE Tutor SET tutor_bio_done = ? where user_id = ?";
+
+        $statement = $this->_dbh->prepare($sql);
+
+        $statement->execute([$bioDone, $userId]);
     }
 
     /**Get email form the user table

@@ -4,6 +4,37 @@
  * @author Oleg Rovinskiy
  * @version 1.0
  */
+//This moves and updates the bio
+$("body").on("change",".bio",function(){
+    let wholeCheckBox = $(this).parents(":eq(7)");
+    wholeCheckBox.remove();
+
+    if($(this).is(":checked")){
+
+        wholeCheckBox.find('label').html('Completed');
+        wholeCheckBox.find('.bioText').html('You have successfully written your bio. To update your bio visit your\n' +
+            '<a href="../form/'+$(this).val()+'">Profile</a>.');
+        dataValue = 1;
+        $(".completedBox").append(wholeCheckBox);
+
+    }
+    else{
+        wholeCheckBox.find('label').html('Complete');
+        wholeCheckBox.find('.bioText').html('When you have finished your bio check this off. To update the bio visit your\n' +
+            '<a href="../form/'+$(this).val()+'">Profile</a>.');
+        dataValue = 0;
+        $(".notCompletedBox").append(wholeCheckBox);
+    }
+
+    $.post("../makeBox",
+        {
+            isBio: true,
+            user: $(this).val(),
+            value : dataValue,
+        });
+
+});
+
 //Uploads file if file passes validation
 $("body").on("change",".pdf",function(){
     let $file = $(this).attr('id');
@@ -83,6 +114,7 @@ $("body").on("click",".big",function()
         //Post to makeBox to save the data
         $.post("../makeBox",
             {
+                isBio: false,
                 user: $(this).val(),
                 value : dataValue,
                 item: $(this).attr('id')

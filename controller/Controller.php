@@ -187,8 +187,13 @@ class Controller
      */
     function checklistAjax()
     {
-        $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value'], $_POST['prev']);
-        $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
+        if($_POST['isBio'] === 'true'){
+            $this->_db->updateBio($_POST['user'],$_POST['value']);
+        }
+        else{
+            $stateID = $this->_db->getNextStateID($_POST['item'], $_POST['value']);
+            $this->_db->updateStateOfTutor($stateID, $_POST['item'], $_POST['user']);
+        }
     }
 
 
