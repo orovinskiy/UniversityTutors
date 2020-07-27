@@ -175,15 +175,15 @@ function toggleErrors(object, valClass, isValid, message) {
 
 //Helper Function to count characters within Bio text area
 $('.clearText').on("input", function() {
-    let minCount = 100;
+    let minCount = 50;
     let currentCount = $.trim($(this).val()).length;
     currentCount = minCount - currentCount;
     //console.log(currentCount); //current count
     //checking to see if min count has been reached
     if (currentCount <= 0) {
-        document.getElementById("count").innerHTML = "Minimum word count reached!";
+        document.getElementById("count").innerHTML = "Suggested Character Count Reached!";
     } else {
-        document.getElementById("count").innerHTML = "Mimimum Characters Remaining: " + currentCount;
+        document.getElementById("count").innerHTML = "Suggested Characters Remaining: " + currentCount;
 }
 });
 
