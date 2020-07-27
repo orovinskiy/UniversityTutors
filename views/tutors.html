@@ -77,7 +77,7 @@ Page for admin viewing and management of tutor onboarding data.
                     <!-- Tutor Bio -->
                     <td>
                         <div class="form-check text-center">
-                            <check if="{{ @tutorData['info']['tutor_bio'] != NULL }}">
+                            <check if="{{ @tutorData['info']['tutor_bio_done'] != 0 }}">
                                 <true>
                                     <input class="form-check-input checkbox-big" type="checkbox" checked disabled>
                                 </true>

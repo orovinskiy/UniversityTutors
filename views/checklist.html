@@ -35,7 +35,7 @@ what forms they have already completed
 
                     <!-- check for bio and image -->
                     <repeat group="{{@imgBio}}" key="{{@name}}"  value="{{@value}}">
-                        <check if="{{empty(@value)}}">
+                        <check if="{{empty(@value) || @value == 0}}">
                             <div class="mb-3">
                                 <section class="card">
                                     <check if="{{@name === 'tutor_image'}}">
@@ -56,9 +56,23 @@ what forms they have already completed
                                                         </p>
                                                     </true>
                                                     <false>
-                                                        <p class=" mt-3 mb-3 mr-1 ml-5">You haven't written your bio yet. To write your bio visit your
-                                                            <a href="../form/{{@userID}}">Profile</a>.
-                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-7">
+                                                                <p class="bioText mt-3 mb-3 mr-1 ml-5">When you have finished your bio check this off. To update the bio visit your
+                                                                    <a href="../form/{{@userID}}">Profile</a>.
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-3">
+                                                                <div class="form-check mt-3 mb-2 text-center">
+                                                                    <input class="bio form-check-input get" type="checkbox"
+                                                                           value="{{@userID}}"
+                                                                           name="doorInter[]">
+                                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                                        Complete
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- Row -->
                                                     </false>
                                                 </check>
                                             </div>
@@ -150,7 +164,7 @@ what forms they have already completed
 
                     <!-- check for bio and image -->
                     <repeat group="{{@imgBio}}" key="{{@name}}"  value="{{@value}}">
-                        <check if="{{!empty(@value)}}">
+                        <check if="{{!empty(@value) || @value == 1}}">
                             <div class="mb-3">
                                 <section class="card">
                                     <check if="{{@name === 'tutor_image'}}">
@@ -171,9 +185,23 @@ what forms they have already completed
                                                         </p>
                                                     </true>
                                                     <false>
-                                                        <p class="mt-3 mb-3 mr-1 ml-5">You have successfully written your bio. To update your bio visit your
-                                                            <a href="../form/{{@userID}}">Profile</a>.
-                                                        </p>
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-7">
+                                                                <p class="mt-3 mb-3 mr-1 ml-5 bioText">You have successfully written your bio. To update your bio visit your
+                                                                    <a href="../form/{{@userID}}">Profile</a>.
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-3">
+                                                                <div class="form-check mt-3 mb-2 text-center">
+                                                                    <input class="bio form-check-input get" type="checkbox"
+                                                                           value="{{@userID}}"
+                                                                           name="doorInter[]" checked>
+                                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                                        Completed
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- Row -->
                                                     </false>
                                                 </check>
                                             </div>
