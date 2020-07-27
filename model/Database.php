@@ -71,7 +71,7 @@ class Database
         $sql = "SELECT * FROM ItemTutorYear 
                 INNER JOIN State ON ItemTutorYear.state_id = State.state_id
                 INNER JOIN Item ON ItemTutorYear.item_id = Item.item_id
-                WHERE tutorYear_id = ?";
+                WHERE tutorYear_id = ? ORDER BY Item.item_order ASC";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$tutorYearId]);
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -402,12 +402,13 @@ class Database
      * @return string mixed returns the file name if exists
      * @author  oleg
      */
-    function getTutorFile($tutorID, $itemID){
+    function getTutorFile($tutorID, $itemID)
+    {
         $sql = 'SELECT itemTutorYear_file FROM tutors.ItemTutorYear WHERE tutorYear_id = ? AND item_id = ?';
 
         $statement = $this->_dbh->prepare($sql);
 
-        $statement->execute([$tutorID,$itemID]);
+        $statement->execute([$tutorID, $itemID]);
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -418,7 +419,8 @@ class Database
      * @param int $itemID id of the item
      * @return string mixed returns the file name if exists
      */
-    function getOgFile($itemID){
+    function getOgFile($itemID)
+    {
         $sql = 'SELECT item_file FROM Item WHERE item_id = ?';
 
         $statement = $this->_dbh->prepare($sql);
@@ -746,13 +748,14 @@ class Database
      * @param int $itemId Id of the item
      * @param string $itemName The item's name
      * @param string $itemType The item's type
+     * @param int $itemOrder The item's order
      * @author Keller Flint
      */
-    function updateItem($itemId, $itemName, $itemType)
+    function updateItem($itemId, $itemName, $itemType, $itemOrder)
     {
-        $sql = "UPDATE Item SET item_name = ?, item_type = ? WHERE item_id = ?";
+        $sql = "UPDATE Item SET item_name = ?, item_type = ?, item_order = ? WHERE item_id = ?";
         $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$itemName, $itemType, $itemId]);
+        $statement->execute([$itemName, $itemType, $itemOrder, $itemId]);
     }
 
     /**
@@ -958,7 +961,7 @@ class Database
      */
     function getItems()
     {
-        $sql = "SELECT * FROM Item";
+        $sql = "SELECT * FROM Item ORDER BY item_order ASC";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute();
 
@@ -976,6 +979,24 @@ class Database
     }
 
     /**
+     * Return's the maximum item's order.
+     *
+     * @return int The maximum item's order
+     * @author Keller Flint
+     */
+    function getMaxItem()
+    {
+        $sql = "SELECT MAX(item_order) AS max FROM Item";
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC)['max'];
+        if (!$result) {
+            $result = 0;
+        }
+        return $result + 1;
+    }
+
+    /**
      * Creates a new item in the database
      *
      * @param string $itemName The name of the item
@@ -986,8 +1007,12 @@ class Database
      */
     function addItem($itemName, $itemType)
     {
+
+        // Get max item order
+        $max = $this->getMaxItem();
+
         // Create the new item
-        $sql = "INSERT INTO Item VALUES (DEFAULT, ?, ?, 0, NULL)";
+        $sql = "INSERT INTO Item VALUES (DEFAULT, ?, ?, 0, NULL, $max)";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemName, $itemType]);
         $itemId = $this->_dbh->lastInsertId();
@@ -1116,13 +1141,14 @@ class Database
      * @param int $itemId item's id to be removed
      * @author Keller and Laxmi
      */
-    function deleteFileComplete($itemId){
+    function deleteFileComplete($itemId)
+    {
         $sql = "SELECT item_file FROM Item WHERE item_id =?";
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$itemId]);
         $return = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if(isset($return[0]['item_file']) && file_exists("/var/www/uploads/" . $return[0]['item_file'])){
+        if (isset($return[0]['item_file']) && file_exists("/var/www/uploads/" . $return[0]['item_file'])) {
             unlink("/var/www/uploads/" . $return[0]['item_file']);
         }
     }
@@ -1183,7 +1209,7 @@ class Database
 
     /**
      * Get all files uploaded by tutor of specific year
-     * @param int  $currentYear specified year
+     * @param int $currentYear specified year
      * @return array Array of all files upload by tutors of specified year
      * @author Laxmi Kandel
      */
@@ -1200,14 +1226,16 @@ class Database
     /*----------------------------------------------------------------------------------*/
     /* Code for placement Project */
 
-    function insertSchool($school){
+    function insertSchool($school)
+    {
         $sql = "INSERT INTO School VALUE(DEFAULT ,?);";
 
         $statement = $this->_dbh->prepare($sql);
         $statement->execute([$school]);
     }
 
-    function checkSchool($school){
+    function checkSchool($school)
+    {
         $sql = "SELECT * FROM School WHERE school_name = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -1216,7 +1244,8 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getAllSchools(){
+    function getAllSchools()
+    {
         $sql = "SELECT * FROM School ";
 
         $statement = $this->_dbh->prepare($sql);
@@ -1225,7 +1254,8 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getJobsForSchool($school){
+    function getJobsForSchool($school)
+    {
         $sql = "SELECT * FROM Role WHERE school_id = ?";
 
         $statement = $this->_dbh->prepare($sql);
@@ -1234,14 +1264,16 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function insertJob($id,$name){
+    function insertJob($id, $name)
+    {
         $sql = "INSERT INTO Role VALUES (DEFAULT, ?, ?, 'Click the edit icon to change the text.')";
 
         $statement = $this->_dbh->prepare($sql);
-        $statement->execute([$id,$name]);
+        $statement->execute([$id, $name]);
     }
 
-    function deleteSchoolnRoles($schoolId){
+    function deleteSchoolnRoles($schoolId)
+    {
         $sql = "DELETE FROM School WHERE school_id = ?";
 
         $statement = $this->_dbh->prepare($sql);

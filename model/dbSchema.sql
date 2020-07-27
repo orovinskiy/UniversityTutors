@@ -55,6 +55,7 @@ CREATE TABLE Item(
     item_type enum("checkbox", "select") NOT NULL,
     item_is_upload bit NOT NULL,
     item_file varchar(255) NULL,
+    item_order int NOT NULL,
 
     PRIMARY KEY (item_id)
 );

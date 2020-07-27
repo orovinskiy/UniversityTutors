@@ -783,7 +783,7 @@ class Controller
                 } //Updating existing item
                 else {
                     if ($this->_val->validateItem($_POST["itemName"])) {
-                        $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"]);
+                        $this->_db->updateItem($_POST["itemId"], $_POST["itemName"], $_POST["itemType"], $_POST["itemOrder"]);
                     } else {
                         $this->_f3->set("errors", $this->_val->getErrors());
                     }
