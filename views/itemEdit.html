@@ -67,16 +67,28 @@ Page to create, edit and delete items in the table
             </div>
         </div>
     </div>
-    <div class="form-check mb-3 text-center">
-        <check if="{{ @item['item_is_upload'] == 0 }}">
-            <true>
-                <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired">
-            </true>
-            <false>
-                <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired" checked>
-            </false>
-        </check>
-        <label class="form-check-label" for="upload-required"> Tutor upload required</label>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group w-100 text-left">
+                <label for="item-order">Item Order</label>
+                <input type="number" class="form-control" id="item-order" value="{{ @item['item_order'] }}" name="itemOrder">
+                <span class="text-danger">{{ @errors["itemOrder"] }}</span>
+            </div>
+        </div>
+        <div class="col-6 mt-5">
+            <div class="form-check">
+                <check if="{{ @item['item_is_upload'] == 0 }}">
+                    <true>
+                        <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired">
+                    </true>
+                    <false>
+                        <input type="checkbox" class="form-check-input" id="upload-required" name="uploadRequired"
+                               checked>
+                    </false>
+                </check>
+                <label class="form-check-label" for="upload-required"> Tutor upload required</label>
+            </div>
+        </div>
     </div>
     <div class="text-center">
         <button type="submit" id="delete" class="btn btn-danger" name="itemDelete" value="itemDelete">Delete Item
