@@ -184,11 +184,13 @@ class Validate
                 }
             }
         }
-        //bio validation if it is not empty
+        //removing BIO validation, no longer need this field to be validated.
+        /*//bio validation if it is not empty
         if (!empty(trim($bio)) && strlen(trim($bio)) < 100) {
             $isValid = false;
             $f3->set("errors['check']", "Must be more than 100 characters");
         }
+        */
         return $isValid;
     }
 
