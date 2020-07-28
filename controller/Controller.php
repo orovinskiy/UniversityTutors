@@ -206,10 +206,10 @@ class Controller
     {
         if ($this->_val->validateFileUploadTut($_FILES['file'])) {
 
-            $tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
+            /*$tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
             if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] .$tutOldFile)) {
                 unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $tutOldFile);
-            }
+            }*/
 
             $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];

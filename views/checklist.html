@@ -85,7 +85,7 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checklist}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_set_by'] !='tutor' }}">
+                        <check if="{{@isChecked['state_is_done'] == '0' && @isChecked['state_set_by'] !='tutor' && @db->getTutorItemOrder(@isChecked['item_id']) > @isChecked['state_order'] }}">
                             <div class="mb-3">
                                 <section class="card">
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
@@ -164,7 +164,7 @@ what forms they have already completed
 
                     <!-- check for bio and image -->
                     <repeat group="{{@imgBio}}" key="{{@name}}"  value="{{@value}}">
-                        <check if="{{!empty(@value) || @value == 1}}">
+                        <check if="{{!empty(@value) || @value == 1 }}">
                             <div class="mb-3">
                                 <section class="card">
                                     <check if="{{@name === 'tutor_image'}}">
@@ -214,7 +214,7 @@ what forms they have already completed
 
                     <!-- Creates a box with the form that was not completed -->
                     <repeat group="{{@checklist}}"  value="{{@isChecked}}">
-                        <check if="{{@isChecked['state_set_by'] == 'tutor'}}">
+                        <check if="{{@isChecked['state_set_by'] == 'tutor' || @db->getTutorItemOrder(@isChecked['item_id']) < @isChecked['state_order']}}">
                             <div class="mb-3">
                                 <section class="card">
                                     <h2 class="card-header bg-light pl-5">{{@isChecked['item_name']}}</h2>
@@ -251,7 +251,7 @@ what forms they have already completed
                                                 <check if="{{!empty(@isChecked['item_is_upload'])}}">
                                                     <div class="uploadFile row">
                                                         <div class=" hidden checkHide mt-3">
-                                                            <input type="file" class="form-control-file" name="fileToUpload" id="pdf">
+                                                            <input type="file" data-file="{{@isChecked['item_file']}}" class="form-control-file pdf" name="fileToUpload">
                                                             <span class="text-danger">*Only .pdf .docx files accepted</span>
                                                         </div>
                                                     </div><!-- Row -->
@@ -260,7 +260,10 @@ what forms they have already completed
                                                     <div class="form-check mt-3 mb-2 text-center">
                                                         <input class="big form-check-input get" type="checkbox"
                                                                value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
-                                                               id="{{@isChecked['item_id']}}" name="doorInter[]" checked>
+                                                               id="{{@isChecked['item_id']}}" name="doorInter[]" checked
+                                                        <check if="{{@db->getTutorItemOrder(@isChecked['item_id']) < @isChecked['state_order']}}">
+                                                            disabled
+                                                        </check>>
                                                         <label class=" form-check-label" for="{{@isChecked['item_id']}}">
                                                             Completed
                                                         </label>
