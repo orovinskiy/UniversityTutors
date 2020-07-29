@@ -206,10 +206,10 @@ class Controller
     {
         if ($this->_val->validateFileUploadTut($_FILES['file'])) {
 
-            $tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
+            /*$tutOldFile = $this->_db->getTutorFile($_SESSION['yearID'],$_POST['itemId']);
             if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] .$tutOldFile)) {
                 unlink($_SERVER['DOCUMENT_ROOT'].'/../'.$GLOBALS['dirName'] . $tutOldFile);
-            }
+            }*/
 
             $fileExtensions = array('.txt', '.pdf', '.docx');
             $filename = $_FILES['file']['name'];
@@ -793,6 +793,7 @@ class Controller
                     if (!empty($_FILES['fileToUpload']['name'])) {
                         $fileTest = $_FILES['fileToUpload']['name'];
                         $fileTest = substr($fileTest,0,strripos($fileTest,'.'));
+                        unset($_SESSION['fileNameError']);
                         if(empty(strrpos($fileTest,'.'))){
                             if(file_exists("/var/www/uploads/".$_FILES['fileToUpload']['name'])){
                                 $_SESSION['fileNameError'] = "*File name already exits. Rename the file or delete the existing file.";

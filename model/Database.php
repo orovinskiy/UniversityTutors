@@ -1223,6 +1223,22 @@ class Database
         return ($statement->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    /** Checks the tutors state order for a item
+     * @param int $itemId the id of the item
+     * @uthor Oleg
+     * @return integer int the tutor order
+     */
+    function getTutorItemOrder($itemId){
+        $sql = "SELECT state_order FROM tutors.State WHERE state_set_by = 'tutor' AND item_id = ? ";
+
+        $statement = $this->_dbh->prepare($sql);
+        $statement->execute([$itemId]);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result[0]['state_order'];
+
+    }
+
     /*----------------------------------------------------------------------------------*/
     /* Code for placement Project */
 
