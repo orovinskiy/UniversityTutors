@@ -15,7 +15,7 @@ fieldset{
     margin-bottom: 3%;
 }
 
-.big {
+.bigCheck {
     transform: scale(1.3);
     -webkit-transform: scale(1.3);
 }

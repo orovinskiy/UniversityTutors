@@ -64,10 +64,10 @@ what forms they have already completed
                                                             </div>
                                                             <div class="col-lg-4 col-md-3">
                                                                 <div class="form-check mt-3 mb-2 text-center">
-                                                                    <input class="bio form-check-input get" type="checkbox"
+                                                                    <input class="bigCheck bio form-check-input get" id="bio" type="checkbox"
                                                                            value="{{@userID}}"
                                                                            name="doorInter[]">
-                                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                                    <label class=" form-check-label" for="bio">
                                                                         Complete
                                                                     </label>
                                                                 </div>
@@ -133,7 +133,7 @@ what forms they have already completed
                                                 </check>
                                                 <div class="row">
                                                     <div class="form-check mt-3  mb-2  text-center">
-                                                        <input class="big form-check-input get" type="checkbox"
+                                                        <input class="bigCheck big form-check-input get" type="checkbox"
                                                                data-order="{{@isChecked['state_order']}}" value="{{@isChecked['tutorYear_id']}}"
                                                                id="{{@isChecked['item_id']}}" name="doorInter[]"
                                                         <check if="@db->getNextState(@isChecked['item_id'],@isChecked['state_order']) !='tutor'">
@@ -193,10 +193,10 @@ what forms they have already completed
                                                             </div>
                                                             <div class="col-lg-4 col-md-3">
                                                                 <div class="form-check mt-3 mb-2 text-center">
-                                                                    <input class="bio form-check-input get" type="checkbox"
+                                                                    <input class="bigCheck bio form-check-input get" id="bio" type="checkbox"
                                                                            value="{{@userID}}"
                                                                            name="doorInter[]" checked>
-                                                                    <label class=" form-check-label" for="{{@isChecked['item_id']}}">
+                                                                    <label class=" form-check-label" for="bio">
                                                                         Completed
                                                                     </label>
                                                                 </div>
@@ -258,7 +258,7 @@ what forms they have already completed
                                                 </check>
                                                 <div class="row">
                                                     <div class="form-check mt-3 mb-2 text-center">
-                                                        <input class="big form-check-input get" type="checkbox"
+                                                        <input class="bigCheck big form-check-input get" type="checkbox"
                                                                value="{{@isChecked['tutorYear_id']}}" data-order="{{@isChecked['state_order']}}"
                                                                id="{{@isChecked['item_id']}}" name="doorInter[]" checked
                                                         <check if="{{@db->getTutorItemOrder(@isChecked['item_id']) < @isChecked['state_order']}}">
