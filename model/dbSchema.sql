@@ -3,7 +3,7 @@ Schema for application's database.
 
 @author Keller Flint
  */
-  DROP TABLE if exists User, Tutor, Info, TutorYear, Item, State, ItemTutorYear;
+DROP TABLE if exists User, Tutor, Info, TutorYear, Item, State, ItemTutorYear;
 
 /* User table containing basic user data. */
 CREATE TABLE User (

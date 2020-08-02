@@ -33,6 +33,7 @@
     PRIMARY KEY (tag_id)
  );
 
+/* (normally would be called tutor but we're already using tutor) */
  CREATE TABLE TutorPlace(
     tutor_id int NOT NULL AUTO_INCREMENT,
     tutor_name VARCHAR(255) NOT NULL,
