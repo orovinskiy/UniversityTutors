@@ -946,6 +946,11 @@ class Controller
     //Placement
     //--------------------------------------------------------------------------
 
+    /**
+     * Adds a school if it doesnt already exist
+     *
+     * @author oleg
+     */
     function addSchool(){
         if($this->_db->checkSchool($_POST['school'])){
             echo 'false';
@@ -956,6 +961,12 @@ class Controller
         }
     }
 
+    /**
+     * This displays all the schools and job roles
+     * specific to the school
+     *
+     * @author oleg
+     */
     function school(){
         $schoolArray = $this->_db->getAllSchools();
         $this->_f3->set('schools',$schoolArray);
@@ -964,6 +975,11 @@ class Controller
         echo $view->render('views/placement/schools.html');
     }
 
+    /**
+     * Gets all the jobs to a certain school
+     *
+     * @author oleg
+     */
     function getJobRole(){
         $jobArray = $this->_db->getJobsForSchool($_POST['school']);
         foreach ($jobArray as $job){
@@ -974,6 +990,9 @@ class Controller
         }
     }
 
+    /**
+     * Inserts a job block to the specific school
+     */
     function insertJobRole(){
         $this->_db->insertJob($_POST['schoolId'],$_POST['jobName']);
         echo '<br><div>

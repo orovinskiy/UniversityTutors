@@ -126,14 +126,17 @@ $('body').on('click','#button-addJob',function(){
     }
 });
 
+// Shows delte button for school
 $('body').on('click','.fa-sort-down',function (){
     schoolDelete($(this),'fa-sort-up', 'fa-sort-down').show(500);
 });
 
+// Hides delte button for school
 $('body').on('click','.fa-sort-up',function (){
     schoolDelete($(this),'fa-sort-down','fa-sort-up').hide(500);
 });
 
+// Deletes the specific school chosen
 $('body').on('click','.delete',function(){
     if(confirm('By deleting this school will delete all the job roles that correspond. Do you wish to continue?')){
         $.post('deleteSchool',{
@@ -144,6 +147,7 @@ $('body').on('click','.delete',function(){
     }
 });
 
+// Helper function to show or hide delete button
 function schoolDelete(selector, firstClass, secondClass){
     let div = selector.parents(':eq(1)');
     div = div.children('button');
@@ -153,7 +157,7 @@ function schoolDelete(selector, firstClass, secondClass){
 
 }
 
-
+// checks if the school name is valid
 function validSchool(school) {
     if(school.trim() !== ''){
         return true;
@@ -161,11 +165,13 @@ function validSchool(school) {
     return false
 }
 
+// resets all the errors
 function resetErrors(){
     $('#job-err').html('');
     $('#school-err').html('');
 }
 
+// hides / shows certain items while scrolling through schools
 function scrollers(){
     resetErrors();
     $('.delete').hide();
