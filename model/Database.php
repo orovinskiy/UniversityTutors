@@ -467,6 +467,11 @@ class Database
         $statement->execute([$state, $item, $user]);
     }
 
+    /** Updates the bio if changes were made
+     * @param int $userId the tutors id
+     * @param int $bioDone 0 == bio not done 1 == bio is done
+     * @author  Oleg
+     */
     function updateBio($userId, $bioDone){
         $sql = "UPDATE Tutor SET tutor_bio_done = ? where user_id = ?";
 
@@ -646,6 +651,12 @@ class Database
         return $this->_dbh->lastInsertId();
     }
 
+    /**Checks if a certain tutor is in a specific year
+     * @param int $id users id
+     * @param int $year the year to check
+     * @return bool True if user is in the year otherwise false
+     * @author oleg
+     */
     function userInYear($id, $year)
     {
         $sql = "SELECT user_id FROM Year WHERE user_id = ? AND year_start = ?";
@@ -713,7 +724,7 @@ class Database
      *
      * @param int $itemId The id of the item
      * @return array All state data for the given item
-     * @author
+     * @author Oleg
      */
     function getStates($itemId)
     {
@@ -1242,6 +1253,11 @@ class Database
     /*----------------------------------------------------------------------------------*/
     /* Code for placement Project */
 
+    /** inserts school into the database
+     * @param string $school school name
+     *
+     * @author Oleg
+     */
     function insertSchool($school)
     {
         $sql = "INSERT INTO School VALUE(DEFAULT ,?);";
@@ -1250,6 +1266,12 @@ class Database
         $statement->execute([$school]);
     }
 
+    /** Checks if a school exits
+     * @param string $school school name
+     * @return array the school name if exits otherwise null
+     *
+     * @author  Oleg
+     */
     function checkSchool($school)
     {
         $sql = "SELECT * FROM School WHERE school_name = ?";
@@ -1260,6 +1282,11 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /** Gets all the schools
+     * @return array all the names of the schools
+     *
+     * @author  Oleg
+     */
     function getAllSchools()
     {
         $sql = "SELECT * FROM School ";
@@ -1270,6 +1297,12 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /** Gets all the schools jobs
+     * @param string $school school name
+     * @return array all the jobs for the school
+     *
+     * @author  Oleg
+     */
     function getJobsForSchool($school)
     {
         $sql = "SELECT * FROM Role WHERE school_id = ?";
@@ -1280,6 +1313,12 @@ class Database
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /** inserts a job for a specific school
+     * @param int $id id of the school
+     * @param string $name name of the job
+     *
+     * @author  Oleg
+     */
     function insertJob($id, $name)
     {
         $sql = "INSERT INTO Role VALUES (DEFAULT, ?, ?, 'Click the edit icon to change the text.')";
@@ -1288,6 +1327,12 @@ class Database
         $statement->execute([$id, $name]);
     }
 
+    /** Deletes the school and all the jobs for the school
+     * @param int $schoolId school id
+     * @return bool returns true if delete was successful otherwise false
+     *
+     * @author  Oleg
+     */
     function deleteSchoolnRoles($schoolId)
     {
         $sql = "DELETE FROM School WHERE school_id = ?";
