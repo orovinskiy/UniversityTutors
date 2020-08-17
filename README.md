@@ -37,8 +37,10 @@ If routing isn't working
  - Make sure overwrite is on If doesnt work change it to all the files `<Directory /var/www/> AllowOverride All </Directory>`
 
 ### Deployment Steps
+*Remember to change the encryption keys on server*
  - Delete existing html contents
  - Clone new files into html folder
  - Composer install
+ - index.php link to the server config file
                                                                                  
                                                                            
