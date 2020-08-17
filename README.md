@@ -35,6 +35,10 @@ If error ```php_network_getaddresses: getaddrinfo failed: Temporary failure in n
 If routing isn't working 
  - Go into apache config file ``` /etc/apache2/apache2.conf ```
  - Make sure overwrite is on If doesnt work change it to all the files `<Directory /var/www/> AllowOverride All </Directory>`
-                                                                           
+
+### Deployment Steps
+ - Delete existing html contents
+ - Clone new files into html folder
+ - Composer install
                                                                                  
                                                                            
